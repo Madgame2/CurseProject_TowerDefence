@@ -8,7 +8,7 @@ namespace Common.systems.GameStates.Transitions
     public abstract class TransitionRulesBase<T> where T : BaseState
     {
         private Type _From;
-        private List<Type> _To;
+        private List<Type> _To = new();
 
         public TransitionRulesBase()
         {
@@ -18,7 +18,6 @@ namespace Common.systems.GameStates.Transitions
         public void CanTrasitTo<To>() where To : BaseState
         {
             _To.Add(typeof(To));
-            _To = new List<Type>();
         }
 
         public abstract void TransistionList();
