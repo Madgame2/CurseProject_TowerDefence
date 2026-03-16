@@ -43,11 +43,11 @@ namespace Common.systems.SceneStates
 
             if (states.Count() <= 0)
             {
-                throw new ArgumentException($"No root State in {_sceneType}");
+                Debug.LogError($"No root State in {_sceneType}");
             }
             else if (states.Count() > 1)
             {
-                throw new ArgumentException($"too many root State in {_sceneType}");
+                Debug.LogError($"too many root State in {_sceneType}");
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Common.systems.SceneStates
 
         public void Initialize()
         {
-            tryMoveToState(_graphReader.Root);
+            //tryMoveToState(_graphReader.Root);
 
         }
 
