@@ -35,10 +35,7 @@ namespace Common.systems.ScriptDirectorSystem.ActorsCasts.Actors
 
         public ActionActorParams DefineLikeActionActor(ActorCast cast = null)
         {
-            var newActor = new ActionActorParams(actorNickName)
-            {
-                actorRoleType = this.actorRoleType
-            };
+            var newActor = new ActionActorParams(actorNickName);
 
             cast?.ReplaceActor(actorNickName, newActor);
             return newActor;
@@ -48,23 +45,76 @@ namespace Common.systems.ScriptDirectorSystem.ActorsCasts.Actors
         public class ActionActorParams : ActorParams
         {
             protected Type roleType;
+            protected string gameObjectName;
+            protected Transform parentTransform;
+            protected string gameObjectTag;
             protected ActorResolvePolicy resolvePolicy;
 
+
+            public string GameObjectTag => gameObjectTag;
+            public string GameObjectName => gameObjectName;
+            public Transform ParentTransform => parentTransform;
             public Type RoleType { get => roleType; }
             public ActorResolvePolicy ResolvePolicy { get { return resolvePolicy; } }
 
             public ActionActorParams(string actorNickName) : base(actorNickName)
             {
-                this.actorRoleType = ActorRoleType.BackedEndActor;
+                this.actorRoleType = ActorRoleType.ActionActor;
+            }
+
+            public ActionActorParams defineRole<Role>() where Role : MonoBehaviour
+            {
+                roleType = typeof(Role);
+                return this;
+            }
+
+
+            public ActionActorParams WithGameObjectName(string name)
+            {
+                gameObjectName = name;
+                return this;
+            }
+
+            public ActionActorParams WithTag(string tag)
+            {
+                gameObjectTag = tag;
+                return this;
+            }
+
+            public ActionActorParams WithParent(Transform parent)
+            {
+                parentTransform = parent;
+                return this;
+            }
+
+
+            public ActionActorParams FindExistOrCreate()
+            {
+                resolvePolicy = ActorResolvePolicy.FindOrCreate;
+                return this;
+            }
+
+            public ActionActorParams FindExist()
+            {
+                resolvePolicy = ActorResolvePolicy.FindExist;
+                return this;
+            }
+
+            public ActionActorParams Create()
+            {
+                resolvePolicy = ActorResolvePolicy.Create;
+                return this;
             }
         }
 
         public class BackedEndActorParams : ActorParams
         {
             protected Type roleType;
+
             protected ActorResolvePolicy resolvePolicy;
 
             public Type RoleType { get =>  roleType; }
+
             public ActorResolvePolicy ResolvePolicy { get { return resolvePolicy; } }
 
             public BackedEndActorParams(string actorNickName) : base(actorNickName)
@@ -95,6 +145,8 @@ namespace Common.systems.ScriptDirectorSystem.ActorsCasts.Actors
                 resolvePolicy = ActorResolvePolicy.Create;
                 return this;
             }
+
+
         }
     }
 }

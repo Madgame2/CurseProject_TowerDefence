@@ -28,5 +28,15 @@ namespace Common.systems.ScriptDirectorSystem.Scripts
 
             throw new InvalidCastException($"Actor '{actorNickname}' is not of type {typeof(T).Name}");
         }
+
+        public T ActionActor<T>(string actorNickname) where T :  MonoBehaviour
+        {
+            var actor = actors.Get(actorNickname);
+
+            if (actor is T typedActor)
+                return typedActor;
+
+            throw new InvalidCastException($"Actor '{actorNickname}' is not of type {typeof(T).Name}");
+        }
     }
 }

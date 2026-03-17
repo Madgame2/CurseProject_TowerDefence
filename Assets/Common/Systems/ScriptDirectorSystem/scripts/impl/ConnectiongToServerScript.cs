@@ -10,11 +10,17 @@ namespace Common.systems.ScriptDirectorSystem.Scripts
                 .DefineLikeBackEndActor(cast)
                 .defineRole<NetTemp>()
                 .FindExistOrCreate();
+
+            cast.DefineActor("MonoBeh")
+                .DefineLikeActionActor(cast)
+                .defineRole<TestMonobeh>()
+                .FindExistOrCreate();
         }
 
         public override void Actions()
         {
             Actor<NetTemp>("NetManager").Connect();
+            ActionActor<TestMonobeh>("MonoBeh").TestMono();
         }
 
 

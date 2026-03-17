@@ -43,12 +43,64 @@ namespace Common.systems.ScriptDirectorSystem
 
         private object tryFindExistActionActor(ActionActorParams param)
         {
-            throw new System.NotImplementedException();
+            if (param.RoleType == null)
+                return null;
+
+            object found = null;
+
+
+            if (!string.IsNullOrEmpty(param.GameObjectTag))
+            {
+                GameObject objWithTag = GameObject.FindWithTag(param.GameObjectTag);
+                if (objWithTag != null)
+                    found = objWithTag.GetComponent(param.RoleType);
+            }
+
+            if (found == null && !string.IsNullOrEmpty(param.GameObjectName))
+            {
+                GameObject objByName = GameObject.Find(param.GameObjectName);
+                if (objByName != null)
+                    found = objByName.GetComponent(param.RoleType);
+            }
+
+            if (found == null)
+            {
+                found = UnityEngine.Object.FindFirstObjectByType(param.RoleType);
+            }
+
+            return found;
         }
 
         private object tryCreateActionActor(ActionActorParams param)
         {
-            throw new System.NotImplementedException();
+            if (param.RoleType == null)
+                return null;
+
+            GameObject go;
+
+            if (!string.IsNullOrEmpty(param.GameObjectName))
+            {
+                go = new GameObject(param.GameObjectName);
+            }
+            else
+            {
+                go = new GameObject(param.RoleType.Name);
+            }
+
+
+            if (!string.IsNullOrEmpty(param.GameObjectTag))
+            {
+                go.tag = param.GameObjectTag;
+            }
+
+            if (param.ParentTransform != null)
+            {
+                go.transform.SetParent(param.ParentTransform, false);
+            }
+
+            MonoBehaviour component = container.InstantiateComponent(param.RoleType, go) as MonoBehaviour;
+
+            return component;
         }
 
 
@@ -109,7 +161,7 @@ namespace Common.systems.ScriptDirectorSystem
                 {
                     case ActorRoleType.ActionActor:
                         {
-                            var actor = tryFindBackEndActor(item);
+                            var actor = tryFindActionActor(item);
                             result.Add(item.NickName, actor);
                         }
                         break;
