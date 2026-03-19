@@ -32,7 +32,7 @@ namespace Common.systems.GameStates.Grpah
             _Grpah = new StateGraph();
             foreach (var rule in TranstitionRules)
             {
-                var instance = (TransitionRulesBase<BaseState>)Activator.CreateInstance(rule);
+                var instance = (ITransitionRules)Activator.CreateInstance(rule);
 
                 var transitions = instance.MakeTranssitions();
 

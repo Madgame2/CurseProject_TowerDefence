@@ -23,7 +23,7 @@ namespace Common.systems.GameStates
             tryMoveToState(_graphReader.RootState);
         }
 
-        private void tryMoveToState(Type stateType) 
+        public void tryMoveToState(Type stateType) 
         {
             if (!typeof(BaseState).IsAssignableFrom(stateType))
             {

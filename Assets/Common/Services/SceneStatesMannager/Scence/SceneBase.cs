@@ -19,6 +19,8 @@ namespace Common.Services.SceneServices.Scenes
             }
             try
             {
+                if (SceneManager.GetActiveScene().name == SceneName) return;
+
                 SceneManager.LoadScene(SceneName);
             }
             catch (Exception ex)

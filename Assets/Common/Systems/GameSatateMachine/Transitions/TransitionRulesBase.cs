@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Common.systems.GameStates.Transitions
 {
-    public abstract class TransitionRulesBase<T> where T : BaseState
+    public abstract class TransitionRulesBase<T> :  ITransitionRules where T : BaseState
     {
         private Type _From;
         private List<Type> _To = new();

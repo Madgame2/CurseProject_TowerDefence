@@ -79,7 +79,7 @@ namespace Common.systems.SceneStates
 
         public void Initialize()
         {
-            //tryMoveToState(_graphReader.Root);
+            tryMoveToState(_graphReader.Root);
 
         }
 

@@ -1,3 +1,4 @@
+using Common.Services.Net;
 using Common.systems.ScriptDirectorSystem.ActorsCasts;
 
 namespace Common.systems.ScriptDirectorSystem.Scripts
@@ -6,21 +7,15 @@ namespace Common.systems.ScriptDirectorSystem.Scripts
     {
         public override void Actors(ref ActorCast cast)
         {
-            cast.DefineActor("NetManager")
+            cast.DefineActor("Net")
                 .DefineLikeBackEndActor(cast)
-                .defineRole<NetTemp>()
-                .FindExistOrCreate();
-
-            cast.DefineActor("MonoBeh")
-                .DefineLikeActionActor(cast)
-                .defineRole<TestMonobeh>()
-                .FindExistOrCreate();
+                .FindExistOrCreate()
+                .defineRole<INetService>();
         }
 
         public override void Actions()
         {
-            Actor<NetTemp>("NetManager").Connect();
-            ActionActor<TestMonobeh>("MonoBeh").TestMono();
+            Actor<INetService>("Net").debug();
         }
 
 

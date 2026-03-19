@@ -1,3 +1,4 @@
+using Common.Services.Net;
 using Common.Services.SceneServices;
 using Common.systems.GameStates;
 using Common.systems.GameStates.Grpah;
@@ -12,6 +13,10 @@ namespace Installers
 
         public override void InstallBindings()
         {
+            Container.Bind<INetService>().To<NetService>().AsSingle();
+
+
+
             Container.Bind<SceneStateManager>().AsSingle();
 
             Container.Bind<GraphReader>().AsSingle().NonLazy();

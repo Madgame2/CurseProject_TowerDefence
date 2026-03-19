@@ -21,10 +21,7 @@ namespace Common.systems.ScriptDirectorSystem.ActorsCasts.Actors
 
         public BackedEndActorParams DefineLikeBackEndActor(ActorCast cast = null)
         {
-            var newActor = new BackedEndActorParams(actorNickName)
-            {
-                actorRoleType = this.actorRoleType
-            };
+            var newActor = new BackedEndActorParams(actorNickName);
 
 
             cast?.ReplaceActor(actorNickName, newActor);

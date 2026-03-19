@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d892674a939d74ea46bc9a3518eea7, type: 3}
+  m_Name: ConnectingPages
+  m_EditorClassIdentifier: Assembly-CSharp::UIWindowsDatabase
+  windows:
+  - windowName: LogIn
+    prefab: {fileID: 5725554655251794815, guid: d4bf2a03a1b0f1b479bb1d255e4eba7d, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 52232f6487ea7fb46aea9b3071f08bba, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+  - windowName: CreateAccount
+    prefab: {fileID: 338979208045072193, guid: eabd45de3f998ec47955720f59e27427, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 5ad203db89fd309438f9f59a318f3b71, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
