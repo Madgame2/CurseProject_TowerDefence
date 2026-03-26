@@ -1,5 +1,8 @@
+using Common.systems.UI.Prefabs;
 using Common.systems.UI.View;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +11,8 @@ namespace Common.systems.UI
 {
     public class UIManager : MonoBehaviour
     {
+        [SerializeField] private WindowInfo _dangerActionQuestionWindow;
+
         [SerializeField] private UIWindowsDatabase windowsDatabase;
         [SerializeField] private Canvas canvas;
 
@@ -26,10 +31,56 @@ namespace Common.systems.UI
             }
         }
 
-        public void TryOpen(string windowName)
+        public async Task<bool> QuestionWindow(string title, string description, DialogType type)
+        {
+            bool reult = false;
+            switch (type) {
+                case DialogType.Danger:
+                    DangerActionViewModel vm = (DangerActionViewModel)openDangerQuestion();
+
+                    reult = await vm.GetResult();
+                    closeDangerQuestion();
+                    break;
+            }
+
+            return reult;
+        }
+
+        private object openDangerQuestion()
+        {
+
+            var go = container.InstantiatePrefab(_dangerActionQuestionWindow.prefab, canvas.transform);
+
+
+            var vm = container.Instantiate(_dangerActionQuestionWindow.ViewModelType);
+
+
+            var view = go.GetComponent<IViewFor>();
+            view.SetContext(vm);
+
+            openedWindows[_dangerActionQuestionWindow] = view;
+            return vm;
+        }
+
+        private bool closeDangerQuestion()
+        {
+
+            if (!openedWindows.TryGetValue(_dangerActionQuestionWindow, out var view) || view == null)
+                return false; // окно не открыто
+
+            view.Cleanup();
+
+            Destroy((view as MonoBehaviour).gameObject);
+
+            openedWindows.Remove(_dangerActionQuestionWindow);
+
+            return true;
+        }
+
+        public object TryOpen(string windowName)
         {
             var winInfo = windowsDatabase.GetWindow(windowName);
-            if (openedWindows.ContainsKey(winInfo)) return;
+            if (openedWindows.ContainsKey(winInfo)) return null;
 
 
             var go = container.InstantiatePrefab(winInfo.prefab, canvas.transform);
@@ -42,7 +93,9 @@ namespace Common.systems.UI
             view.SetContext(vm);
 
 
-            openedWindows[winInfo] = view; 
+            openedWindows[winInfo] = view;
+
+            return vm;
         }
 
         public bool Close(string windowName)

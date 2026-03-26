@@ -39,19 +39,19 @@ namespace Common.systems.SceneStates
                 _graphReader.AddState(t);
             }
 
-            states.Where(t => t.GetCustomAttribute<RootStateAttribute>() != null);
+            var root = states.Where(t => t.GetCustomAttribute<RootStateAttribute>() != null);
 
-            if (states.Count() <= 0)
+            if (root.Count() <= 0)
             {
                 Debug.LogError($"No root State in {_sceneType}");
             }
-            else if (states.Count() > 1)
+            else if (root.Count() > 1)
             {
                 Debug.LogError($"too many root State in {_sceneType}");
             }
             else
             {
-                _graphReader.makeRootState(states.First());
+                _graphReader.makeRootState(root.First());
             }
             
 

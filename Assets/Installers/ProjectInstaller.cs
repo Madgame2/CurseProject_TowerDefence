@@ -1,4 +1,5 @@
 using Common.Services.Net;
+using Common.Services.Net.Modules;
 using Common.Services.SceneServices;
 using Common.systems.GameStates;
 using Common.systems.GameStates.Grpah;
@@ -13,7 +14,13 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            Container.Bind<INetService>().To<NetService>().AsSingle();
+            NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
+
+
+        Container.Bind<WebSocketModule>().AsSingle();
+            Container.Bind<HttpModule>().AsSingle();
+            Container.Bind<NetService>().AsSingle().NonLazy();
+            Container.Bind<IInitializable>().To<NetService>().FromResolve();
 
 
 

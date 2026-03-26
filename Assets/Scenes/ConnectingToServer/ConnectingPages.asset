@@ -25,3 +25,9 @@ MonoBehaviour:
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+  - windowName: ConfirmProfile
+    prefab: {fileID: 1655356106556756533, guid: 83ed395f66eeaaa4b8854f71f338da88, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 09d5ee7aa0a62da4b9d51887f7cae3d3, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
