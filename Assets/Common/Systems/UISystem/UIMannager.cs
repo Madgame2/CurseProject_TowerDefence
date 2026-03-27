@@ -1,5 +1,6 @@
 using Common.systems.UI.Prefabs;
 using Common.systems.UI.View;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
@@ -12,6 +13,7 @@ namespace Common.systems.UI
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private WindowInfo _dangerActionQuestionWindow;
+        [SerializeField] private GameObject _messageWindow;
 
         [SerializeField] private UIWindowsDatabase windowsDatabase;
         [SerializeField] private Canvas canvas;
@@ -114,5 +116,15 @@ namespace Common.systems.UI
             return true;
         }
 
+        public void showInformWindow(string Tittle, string description)
+        {
+            var obj = Instantiate(_messageWindow, canvas.transform);
+            obj.TryGetComponent<MessageWindowView>(out MessageWindowView view);
+
+            if (view != null)
+            {
+                view.Init(Tittle, description);
+            }
+        }
     }
 }

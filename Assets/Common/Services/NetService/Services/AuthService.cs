@@ -1,4 +1,5 @@
 using Common.Services.Net.Modules;
+using System;
 using System.Net.Cache;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
@@ -32,6 +33,12 @@ namespace Common.Services.Net.Services
         public async Task<HttpResponse> TryDeleteUnconfUser(string email)
         {
             return await _httpModule.DeleteJsonAsync($"{_baseUrl}/profile/UnregUser?email={email}");
+        }
+
+        internal async Task<HttpResponse> tryVerifyUser(string profileEmail, string code)
+        {
+            var json = $"{{\"email\":\"{profileEmail}\",\"code\":\"{code}\"}}";
+            return await _httpModule.PostJsonAsync($"{_baseUrl}/profile/confirmRegr", json);
         }
     }
 

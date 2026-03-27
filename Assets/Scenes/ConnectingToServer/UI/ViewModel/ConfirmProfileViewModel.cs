@@ -69,4 +69,46 @@ public class ConfirmProfileViewModel
         SetVisible?.Invoke(true);
 
     }
+
+    internal async Task<bool> tryVerifyUser(string code)
+    {
+
+        var authService = _netService.CreateAuthService();
+        var result = await authService.tryVerifyUser(profileEmail, code);
+
+        switch (result.StatusCode)
+        {
+            case 200:
+                {
+                    _uiManager.Close("ConfirmProfile");
+                    _uiManager.showInformWindow("Profile successfully activated!",
+                        "Please re-enter your details on the authorization page so that we can authorize the connection.");
+
+                    _uiManager.Close("CreateAccount");
+                    _uiManager.TryOpen("LogIn");
+
+                    return true;
+                }
+            case 400:
+                {
+                    Debug.LogError("Not implemet");
+
+                    break;
+                }
+            case 404:
+                {
+                    Debug.LogError("Not implemet");
+
+                    break;
+                }
+            case 500:
+                {
+                    Debug.LogError("Not implemet");
+
+                    break;
+                }
+        }
+
+        return false;
+    }
 }
