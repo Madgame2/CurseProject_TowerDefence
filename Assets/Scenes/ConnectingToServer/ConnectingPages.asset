@@ -31,3 +31,9 @@ MonoBehaviour:
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+  - windowName: Loading
+    prefab: {fileID: 5061182673598158224, guid: 8ae9bb9f896ade649b5bfcfa78f14b5b, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 7209f9250538ad84783ee54353c7b2fd, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []

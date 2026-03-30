@@ -21,7 +21,6 @@ namespace Common.systems.UI
         [Inject]private readonly DiContainer container;
         private readonly Dictionary<WindowInfo, IViewFor> openedWindows = new();
 
-
         public void Start()
         {
             foreach (var window in windowsDatabase.windows)
@@ -79,8 +78,14 @@ namespace Common.systems.UI
             return true;
         }
 
-        public object TryOpen(string windowName)
+        public AdvancedOptions TryOpen(string windowName)
         {
+            return TryOpen(windowName, out _);
+        }
+
+        public AdvancedOptions TryOpen(string windowName, out object ViewModel)
+        {
+            ViewModel = null;
             var winInfo = windowsDatabase.GetWindow(windowName);
             if (openedWindows.ContainsKey(winInfo)) return null;
 
@@ -96,8 +101,10 @@ namespace Common.systems.UI
 
 
             openedWindows[winInfo] = view;
+            ViewModel = vm;
 
-            return vm;
+            AdvancedOptions options = new AdvancedOptions(this);
+            return options;
         }
 
         public bool Close(string windowName)
@@ -107,9 +114,11 @@ namespace Common.systems.UI
             if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
                 return false; // окно не открыто
 
+
             view.Cleanup();
 
             Destroy((view as MonoBehaviour).gameObject);
+
 
             openedWindows.Remove(winInfo);
 
@@ -124,6 +133,47 @@ namespace Common.systems.UI
             if (view != null)
             {
                 view.Init(Tittle, description);
+            }
+        }
+
+        public void Hide(string uri)
+        {
+            var winInfo = windowsDatabase.GetWindow(uri);
+
+            if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
+                return; // окно не открыто
+
+            if(view is MonoBehaviour viewMono)
+            {
+                viewMono.gameObject.SetActive(false);
+            }
+        }
+
+        public void Show(string uri)
+        {
+            var winInfo = windowsDatabase.GetWindow(uri);
+
+            if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
+                return; // окно не открыто
+
+            if (view is MonoBehaviour viewMono)
+            {
+                viewMono.gameObject.SetActive(true);
+            }
+        }
+
+        public class AdvancedOptions
+        {
+            private readonly UIManager _uiManager;
+
+            public AdvancedOptions(UIManager uiManager)
+            {
+                _uiManager = uiManager;
+            }
+
+            public void Hide(string pageName)
+            {
+                _uiManager.Hide(pageName);
             }
         }
     }

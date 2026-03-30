@@ -35,10 +35,16 @@ namespace Common.Services.Net.Services
             return await _httpModule.DeleteJsonAsync($"{_baseUrl}/profile/UnregUser?email={email}");
         }
 
-        internal async Task<HttpResponse> tryVerifyUser(string profileEmail, string code)
+        public async Task<HttpResponse> tryVerifyUser(string profileEmail, string code)
         {
             var json = $"{{\"email\":\"{profileEmail}\",\"code\":\"{code}\"}}";
             return await _httpModule.PostJsonAsync($"{_baseUrl}/profile/confirmRegr", json);
+        }
+
+        public async Task<HttpResponse> tryAuthorizatiUser(string profileEmail, string password)
+        {
+            var json = $"{{\"email\":\"{profileEmail}\",\"password\":\"{password}\"}}";
+            return await _httpModule.PostJsonAsync($"{_baseUrl}/profile/login", json);
         }
     }
 

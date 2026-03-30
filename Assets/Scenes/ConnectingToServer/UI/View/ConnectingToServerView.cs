@@ -1,5 +1,6 @@
 using Common.systems.UI;
 using Common.systems.UI.View;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class ConnectingToServerView :ViewBase<ConnectingToServerViewModel>
     [SerializeField] private Button RegistryButton;
     [SerializeField] private Button ExitButton;
 
+    [SerializeField] private TMP_Text _email;
+    [SerializeField] private TMP_Text _password;
 
     protected override void OnViewModelAssigned()
     {
@@ -26,7 +29,7 @@ public class ConnectingToServerView :ViewBase<ConnectingToServerViewModel>
 
     private void Submit_onPress()
     {
-
+        ViewModel.Submit(_email.text, _password.text);
     }
 
     private void Registry_onPress()
