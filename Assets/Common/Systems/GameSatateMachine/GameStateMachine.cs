@@ -6,11 +6,13 @@ using Zenject;
 
 namespace Common.systems.GameStates
 {
-    public class GameStateMachine : IInitializable
+    public class GameStateMachine : Zenject.IInitializable
     {
         private readonly DiContainer _container;
         protected readonly GraphReader _graphReader;
         protected BaseState _currentState;
+
+        private Type _debugStartState;
 
         public GameStateMachine(GraphReader graphReader, DiContainer container)
         {
@@ -20,7 +22,13 @@ namespace Common.systems.GameStates
 
         public void Initialize()
         {
-            tryMoveToState(_graphReader.RootState);
+            Type startState = _debugStartState!=null ? _debugStartState : _graphReader.RootState;
+            tryMoveToState(startState);
+        }
+
+        public void SetStartState<T>()where T:BaseState
+        {
+            _debugStartState = typeof(T);
         }
 
         public void tryMoveToState(Type stateType) 

@@ -10,8 +10,8 @@ public class ConnectingToServerView :ViewBase<ConnectingToServerViewModel>
     [SerializeField] private Button RegistryButton;
     [SerializeField] private Button ExitButton;
 
-    [SerializeField] private TMP_Text _email;
-    [SerializeField] private TMP_Text _password;
+    [SerializeField] private TMP_InputField _email;
+    [SerializeField] private TMP_InputField _password;
 
     protected override void OnViewModelAssigned()
     {

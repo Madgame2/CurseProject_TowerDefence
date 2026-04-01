@@ -44,7 +44,7 @@ public class ConnectingToServerViewModel
         try
         {
             var response = await Authorization(email, password);
-            HandleResponse(response);
+            await HandleResponse(response);
 
         }
         catch (Exception ex)
@@ -57,12 +57,12 @@ public class ConnectingToServerViewModel
         }
     }
 
-    private void HandleResponse(HttpResponse response)
+    private async Task HandleResponse(HttpResponse response)
     {
         switch (response.StatusCode)
         {
             case 200:
-                Handle200(response);
+                await Handle200(response);
                 break;
 
             case 400:
@@ -89,10 +89,26 @@ public class ConnectingToServerViewModel
         Debug.LogException(ex);
     }
 
-    private void Handle200(HttpResponse response)
+    private async Task Handle200(HttpResponse response)
     {
         AuthResponseDto dto = JsonConvert.DeserializeObject<AuthResponseDto>(response.Body);
         TokenManager.SetTokens(dto.accessToken, dto.refreshToken);
+
+        var result = await netService._webSocketModule.tryConnect(dto.accessToken);
+
+        if (result)
+        {
+
+            Debug.Log("connected");
+            gameStates.tryMoveToState(typeof(LobbyState));
+            return;
+        }
+        else
+        {
+            Debug.LogError("Не чет пошло не так");
+        }
+
+        await netService._webSocketModule.Disconnect();
     }
 
     private void Handle400(HttpResponse response)

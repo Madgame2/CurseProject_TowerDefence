@@ -8,8 +8,8 @@ namespace Common.Services.Net
 {
     public class NetService : IInitializable
     {
-        internal readonly HttpModule _httpModule;
-        internal readonly WebSocketModule _webSocketModule;
+        public HttpModule _httpModule { get; private set; }
+        public  WebSocketModule _webSocketModule { get; private set; }
 
         public NetworkConfig _netConfig;
         public string BaseUrl = "http://localhost:3000"; // TEMP
@@ -23,6 +23,8 @@ namespace Common.Services.Net
         {
             _httpModule = httpModule;
             _webSocketModule = webSocketModule;
+
+            _webSocketModule.setServerAdress("localhost:3000");
         }
 
         public void Initialize()

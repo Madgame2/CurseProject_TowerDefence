@@ -7,5 +7,6 @@ public class RootStateTransitions : TransitionRulesBase<ConnectToServerState>
     public override void TransistionList()
     {
         CanTrasitTo<ExitState>();
+        CanTrasitTo<LobbyState>();
     }
 }

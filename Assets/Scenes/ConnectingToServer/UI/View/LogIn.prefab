@@ -1191,6 +1191,8 @@ MonoBehaviour:
   SubmitButton: {fileID: 4386184992100051259}
   RegistryButton: {fileID: 506256982954509304}
   ExitButton: {fileID: 2378447683297148289}
+  _email: {fileID: 2195621189325272007}
+  _password: {fileID: 369524433960502985}
 --- !u!1 &5904388165649472760
 GameObject:
   m_ObjectHideFlags: 0
