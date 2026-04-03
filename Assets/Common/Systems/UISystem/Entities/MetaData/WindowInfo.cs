@@ -26,5 +26,7 @@ public class WindowInfo
     }
     public bool ShowInStart = false;
     public List<string> canOpenWith;    
-    public List<string> cannotOpenWith; 
+    public List<string> cannotOpenWith;
+
+    public bool selfCanvas = false;
 }

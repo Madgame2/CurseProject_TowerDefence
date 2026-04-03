@@ -89,8 +89,8 @@ namespace Common.systems.UI
             var winInfo = windowsDatabase.GetWindow(windowName);
             if (openedWindows.ContainsKey(winInfo)) return null;
 
-
-            var go = container.InstantiatePrefab(winInfo.prefab, canvas.transform);
+            Transform root = winInfo.selfCanvas ? null : canvas?.transform;
+            var go = container.InstantiatePrefab(winInfo.prefab, root);
 
 
             var vm = container.Instantiate(winInfo.ViewModelType);

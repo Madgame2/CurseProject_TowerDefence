@@ -20,6 +20,8 @@ namespace Common.systems.SceneStates
 
         private BaseState _currentState = null;
 
+        public event Action<Type, Type> onStateChanges;
+
         public SceneStateMachine(GraphReader graphReader, DiContainer container)
         {
             this._graphReader = graphReader;
@@ -91,11 +93,14 @@ namespace Common.systems.SceneStates
                 return false;
             }
             _currentState?.LeavFormState();
-
+            
             BaseState stateInstance = (BaseState)_container.Instantiate(stateType);
+            Type oldState = _currentState?.GetType();
 
             _currentState = stateInstance;
             _currentState.EnterToState();
+
+            onStateChanges?.Invoke(oldState, stateType);
 
             return true;
         }

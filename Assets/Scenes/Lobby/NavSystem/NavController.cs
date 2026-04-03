@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,9 @@ public class NavController : MonoBehaviour
     private Tween moveTween;
     private Coroutine rotationCoroutine;
 
+    public bool IsAnimating => moveTween != null && moveTween.IsActive() && moveTween.IsPlaying();
+
+
     //public void Update()
     //{
     //    if (Keyboard.current.wKey.isPressed)
@@ -31,6 +35,15 @@ public class NavController : MonoBehaviour
     //        ExecReverseAnim("LobbyPage");
     //    }
     //}
+
+
+    public async Task WaitIfAnimating()
+    {
+        if (IsAnimating)
+        {
+            await moveTween.AsyncWaitForCompletion();
+        }
+    }
 
     private Path GetPath(string animName)
     {
