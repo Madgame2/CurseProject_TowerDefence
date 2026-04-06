@@ -32,6 +32,12 @@ namespace Common.systems.UI
             }
         }
 
+        public bool IsOpen(string windowName)
+        {
+            var winInfo = windowsDatabase.GetWindow(windowName);
+            return openedWindows.ContainsKey(winInfo);
+        }
+
         public async Task<bool> QuestionWindow(string title, string description, DialogType type)
         {
             bool reult = false;
@@ -85,9 +91,10 @@ namespace Common.systems.UI
 
         public AdvancedOptions TryOpen(string windowName, out object ViewModel)
         {
+            AdvancedOptions options = new AdvancedOptions(this);
             ViewModel = null;
             var winInfo = windowsDatabase.GetWindow(windowName);
-            if (openedWindows.ContainsKey(winInfo)) return null;
+            if (openedWindows.ContainsKey(winInfo)) return options;
 
             Transform root = winInfo.selfCanvas ? null : canvas?.transform;
             var go = container.InstantiatePrefab(winInfo.prefab, root);
@@ -103,7 +110,7 @@ namespace Common.systems.UI
             openedWindows[winInfo] = view;
             ViewModel = vm;
 
-            AdvancedOptions options = new AdvancedOptions(this);
+            
             return options;
         }
 

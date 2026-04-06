@@ -12,4 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71d892674a939d74ea46bc9a3518eea7, type: 3}
   m_Name: LobbyUIdataBase
   m_EditorClassIdentifier: Assembly-CSharp::UIWindowsDatabase
-  windows: []
+  windows:
+  - windowName: Main
+    prefab: {fileID: 6764303636543539774, guid: 581b75ad613e21e499486db2c431bfcb, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 3726440c278b68f468b143d7fc66d7cc, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 1
+  - windowName: SettingsOpt
+    prefab: {fileID: 6283363634483344776, guid: 53d15d2c254567b45800c8fb5ef25bfa, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 6f533626ab93e814aa2e79615f8fbd3f, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 1
+  - windowName: SettingsImp
+    prefab: {fileID: 1126186671457653875, guid: 3c7c7c7eba465e848aef01e218ad1066, type: 3}
+    viewModelScript: {fileID: 11500000, guid: d48136a318975a14dbc5fa743ba21f6a, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 1
