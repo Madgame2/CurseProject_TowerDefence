@@ -206,6 +206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654e8d2c91ac8044b8aaacfe20966532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioPageView
+  _totalVolume: {fileID: 5276141942591933246}
+  _musicVolume: {fileID: 3590137775944920551}
+  _effectsVolume: {fileID: 584211568666627317}
+  _environmentVolume: {fileID: 5301971485991282485}
 --- !u!114 &7397886728329995460
 MonoBehaviour:
   m_ObjectHideFlags: 0

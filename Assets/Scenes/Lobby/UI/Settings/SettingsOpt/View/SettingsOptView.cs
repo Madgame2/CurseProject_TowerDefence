@@ -18,18 +18,21 @@ public class SettingsOptView : ViewBase<SettingsOptViewModel>
     [SerializeField] private Toggle ControlsSettings;
 
     [SerializeField] private Button ExitButton;
+    [SerializeField] private Button ApplyButton;
 
     private bool _isUpdating = false;
 
     protected override void OnViewModelAssigned()
     {
         ViewModel.ChangeButtonsAvailable += setButtonsActive;
+        ViewModel.HasChanges += ProcessChanges;
 
         GraphicsOption.onValueChanged.AddListener(OnGraphics);
         AudioSettings.onValueChanged.AddListener(OnAudio);
         ControlsSettings.onValueChanged.AddListener(OnControls);
 
         ExitButton.onClick.AddListener(ViewModel.onBack);
+        ApplyButton.onClick.AddListener(ViewModel.ConfirmChanges);
 
         UpdateVisuals();
     }
@@ -41,8 +44,17 @@ public class SettingsOptView : ViewBase<SettingsOptViewModel>
         ControlsSettings.onValueChanged.RemoveAllListeners();
 
         ExitButton.onClick.RemoveAllListeners();
+        ApplyButton.onClick.RemoveAllListeners();
 
         ViewModel.ChangeButtonsAvailable -= setButtonsActive;
+        ViewModel.HasChanges -= ProcessChanges;
+    }
+
+    private void ProcessChanges(bool isUpdating)
+    {
+        ApplyButton.interactable = isUpdating;
+        ApplyButton.enabled = isUpdating;
+        ApplyButton.gameObject.SetActive(isUpdating);
     }
 
     public void OnGraphics(bool isOn)

@@ -4,7 +4,7 @@ using Common.systems.UI.View;
 using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.Profiling.HierarchyFrameDataView;
+using System.Collections.Generic;
 
 namespace Common.systems.UI.PagesSystem
 {
@@ -17,7 +17,9 @@ namespace Common.systems.UI.PagesSystem
 
         private GameObject _currentPage;
 
-        public void OpenPageID(int PageID)
+        private readonly Dictionary<PagesInfo, GameObject> _pagesBuffer = new();
+
+        public AdvancedOptions OpenPageID(int PageID)
         {
             if(_currentPage != null)
             {
@@ -25,26 +27,45 @@ namespace Common.systems.UI.PagesSystem
             }
 
             var config = _pagesDatabase.GetWindow(PageID);
-            _currentPage = CreatePage(config);
-            _currentPage.transform.SetParent(_canvas.transform);
+            GameObject page = CreatePage(config);
+            _currentPage = page;
+            _currentPage.transform.SetParent(_canvas, false);
+
+            return new AdvancedOptions(this, config, page);
         }
 
-        public void OpenPageByName(string Uri)
+        public AdvancedOptions OpenPageByName(string Uri)
         {
             if (_currentPage != null)
             {
-                Destroy(_currentPage);
+                if (_pagesBuffer.ContainsValue(_currentPage))
+                {
+                    _currentPage.SetActive(false);
+                }
+                else { 
+                    Destroy(_currentPage);
+                }
             }
 
             var config = _pagesDatabase.GetWindow(Uri);
-            _currentPage = CreatePage(config);
+            GameObject page = CreatePage(config);
+            _currentPage = page;
             _currentPage.transform.SetParent(_canvas, false);
+
+            return new AdvancedOptions(this, config, page);
         }
 
         private GameObject CreatePage(PagesInfo pageInfo)
         {
-            var go = container.InstantiatePrefab(pageInfo.prefab);
+            if (_pagesBuffer.ContainsKey(pageInfo))
+            {
+                GameObject page = _pagesBuffer[pageInfo];
+                page.SetActive(true);
 
+                return page;
+            }
+
+            var go = container.InstantiatePrefab(pageInfo.prefab);
 
             var vm = container.Instantiate(pageInfo.ViewModelType);
 
@@ -53,6 +74,31 @@ namespace Common.systems.UI.PagesSystem
             view.SetContext(vm);
 
             return go;
+        }
+
+
+        public class AdvancedOptions
+        {
+            private PagesContainer _container;
+            private PagesInfo _view;
+            private GameObject _go;
+
+            public AdvancedOptions(PagesContainer container, PagesInfo currentPage, GameObject go)
+            {
+                _container = container; 
+                _view = currentPage;
+                _go = go;
+            }
+
+            public AdvancedOptions DontUnload()
+            {
+                if(!_container._pagesBuffer.ContainsKey(_view))
+                {
+                    _container._pagesBuffer.Add(_view, _go);
+                }
+
+                return this;
+            }
         }
     }
 }

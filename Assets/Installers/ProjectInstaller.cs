@@ -1,6 +1,7 @@
 using Common.Services.Net;
 using Common.Services.Net.Modules;
 using Common.Services.SceneServices;
+using Common.systems.Configs;
 using Common.systems.GameStates;
 using Common.systems.GameStates.Grpah;
 using Common.systems.ScriptDirectorSystem;
@@ -17,12 +18,12 @@ namespace Installers
             NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
 
 
-        Container.Bind<WebSocketModule>().AsSingle();
+            Container.Bind<WebSocketModule>().AsSingle();
             Container.Bind<HttpModule>().AsSingle();
             Container.Bind<NetService>().AsSingle().NonLazy();
             Container.Bind<IInitializable>().To<NetService>().FromResolve();
 
-
+            Container.Bind<ConfigSystem>().AsSingle().NonLazy();
 
             Container.Bind<SceneStateManager>().AsSingle();
 

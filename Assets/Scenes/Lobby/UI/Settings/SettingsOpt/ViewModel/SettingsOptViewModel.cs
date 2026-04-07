@@ -1,3 +1,4 @@
+using Common.systems.Configs;
 using Common.systems.SceneStates;
 using Common.systems.UI;
 using System;
@@ -15,19 +16,39 @@ public class SettingsOptViewModel
     private SceneStateMachine<LobbyScene> _sceneStateMachine;
     private readonly NavController _navController;
     private readonly UIManager _uiManager;
+    private readonly ConfigSystem _configs;
+
 
     private SettingOpt _currentOpt;
     private SettingImpViewModel _settingImpViewModel;
 
     public event Action<bool> ChangeButtonsAvailable;
+    public event Action<bool> HasChanges;
 
-    public SettingsOptViewModel(SceneStateMachine<LobbyScene> sceneStateMachine, NavController navController, UIManager uIManager)
+    public SettingsOptViewModel(SceneStateMachine<LobbyScene> sceneStateMachine,
+        NavController navController,
+        UIManager uIManager,
+        ConfigSystem config)
     {
         _sceneStateMachine = sceneStateMachine;
         _navController = navController;
         _uiManager = uIManager;
+        _configs = config;
 
         _sceneStateMachine.onStateChanges += StateChangesHandle;
+
+        _configs.hasChanges += ConfigChangesHandler;
+    }
+
+    private void ConfigChangesHandler()
+    {
+        HasChanges?.Invoke(true);
+    }
+
+    public void ConfirmChanges()
+    {
+        _configs.SaveData();
+        HasChanges?.Invoke(false);
     }
 
     public void OpenSettingsImp()
