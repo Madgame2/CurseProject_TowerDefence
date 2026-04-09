@@ -3,6 +3,7 @@ using Common.Services.SceneServices.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -41,6 +42,29 @@ namespace Common.Services.SceneServices
             {
                 _currentScene.OnPrepare();
                 _currentScene.LoadMyScene();
+            }
+        }
+        public async Task LoadSceneAsync<T>(params SceneParamBase[] parameters) where T : SceneBase
+        {
+            _sceneParams.Clear();
+            foreach (var p in parameters)
+            {
+                _sceneParams[p.GetType()] = p;
+            }
+
+            if (_currentScene != null)
+            {
+                _currentScene.OnCleanup();
+            }
+
+            _currentScene = (SceneBase)Activator.CreateInstance(typeof(T));
+
+            if (_currentScene != null)
+            {
+                _currentScene.OnPrepare();
+
+                // Ждём загрузку сцены
+                await _currentScene.LoadMySceneAsync();
             }
         }
     }

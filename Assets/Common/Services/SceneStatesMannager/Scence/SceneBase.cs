@@ -1,6 +1,7 @@
 using ModestTree;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +27,16 @@ namespace Common.Services.SceneServices.Scenes
             catch (Exception ex)
             {
                 Debug.LogError($"[BaseScene] Ошибка при загрузке сцены '{SceneName}' в {this.GetType().Name}: {ex.Message}");
+            }
+        }
+
+        public virtual async Task LoadMySceneAsync()
+        {
+            var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(SceneName);
+
+            while (!operation.isDone)
+            {
+                await Task.Yield(); // даёт кадру отрисоваться
             }
         }
 

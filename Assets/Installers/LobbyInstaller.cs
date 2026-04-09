@@ -1,8 +1,10 @@
 using Common.Services.SceneServices.Scenes;
 using Common.systems.GameStates;
+using Common.systems.ProfileSystem;
 using Common.systems.SceneStates;
 using Common.systems.SceneStates.Graph;
 using Common.systems.UI;
+using Scenes.Lobby;
 using System;
 using UnityEngine;
 using Zenject;
@@ -30,5 +32,12 @@ public class LobbyInstaller : MonoInstaller
 
         Container.Bind<SceneStateMachine<LobbyScene>>().AsSingle().NonLazy();
         Container.Bind<IInitializable>().To<SceneStateMachine<LobbyScene>>().FromResolve();
+
+        Container.Bind<ProfileManager>().AsSingle().NonLazy();
+        
+        Container.Bind<LobbyManager>().AsSingle().NonLazy();
+        Container.Bind<IInitializable>().To<LobbyManager>().FromResolve();
+
+        Container.BindInterfacesTo<LobbySceneEntryPoint>().AsSingle();
     }
 }

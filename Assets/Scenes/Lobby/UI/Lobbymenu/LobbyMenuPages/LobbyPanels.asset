@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0c3dd5957afcb4b8ae5c09b521bcc7, type: 3}
+  m_Name: LobbyPanels
+  m_EditorClassIdentifier: Assembly-CSharp::Common.systems.UI.PagesSystem.DataBase.PagesDataBase
+  pages:
+  - pageUri: HostPanel
+    prefab: {fileID: 1563074721394490609, guid: 73aaa83bbe2f47f478586fff0ad60369, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 0a7018e98a1c7054ab9ff6ab6f4db261, type: 3}

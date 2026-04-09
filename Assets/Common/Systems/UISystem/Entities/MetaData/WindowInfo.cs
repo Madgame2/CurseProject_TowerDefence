@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class WindowInfo
@@ -29,4 +30,5 @@ public class WindowInfo
     public List<string> cannotOpenWith;
 
     public bool selfCanvas = false;
+    public bool withoutCanvas = false;
 }
