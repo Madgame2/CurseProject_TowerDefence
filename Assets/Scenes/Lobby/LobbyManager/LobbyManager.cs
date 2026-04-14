@@ -21,6 +21,21 @@ namespace Scenes.Lobby
 
         public event Action onLobbyUpdated;
 
+        private bool _inGameSearch = false;
+        public event Action<bool> gameSearchStateChanges;
+
+        public bool InGameSearch
+        {
+            set {
+                _inGameSearch = value;
+                gameSearchStateChanges?.Invoke(_inGameSearch);
+            }
+            get => _inGameSearch;
+        }
+
+
+
+
         public Lobby.Entities.Lobby Lobby
         {
             get => _lobby;
@@ -127,6 +142,11 @@ namespace Scenes.Lobby
 
                 return null;
             }
+        }
+
+        internal void SyncState()
+        {
+            throw new NotImplementedException();
         }
     }
 }

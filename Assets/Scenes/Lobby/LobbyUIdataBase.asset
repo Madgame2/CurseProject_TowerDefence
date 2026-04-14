@@ -45,3 +45,27 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 1
     withoutCanvas: 0
+  - windowName: HostPlay
+    prefab: {fileID: 7376394928587520631, guid: 6a53ffa047048a74480ba7ef814f4390, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 14f8427dab3e518439ce5edb6472750f, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: InvitePage
+    prefab: {fileID: 9144030910134240710, guid: 94e577ebb3a64fe4590db6c86ea7fa22, type: 3}
+    viewModelScript: {fileID: 11500000, guid: fe2580d8b0d80bb4bbf30881f5ec0fcb, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: JoinToLobby
+    prefab: {fileID: 284483321669837219, guid: de61c8728399fe74280482f16407b482, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 7e647e011c502a343babd1bb7f018cf0, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

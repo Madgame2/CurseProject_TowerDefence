@@ -5,6 +5,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Common.Services.Net.Modules
@@ -55,7 +56,7 @@ namespace Common.Services.Net.Modules
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Receive error: " + ex.Message);
+                    Debug.LogError("Receive error: " + ex.Message);
                     break;
                 }
             }
@@ -104,11 +105,25 @@ namespace Common.Services.Net.Modules
 
             try
             {
-                
+                if (_WebSocket.State == WebSocketState.Open ||
+                    _WebSocket.State == WebSocketState.CloseReceived)
+                {
+                    await _WebSocket.CloseAsync(
+                        WebSocketCloseStatus.NormalClosure,
+                        "Client disconnect",
+                        CancellationToken.None
+                    );
+                    _WebSocket.Dispose();
+                }
             }
             catch (Exception e)
             {
                 Debug.LogError("Disconnect error: " + e.Message);
+            }
+            finally
+            {
+                _WebSocket.Dispose();
+                _WebSocket = null;
             }
         }
 
@@ -120,8 +135,8 @@ namespace Common.Services.Net.Modules
 
             var message = new
             {
-                action = action,
-                payload = payload
+                action,
+                payload
             };
 
             string json = JsonConvert.SerializeObject(message);
@@ -170,12 +185,24 @@ namespace Common.Services.Net.Modules
 
         public void On(string actionName, Action<string> callback)
         {
+            if (!_handlers.TryGetValue(actionName, out var list))
+            {
+                list = new List<Action<string>>();
+                _handlers[actionName] = list;
+            }
 
+            list.Add(callback);
         }
 
         public void Off(string actionName, Action<string> callback)
         {
+            if (!_handlers.TryGetValue(actionName, out var list))
+                return;
 
+            list.Remove(callback);
+
+            if (list.Count == 0)
+                _handlers.Remove(actionName);
         }
 
         private void HandleMessage(string json)
@@ -188,17 +215,38 @@ namespace Common.Services.Net.Modules
             if (!string.IsNullOrEmpty(requestId) && _pendingRequests.ContainsKey(requestId))
             {
                 _pendingRequests[requestId].SetResult(json);
-                _pendingRequests.Remove(requestId);
+                //_pendingRequests.Remove(requestId);
                 return;
             }
 
-            // Иначе обычные события (On/handlers)
+            if (!string.IsNullOrEmpty(msg.Action))
+            {
+                HandleEvent(msg);
+            }
+
+        }
+
+        private void HandleEvent(WSResponse msg)
+        {
+            if (string.IsNullOrEmpty(msg.Action))
+                return;
+
+            if (_handlers.TryGetValue(msg.Action, out var list))
+            {
+                foreach (var handler in list)
+                {
+                    handler.Invoke(msg.Data?.ToString());
+                }
+            }
         }
     }
 
 
     public class WSResponse
     {
+        [JsonProperty("action")]
+        public string? Action { get; set; }
+
         [JsonProperty("code")]
         public int Code { get; set; }
 

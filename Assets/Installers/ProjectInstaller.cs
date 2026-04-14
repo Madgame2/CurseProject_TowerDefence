@@ -1,9 +1,11 @@
 using Common.Services.Net;
 using Common.Services.Net.Modules;
+using Common.Services.Net.Services;
 using Common.Services.SceneServices;
 using Common.systems.Configs;
 using Common.systems.GameStates;
 using Common.systems.GameStates.Grpah;
+using Common.systems.MainThread;
 using Common.systems.ScriptDirectorSystem;
 using UnityEngine;
 using Zenject;
@@ -12,7 +14,6 @@ namespace Installers
 {
     public class ProjectInstaller : MonoInstaller
     {
-
         public override void InstallBindings()
         {
             NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
@@ -20,6 +21,7 @@ namespace Installers
 
             Container.Bind<WebSocketModule>().AsSingle();
             Container.Bind<HttpModule>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LiveConnectionService>().AsSingle().NonLazy();
             Container.Bind<NetService>().AsSingle().NonLazy();
             Container.Bind<IInitializable>().To<NetService>().FromResolve();
 
@@ -34,6 +36,13 @@ namespace Installers
             Container.Bind<IInitializable>().To<GameStateMachine>().FromResolve();
 
             Container.Bind<ScriptDirector>().AsTransient();
+
+            Container
+                .Bind<MainThreadDispatcher>()
+                .FromNewComponentOnNewGameObject()
+                .WithGameObjectName("MainThreadDispatcher")
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

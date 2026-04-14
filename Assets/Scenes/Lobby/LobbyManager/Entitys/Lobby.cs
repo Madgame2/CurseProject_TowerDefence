@@ -6,11 +6,24 @@ namespace Scenes.Lobby.Entities
 {
     public class Lobby
     {
+
+        [JsonProperty("hostHeaderImage")]
+        public string hostHeaderImage;
+
+        [JsonProperty("hostName")]
+        public string hostName;
+
+        [JsonProperty("inviteCode")]
+        public string inviteCode;
+
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("users")]
         public List<string> Users { get; set; } = new List<string>();
+
+        [JsonProperty("usersProfiles")]
+        public List<Player> LobbyUsers { get; set; } = new List<Player>();  
 
         [JsonProperty("host")]
         public string Host { get; set; }
