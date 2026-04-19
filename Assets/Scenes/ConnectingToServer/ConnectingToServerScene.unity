@@ -608,6 +608,8 @@ MonoBehaviour:
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
   _messageWindow: {fileID: 8857022121351792727, guid: 431f0259e0232f34e8fbfb15acb641a5, type: 3}
   windowsDatabase: {fileID: 11400000, guid: 264853358595a6b4e8996f7763e55cc9, type: 2}
   canvas: {fileID: 726471370}

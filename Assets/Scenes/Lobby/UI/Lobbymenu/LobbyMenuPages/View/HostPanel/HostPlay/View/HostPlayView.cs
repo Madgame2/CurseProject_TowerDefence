@@ -46,7 +46,7 @@ public class HostPlayView : ViewBase<HostPlayViewModel>
     {
         MatchMakingRequestDTO dto = new MatchMakingRequestDTO();
         dto.Seed = long.Parse(_seedInput.text);
-        dto.matchDifficulty = values[_difficultyDropdownBox.value];
+        dto.matchDifficulty = values[_difficultyDropdownBox.value].ToString();
 
         ViewModel.StartSearch(dto);
     }

@@ -26,6 +26,8 @@ namespace Common.Services.Net.Services
         public event Action OnConnectionLost;
         public event Action OnConnectionRestored;
 
+        private bool _isActive;
+
         private enum ConnectionState
         {
             Connected,
@@ -34,6 +36,12 @@ namespace Common.Services.Net.Services
         }
 
         private ConnectionState _state = ConnectionState.Disconnected;
+
+        public void ResetHeartbeat()
+        {
+            _lastPongTime = DateTime.UtcNow;
+            _state = ConnectionState.Connected;
+        }
 
         public LiveConnectionService(WebSocketModule net)
         {
@@ -47,7 +55,7 @@ namespace Common.Services.Net.Services
 
         public async void Dispose()
         {
-            _cts?.Cancel();
+            Stop();
 
             try
             {
@@ -61,12 +69,18 @@ namespace Common.Services.Net.Services
 
             _socket?.Disconnect();
         }
-            
 
         private void StartHeartBeat()
         {
+            if (_isActive)
+                return;
+
             if (_cts != null && !_cts.IsCancellationRequested)
                 return;
+
+            _isActive = true;
+
+            Stop();
 
             _cts = new CancellationTokenSource();
             _lastPongTime = DateTime.UtcNow;
@@ -79,8 +93,9 @@ namespace Common.Services.Net.Services
 
         private void Stop()
         {
+            _isActive = false;
+
             _cts?.Cancel();
-            _cts = null;
 
             _state = ConnectionState.Disconnected;
         }

@@ -69,3 +69,19 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: SearchingPanel
+    prefab: {fileID: 5776042976217766742, guid: 95422af422375e04c848674e3e4a0e6a, type: 3}
+    viewModelScript: {fileID: 11500000, guid: b598288bd74d7cb488c6476b8fbf1aa5, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: SearchingComplite
+    prefab: {fileID: 5776042976217766742, guid: 9f7f83ee778b1c74dac0db0a765a0fc6, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 731d3c69bb12519488f20e4d139e9d01, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

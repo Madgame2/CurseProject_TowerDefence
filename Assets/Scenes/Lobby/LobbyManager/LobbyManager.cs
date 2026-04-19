@@ -1,9 +1,14 @@
+using Common.Events;
 using Common.Services.Net;
 using Common.Services.Net.Modules;
+using Common.systems.MainThread;
 using Common.systems.ProfileSystem.Entities;
+using Common.systems.UI;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Scenes.Lobby.Entities;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -13,6 +18,9 @@ namespace Scenes.Lobby
 {
     public class LobbyManager : IInitializable
     {
+        private NavController navController;
+        private UIManager _uiManager;
+        private MainThreadDispatcher _threadDispatcher;
         private readonly WebSocketModule _socket;
         private Lobby.Entities.Lobby _lobby = null;
 
@@ -41,19 +49,79 @@ namespace Scenes.Lobby
             get => _lobby;
             private set
             {
+                if( _lobby == null && value != null) {
+                    _socket.On("Lobby_updates", lobbyUpdatesHandle);
+                }
+                else
+                {
+                    _socket.Off("Lobby_updates", lobbyUpdatesHandle);
+                }
                 _lobby = value;
+
                 onLobbyUpdated?.Invoke();
             }
         }
 
-        public LobbyManager(NetService netService) 
+        public LobbyManager(NetService netService, NavController nav, MainThreadDispatcher dispatcher, UIManager uIManager) 
         {
             _socket = netService._webSocketModule;
-
+            navController = nav;
+            _threadDispatcher = dispatcher;
+            _uiManager = uIManager;
         }
 
         public async void Initialize()
         {
+        }
+
+        private void lobbyUpdatesHandle(string message)
+        {
+            Debug.Log(message);
+            var lobbyEvent = JsonConvert.DeserializeObject<LobbyEvent>(message);
+
+            Debug.Log(lobbyEvent.type);
+            switch (lobbyEvent.type)
+            {
+                case "STATE_UPDATE":
+                    HandelUpdateState(lobbyEvent.state);
+                    break;
+            }
+        }
+
+        private void HandelUpdateState(string state)
+        {
+            switch (state)
+            {
+                case "IN_SEARCH":
+                    _socket.On("sessionReady", HandleSessionReady);
+                    Debug.Log("Subsrubet to: sessionReady");
+                    break;
+            }
+        }
+
+        private void HandleSessionReady(string obj)
+        {
+            //SessionServerInfo sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
+
+            
+            //try
+            //{
+            //    string[] keys = new string[] { sessionServerInfo.passToken };
+            //    //var newSocket = await WebSocketModule.CreateConnectionTo(sessionServerInfo.host, sessionServerInfo.port, keys, cts.Token);
+
+            //    //await _socket.ReplaceSessionSocketAsync(newSocket);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+
+            _threadDispatcher.Run(() => {
+                _uiManager.Close("SearchingPanel");
+                _uiManager.TryOpen("SearchingComplite");
+                navController.PlayCinematicTransitionToSession();
+                }
+            );
         }
 
         public async Task Init()

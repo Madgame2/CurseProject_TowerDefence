@@ -13,9 +13,10 @@ public class NavController : MonoBehaviour
 {
     public List<Path> ways;
     [SerializeField] private Transform _transformObject;
+    [SerializeField] private VignetteController vignette;
 
-    //[SerializeField] private Path[] _paths;
-
+    public float moveUpHeight = 5f;
+    public float duration = 2f;
 
     private Tween moveTween;
     private Coroutine rotationCoroutine;
@@ -23,19 +24,16 @@ public class NavController : MonoBehaviour
     public bool IsAnimating => moveTween != null && moveTween.IsActive() && moveTween.IsPlaying();
 
 
-    //public void Update()
-    //{
-    //    if (Keyboard.current.wKey.isPressed)
-    //    {
-    //        ExecAnim("LobbyPage");
-    //    }
+    public void PlayCinematicTransitionToSession()
+    {
+        Stop();
 
-    //    if (Keyboard.current.sKey.isPressed)
-    //    {
-    //        ExecReverseAnim("LobbyPage");
-    //    }
-    //}
+        Sequence seq = DOTween.Sequence();
 
+        seq.Join(_transformObject.DOMoveY(_transformObject.position.y + moveUpHeight, duration));
+        seq.Join(_transformObject.DORotate(new Vector3(-80, 0, 0), duration));
+        seq.Join(vignette.FadeOut());
+    }
 
     public async Task WaitIfAnimating()
     {

@@ -6,7 +6,7 @@ public class MatchMakingRequestDTO
 {
     public long Seed;
     public string LobbyId;
-    public MatchDifficulty matchDifficulty;
+    public string matchDifficulty;
 }
 
 

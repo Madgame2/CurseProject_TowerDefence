@@ -23,22 +23,120 @@ namespace Common.Services.Net.Modules
         public event Action onConnect;
         public event Action onDisconnect;
 
+        private CancellationTokenSource _receiveCts;
+        private Task _receiveTask;
 
         public bool IsConnected => _isConnected;
 
-        private async Task ReceiveLoop(CancellationToken ct = default)
+        public static async Task<ClientWebSocket> CreateConnectionTo(
+            string hostAddress,
+            int port,
+            string[] keys = null,
+            CancellationToken ct = default)
         {
-            var buffer = new byte[8192];
+            var ws = new ClientWebSocket();
 
-            while (_WebSocket != null && _WebSocket.State == WebSocketState.Open && !ct.IsCancellationRequested)
+            if (keys != null && keys.Length > 0)
+            {
+                foreach (var key in keys)
+                {
+                    ws.Options.SetRequestHeader("X-Key", key);
+                }
+            }
+
+            var uri = new Uri($"ws://{hostAddress}:{port}/ws");
+
+            try
+            {
+                await ws.ConnectAsync(uri, ct);
+                return ws;
+            }
+            catch (OperationCanceledException)
+            {
+                ws.Dispose();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                ws.Dispose();
+                throw new Exception($"Failed to connect to session server: {uri}", ex);
+            }
+        }
+        public async Task ReplaceSessionSocketAsync(ClientWebSocket newSocket)
+        {
+            var oldCts = _receiveCts;
+            _receiveCts = new CancellationTokenSource();
+
+
+            if (oldCts != null)
+            {
+                oldCts.Cancel();
+                try
+                {
+                    if (_receiveTask != null)
+                        await _receiveTask; // ВАЖНО: дождаться завершения старого receive loop
+                }
+                catch
+                {
+                    // ignore cancellation / receive errors
+                }
+                finally
+                {
+                    oldCts.Dispose();
+                }
+            }
+            var oldSocket = _WebSocket;
+
+            if (oldSocket != null)
             {
                 try
                 {
-                    var result = await _WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
+                    if (oldSocket.State == WebSocketState.Open ||
+                        oldSocket.State == WebSocketState.CloseReceived)
+                    {
+                        await oldSocket.CloseAsync(
+                            WebSocketCloseStatus.NormalClosure,
+                            "Replaced by new session socket",
+                            CancellationToken.None
+                        );
+                    }
+                }
+                catch
+                {
+                    // socket мог уже умереть — это нормально
+                }
+                finally
+                {
+                    oldSocket.Dispose();
+                }
+            }
+
+            _isConnected = false;
+
+            // 4. Атомарная замена сокета
+            _WebSocket = newSocket;
+
+            // 5. Запуск нового receive loop
+            StartReceiveLoop(_WebSocket);
+
+            // 6. ВАЖНО: уведомить систему, что соединение восстановлено
+            _isConnected = true;
+            onConnect?.Invoke();
+        }
+        private async Task ReceiveLoop(ClientWebSocket socket, CancellationToken ct)
+        {
+            var buffer = new byte[8192];
+
+            while (socket != null &&
+                   socket.State == WebSocketState.Open &&
+                   !ct.IsCancellationRequested)
+            {
+                try
+                {
+                    var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
 
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
-                        Console.WriteLine("Server closed connection");
                         _isConnected = false;
                         onDisconnect?.Invoke();
                         break;
@@ -47,7 +145,7 @@ namespace Common.Services.Net.Modules
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         var json = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                        HandleMessage(json); // тут вызываем твой обработчик
+                        HandleMessage(json);
                     }
                 }
                 catch (OperationCanceledException)
@@ -57,16 +155,22 @@ namespace Common.Services.Net.Modules
                 catch (Exception ex)
                 {
                     Debug.LogError("Receive error: " + ex.Message);
-                    break;
                 }
             }
         }
-
 
         public void setServerAdress(string adress)
         {
             if (string.IsNullOrEmpty(adress)) throw new ArgumentNullException();
             _hostAddress = adress;
+        }
+
+        private void StartReceiveLoop(ClientWebSocket socket)
+        {
+            _receiveCts?.Cancel();
+            _receiveCts = new CancellationTokenSource();
+
+            _receiveTask = Task.Run(() => ReceiveLoop(socket, _receiveCts.Token));
         }
 
         public async Task<bool> tryConnect(string AccessToken)
@@ -84,8 +188,7 @@ namespace Common.Services.Net.Modules
                     _isConnected = true;
                     onConnect?.Invoke();
 
-                    // Запускаем receive loop, чтобы HandleMessage вызывался
-                    _ = Task.Run(() => ReceiveLoop());
+                    StartReceiveLoop(_WebSocket);
 
                     return true;
                 }
