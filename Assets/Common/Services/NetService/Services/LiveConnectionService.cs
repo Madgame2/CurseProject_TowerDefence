@@ -91,13 +91,11 @@ namespace Common.Services.Net.Services
             _monitorTask = MonitorLoop();
         }
 
-        private void Stop()
+        public void Stop()
         {
             _isActive = false;
 
             _cts?.Cancel();
-
-            _state = ConnectionState.Disconnected;
         }
 
         private async Task PingLoop()

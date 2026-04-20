@@ -1,12 +1,15 @@
+using Common.Services.Net.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using Zenject;
 
 namespace Common.Services.Net.Modules
 {
@@ -14,7 +17,11 @@ namespace Common.Services.Net.Modules
     {
         private ClientWebSocket _WebSocket;
         private Dictionary<string, List<Action<string>>> _handlers = new();
+        private readonly Dictionary<string, List<Func<string, Task>>> _asyncHandlers = new();
         private Dictionary<string, TaskCompletionSource<string>> _pendingRequests = new();
+        [Inject] private LiveConnectionService liveService;
+        private readonly SemaphoreSlim _replaceLock = new(1, 1);
+        private readonly SemaphoreSlim _disconnectLock = new(1, 1);
 
 
         private string _hostAddress;
@@ -31,16 +38,16 @@ namespace Common.Services.Net.Modules
         public static async Task<ClientWebSocket> CreateConnectionTo(
             string hostAddress,
             int port,
-            string[] keys = null,
+            Dictionary<string, string> headers = null,
             CancellationToken ct = default)
         {
             var ws = new ClientWebSocket();
 
-            if (keys != null && keys.Length > 0)
+            if (headers != null)
             {
-                foreach (var key in keys)
+                foreach (var kv in headers)
                 {
-                    ws.Options.SetRequestHeader("X-Key", key);
+                    ws.Options.SetRequestHeader(kv.Key, kv.Value);
                 }
             }
 
@@ -62,78 +69,86 @@ namespace Common.Services.Net.Modules
                 throw new Exception($"Failed to connect to session server: {uri}", ex);
             }
         }
+
+
         public async Task ReplaceSessionSocketAsync(ClientWebSocket newSocket)
         {
-            var oldCts = _receiveCts;
-            _receiveCts = new CancellationTokenSource();
+            await _replaceLock.WaitAsync();
 
+            ClientWebSocket oldSocket = null;
+            CancellationTokenSource oldCts = null;
 
-            if (oldCts != null)
+            try
             {
-                oldCts.Cancel();
-                try
-                {
-                    if (_receiveTask != null)
-                        await _receiveTask; // ВАЖНО: дождаться завершения старого receive loop
-                }
-                catch
-                {
-                    // ignore cancellation / receive errors
-                }
-                finally
-                {
-                    oldCts.Dispose();
-                }
-            }
-            var oldSocket = _WebSocket;
+                liveService.Stop();
 
-            if (oldSocket != null)
-            {
-                try
+                oldSocket = _WebSocket;
+                oldCts = _receiveCts;
+
+                // 1. stop loop
+                oldCts?.Cancel();
+
+                // 2. wake up ReceiveAsync
+                if (oldSocket != null)
                 {
-                    if (oldSocket.State == WebSocketState.Open ||
-                        oldSocket.State == WebSocketState.CloseReceived)
+                    try
                     {
-                        await oldSocket.CloseAsync(
-                            WebSocketCloseStatus.NormalClosure,
-                            "Replaced by new session socket",
-                            CancellationToken.None
-                        );
+                        if (oldSocket.State == WebSocketState.Open ||
+                            oldSocket.State == WebSocketState.CloseReceived)
+                        {
+                            await oldSocket.CloseOutputAsync(
+                                WebSocketCloseStatus.NormalClosure,
+                                "Replaced",
+                                CancellationToken.None);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        Debug.LogWarning($"Socket close error: {ex}");
+                    }
+
+                    // 🔥 HARD GUARANTEE
+                    try
+                    {
+                        oldSocket.Abort();
+                    }
+                    catch { }
                 }
-                catch
-                {
-                    // socket мог уже умереть — это нормально
-                }
-                finally
-                {
-                    oldSocket.Dispose();
-                }
+
+                // 3. cleanup (NO await oldTask anymore)
+                oldCts?.Dispose();
+
+                _receiveCts = new CancellationTokenSource();
+                _WebSocket = newSocket;
+
+                _isConnected = false;
+
+                // 4. restart
+                StartReceiveLoop(_WebSocket);
+
+                _isConnected = true;
+                onConnect?.Invoke();
             }
-
-            _isConnected = false;
-
-            // 4. Атомарная замена сокета
-            _WebSocket = newSocket;
-
-            // 5. Запуск нового receive loop
-            StartReceiveLoop(_WebSocket);
-
-            // 6. ВАЖНО: уведомить систему, что соединение восстановлено
-            _isConnected = true;
-            onConnect?.Invoke();
+            finally
+            {
+                _replaceLock.Release();
+            }
         }
         private async Task ReceiveLoop(ClientWebSocket socket, CancellationToken ct)
         {
             var buffer = new byte[8192];
 
-            while (socket != null &&
-                   socket.State == WebSocketState.Open &&
-                   !ct.IsCancellationRequested)
+            try
             {
-                try
+                while (!ct.IsCancellationRequested)
                 {
+                    if (socket == null || socket.State != WebSocketState.Open)
+                        break;
+
                     var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
+
+                    if (ct.IsCancellationRequested)
+                        break;
 
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
@@ -145,17 +160,17 @@ namespace Common.Services.Net.Modules
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         var json = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                        HandleMessage(json);
+                        await HandleMessage(json);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError("Receive error: " + ex.Message);
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                // normal shutdown
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Receive error: " + ex);
             }
         }
 
@@ -170,7 +185,7 @@ namespace Common.Services.Net.Modules
             _receiveCts?.Cancel();
             _receiveCts = new CancellationTokenSource();
 
-            _receiveTask = Task.Run(() => ReceiveLoop(socket, _receiveCts.Token));
+            _receiveTask = ReceiveLoop(socket, _receiveCts.Token);
         }
 
         public async Task<bool> tryConnect(string AccessToken)
@@ -204,29 +219,44 @@ namespace Common.Services.Net.Modules
 
         public async Task Disconnect()
         {
-            if (_WebSocket == null) return;
+            await _disconnectLock.WaitAsync();
 
             try
             {
-                if (_WebSocket.State == WebSocketState.Open ||
-                    _WebSocket.State == WebSocketState.CloseReceived)
+                var socket = _WebSocket;
+                _WebSocket = null;
+                _isConnected = false;
+
+                if (socket == null)
+                    return;
+
+                try
                 {
-                    await _WebSocket.CloseAsync(
-                        WebSocketCloseStatus.NormalClosure,
-                        "Client disconnect",
-                        CancellationToken.None
-                    );
-                    _WebSocket.Dispose();
+                    if (socket.State == WebSocketState.Open ||
+                        socket.State == WebSocketState.CloseReceived)
+                    {
+                        await socket.CloseAsync(
+                            WebSocketCloseStatus.NormalClosure,
+                            "Client disconnect",
+                            CancellationToken.None
+                        );
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Disconnect error: " + e.Message);
+                catch (Exception e)
+                {
+                    Debug.LogError("Disconnect error: " + e);
+                }
+                finally
+                {
+                    socket.Dispose();
+                }
+
+                // остановка receive loop
+                _receiveCts?.Cancel();
             }
             finally
             {
-                _WebSocket.Dispose();
-                _WebSocket = null;
+                _disconnectLock.Release();
             }
         }
 
@@ -285,6 +315,16 @@ namespace Common.Services.Net.Modules
             return response!;
         }
 
+        public void On(string actionName, Func<string, Task> callback)
+        {
+            if (!_asyncHandlers.TryGetValue(actionName, out var list))
+            {
+                list = new List<Func<string, Task>>();
+                _asyncHandlers[actionName] = list;
+            }
+
+            list.Add(callback);
+        }
 
         public void On(string actionName, Action<string> callback)
         {
@@ -308,7 +348,7 @@ namespace Common.Services.Net.Modules
                 _handlers.Remove(actionName);
         }
 
-        private void HandleMessage(string json)
+        private async Task HandleMessage(string json)
         {
             // Десериализация в конкретный тип вместо dynamic
             var msg = JsonConvert.DeserializeObject<WSResponse>(json);
@@ -317,6 +357,7 @@ namespace Common.Services.Net.Modules
 
             if (!string.IsNullOrEmpty(requestId) && _pendingRequests.ContainsKey(requestId))
             {
+
                 _pendingRequests[requestId].SetResult(json);
                 //_pendingRequests.Remove(requestId);
                 return;
@@ -324,22 +365,44 @@ namespace Common.Services.Net.Modules
 
             if (!string.IsNullOrEmpty(msg.Action))
             {
-                HandleEvent(msg);
+               await HandleEvent(msg);
             }
 
         }
 
-        private void HandleEvent(WSResponse msg)
+        private async Task HandleEvent(WSResponse msg)
         {
             if (string.IsNullOrEmpty(msg.Action))
                 return;
 
+            var data = msg.Data?.ToString();
+
+            // sync handlers
             if (_handlers.TryGetValue(msg.Action, out var list))
             {
                 foreach (var handler in list)
                 {
-                    handler.Invoke(msg.Data?.ToString());
+                    handler.Invoke(data);
                 }
+            }
+
+            // async handlers
+            if (_asyncHandlers.TryGetValue(msg.Action, out var asyncList))
+            {
+                var tasks = asyncList.Select(handler => SafeInvoke(handler, data));
+                await Task.WhenAll(tasks);
+            }
+        }
+
+        private async Task SafeInvoke(Func<string, Task> handler, string data)
+        {
+            try
+            {
+                await handler(data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Handler error: {ex}");
             }
         }
     }

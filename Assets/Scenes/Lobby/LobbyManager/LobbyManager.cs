@@ -2,15 +2,18 @@ using Common.Events;
 using Common.Services.Net;
 using Common.Services.Net.Modules;
 using Common.systems.MainThread;
+using Common.systems.ProfileSystem;
 using Common.systems.ProfileSystem.Entities;
 using Common.systems.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Scenes.Lobby.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Zenject;
 
@@ -23,6 +26,7 @@ namespace Scenes.Lobby
         private MainThreadDispatcher _threadDispatcher;
         private readonly WebSocketModule _socket;
         private Lobby.Entities.Lobby _lobby = null;
+        private readonly ProfileManager _profileMannager;
 
         public event Action onTimeOut;
         public event Action onServerError;
@@ -62,12 +66,13 @@ namespace Scenes.Lobby
             }
         }
 
-        public LobbyManager(NetService netService, NavController nav, MainThreadDispatcher dispatcher, UIManager uIManager) 
+        public LobbyManager(NetService netService, NavController nav, MainThreadDispatcher dispatcher, UIManager uIManager, ProfileManager profileManager) 
         {
             _socket = netService._webSocketModule;
             navController = nav;
             _threadDispatcher = dispatcher;
             _uiManager = uIManager;
+            _profileMannager = profileManager;
         }
 
         public async void Initialize()
@@ -99,29 +104,65 @@ namespace Scenes.Lobby
             }
         }
 
-        private void HandleSessionReady(string obj)
+        private async Task HandleSessionReady(string obj)
         {
-            //SessionServerInfo sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
+            SessionServerInfo sessionServerInfo;
 
-            
-            //try
-            //{
-            //    string[] keys = new string[] { sessionServerInfo.passToken };
-            //    //var newSocket = await WebSocketModule.CreateConnectionTo(sessionServerInfo.host, sessionServerInfo.port, keys, cts.Token);
+            try
+            {
+                sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
 
-            //    //await _socket.ReplaceSessionSocketAsync(newSocket);
-            //}
-            //catch (Exception ex)
-            //{
+                if (sessionServerInfo == null)
+                    throw new Exception("SessionServerInfo is null");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to parse sessionReady payload: {ex}");
+                return;
+            }
 
-            //}
+            try
+            {
+                using var cts = new CancellationTokenSource();
 
-            _threadDispatcher.Run(() => {
+                // ⏱️ таймаут (например 5 секунд)
+                cts.CancelAfter(TimeSpan.FromSeconds(5));
+
+                var headers = new Dictionary<string, string>
+                        {
+                            { "Authorization", $"{sessionServerInfo.passToken}" },
+                            { "X-User-Id", _profileMannager.Profile.UserId },
+                            { "X-Session-Id", sessionServerInfo.sessionId }
+                        };
+
+                var newSocket = await WebSocketModule.CreateConnectionTo(
+                    sessionServerInfo.host,
+                    sessionServerInfo.port,
+                    headers,
+                    cts.Token
+                );
+
+                await _socket.ReplaceSessionSocketAsync(newSocket);
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning("Connection to session server timed out");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to connect to session server: {ex}");
+                return;
+            }
+
+
+            Debug.Log("Я ПОДКЛЮЧИЛСЯ");
+            _threadDispatcher.Run(() =>
+            {
                 _uiManager.Close("SearchingPanel");
                 _uiManager.TryOpen("SearchingComplite");
                 navController.PlayCinematicTransitionToSession();
-                }
-            );
+            });
         }
 
         public async Task Init()
