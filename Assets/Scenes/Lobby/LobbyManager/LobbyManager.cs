@@ -1,6 +1,8 @@
 using Common.Events;
+using Common.Services.Global;
 using Common.Services.Net;
 using Common.Services.Net.Modules;
+using Common.systems.GameStates;
 using Common.systems.MainThread;
 using Common.systems.ProfileSystem;
 using Common.systems.ProfileSystem.Entities;
@@ -27,6 +29,8 @@ namespace Scenes.Lobby
         private readonly WebSocketModule _socket;
         private Lobby.Entities.Lobby _lobby = null;
         private readonly ProfileManager _profileMannager;
+        private readonly GameStateMachine _gameStatemachine;
+        private GlobalStorage _globalStorage;
 
         public event Action onTimeOut;
         public event Action onServerError;
@@ -66,13 +70,21 @@ namespace Scenes.Lobby
             }
         }
 
-        public LobbyManager(NetService netService, NavController nav, MainThreadDispatcher dispatcher, UIManager uIManager, ProfileManager profileManager) 
+        public LobbyManager(NetService netService,
+            NavController nav,
+            MainThreadDispatcher dispatcher,
+            UIManager uIManager,
+            ProfileManager profileManager,
+            GameStateMachine gameState,
+            GlobalStorage globalStorage) 
         {
             _socket = netService._webSocketModule;
             navController = nav;
             _threadDispatcher = dispatcher;
             _uiManager = uIManager;
             _profileMannager = profileManager;
+            _gameStatemachine = gameState;
+            _globalStorage = globalStorage;
         }
 
         public async void Initialize()
@@ -106,63 +118,72 @@ namespace Scenes.Lobby
 
         private async Task HandleSessionReady(string obj)
         {
-            SessionServerInfo sessionServerInfo;
+            SessionServerInfo sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
 
-            try
-            {
-                sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
-
-                if (sessionServerInfo == null)
-                    throw new Exception("SessionServerInfo is null");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to parse sessionReady payload: {ex}");
-                return;
-            }
-
-            try
-            {
-                using var cts = new CancellationTokenSource();
-
-                // ⏱️ таймаут (например 5 секунд)
-                cts.CancelAfter(TimeSpan.FromSeconds(5));
-
-                var headers = new Dictionary<string, string>
-                        {
-                            { "Authorization", $"{sessionServerInfo.passToken}" },
-                            { "X-User-Id", _profileMannager.Profile.UserId },
-                            { "X-Session-Id", sessionServerInfo.sessionId }
-                        };
-
-                var newSocket = await WebSocketModule.CreateConnectionTo(
-                    sessionServerInfo.host,
-                    sessionServerInfo.port,
-                    headers,
-                    cts.Token
-                );
-
-                await _socket.ReplaceSessionSocketAsync(newSocket);
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.LogWarning("Connection to session server timed out");
-                return;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to connect to session server: {ex}");
-                return;
-            }
+            _globalStorage.Set<SessionServerInfo>("sessionInfo", sessionServerInfo);
 
 
-            Debug.Log("Я ПОДКЛЮЧИЛСЯ");
-            _threadDispatcher.Run(() =>
+            _threadDispatcher.Run(async () =>
             {
                 _uiManager.Close("SearchingPanel");
                 _uiManager.TryOpen("SearchingComplite");
                 navController.PlayCinematicTransitionToSession();
+                await Task.Delay(1000);
+
+                _gameStatemachine.tryMoveToState(typeof(GameSessionState));
             });
+
+            //SessionServerInfo sessionServerInfo;
+            //try
+            //{
+            //    Debug.Log(obj);
+            //    sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
+
+            //    if (sessionServerInfo == null)
+            //        throw new Exception("SessionServerInfo is null");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.LogError($"Failed to parse sessionReady payload: {ex}");
+            //    return;
+            //}
+
+            //try
+            //{
+            //    using var cts = new CancellationTokenSource();
+
+            //    // ⏱️ таймаут (например 5 секунд)
+            //    cts.CancelAfter(TimeSpan.FromSeconds(5));
+
+            //    var headers = new Dictionary<string, string>
+            //            {
+            //                { "Authorization", $"{sessionServerInfo.passToken}" },
+            //                { "X-User-Id", _profileMannager.Profile.UserId },
+            //                { "x-session-id", sessionServerInfo.sessionId }
+            //            };
+
+            //    var newSocket = await WebSocketModule.CreateConnectionTo(
+            //        sessionServerInfo.host,
+            //        sessionServerInfo.port,
+            //        headers,
+            //        cts.Token
+            //    );
+
+            //    await _socket.ReplaceSessionSocketAsync(newSocket);
+            //}
+            //catch (OperationCanceledException)
+            //{
+            //    Debug.LogWarning("Connection to session server timed out");
+            //    return;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.LogError($"Failed to connect to session server: {ex}");
+            //    return;
+            //}
+
+
+            ///Debug.Log("Я ПОДКЛЮЧИЛСЯ");
         }
 
         public async Task Init()

@@ -6,6 +6,7 @@ using Common.systems.ScriptDirectorSystem.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using System;
 
 namespace Common.systems.GameStates.States
 {
@@ -21,7 +22,7 @@ namespace Common.systems.GameStates.States
             _sceneStateMannager = sceneManager;
             this.scriptDirector = director;
         }
-        protected override void OnEnterToState()
+        protected override void OnEnterToState(Type newState)
         {
             _sceneStateMannager.loadScene<ConnectingToServerScene>();
             Debug.Log("enter to scene");

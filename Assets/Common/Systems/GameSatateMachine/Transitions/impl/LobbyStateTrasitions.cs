@@ -8,5 +8,6 @@ public class LobbyStateTrasitions : TransitionRulesBase<LobbyState>
     {
         CanTrasitTo<ConnectToServerState>();
         CanTrasitTo<ExitState>();
+        CanTrasitTo<GameSessionState>();
     }
 }

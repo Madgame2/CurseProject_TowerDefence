@@ -106,6 +106,7 @@ namespace Common.Services.Net.Services
                 {
                     _cts.Token.ThrowIfCancellationRequested();
                     await _socket.Send("ping", null);
+                    Debug.Log("PING");
                 }
                 catch
                 {
@@ -120,7 +121,7 @@ namespace Common.Services.Net.Services
         private void OnPongReceived(string data)
         {
             _lastPongTime = DateTime.UtcNow;
-
+            Debug.Log("PONG");
             if (_state != ConnectionState.Connected)
             {
                 _state = ConnectionState.Connected;

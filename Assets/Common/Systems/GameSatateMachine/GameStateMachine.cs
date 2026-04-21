@@ -1,6 +1,7 @@
 using Common.systems.GameStates.Grpah;
 using Common.systems.GameStates.States;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -38,12 +39,13 @@ namespace Common.systems.GameStates
                 Debug.LogError($"{stateType} не является наследником BaseState!");
                 return;
             }
-            _currentState?.LeavFormState();
+            _currentState?.LeavFormState(stateType);
 
             BaseState stateInstance = (BaseState)_container.Instantiate(stateType);
 
+            Type buffer= _currentState?.GetType();
             _currentState = stateInstance;
-            _currentState.EnterToState();
+            _currentState.EnterToState(buffer);
         }
     }
 }

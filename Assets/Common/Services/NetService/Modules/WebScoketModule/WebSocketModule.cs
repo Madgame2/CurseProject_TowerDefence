@@ -47,6 +47,7 @@ namespace Common.Services.Net.Modules
             {
                 foreach (var kv in headers)
                 {
+                    Debug.Log($"{kv}: {headers}");
                     ws.Options.SetRequestHeader(kv.Key, kv.Value);
                 }
             }
@@ -402,7 +403,7 @@ namespace Common.Services.Net.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Handler error: {ex}");
+                Debug.LogError($"Handler error: {ex}");
             }
         }
     }
