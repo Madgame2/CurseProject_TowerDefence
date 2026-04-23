@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d892674a939d74ea46bc9a3518eea7, type: 3}
+  m_Name: SessionUIdataBase
+  m_EditorClassIdentifier: Assembly-CSharp::UIWindowsDatabase
+  windows:
+  - windowName: LoadingUI
+    prefab: {fileID: 2984446002266547256, guid: d0834c47ee6b02b409c025800378350a, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 0443544049960b14583bc34e4d31cbfc, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

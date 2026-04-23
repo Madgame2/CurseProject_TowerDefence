@@ -85,3 +85,11 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: JoinReqestPanel
+    prefab: {fileID: 4185440496217720061, guid: 3fc92d16a76c792478592949671a7884, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 4debf14ba1a687d45adbdb308d9bbd4a, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 1
+    withoutCanvas: 0

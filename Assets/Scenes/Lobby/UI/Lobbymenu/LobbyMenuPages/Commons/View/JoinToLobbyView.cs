@@ -22,6 +22,7 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
     private Dictionary<string, GameObject> lobbyes = new Dictionary<string, GameObject>();
 
     [Inject] private readonly MainThreadDispatcher _threadDispatcher;
+    [Inject] private DiContainer _container;
 
     protected override void OnViewModelAssigned()
     {
@@ -74,7 +75,7 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
 
         _threadDispatcher.Run(() =>
         {
-            GameObject listElem = Instantiate(_template, _contentRoot, false);
+            GameObject listElem = _container.InstantiatePrefab(_template, _contentRoot);
 
             if (listElem.TryGetComponent<LobbyShowElem>(out LobbyShowElem lse))
             {
@@ -82,6 +83,7 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
             }
 
             lobbyes.Add(newLobby.Id, listElem);
+
         });
     }
 
@@ -91,8 +93,12 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
 
         foreach(var lob in lobbies)
         {
-            GameObject listElem = Instantiate(_template, _contentRoot, false);
-            if(listElem.TryGetComponent<LobbyShowElem>(out LobbyShowElem lse))
+            GameObject listElem = _container.InstantiatePrefab(
+                _template,
+                _contentRoot
+            );
+
+            if (listElem.TryGetComponent<LobbyShowElem>(out LobbyShowElem lse))
             {
                 lse.Init(lob);
             }

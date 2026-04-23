@@ -2,6 +2,7 @@ using Common.Services.Net.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -138,6 +139,7 @@ namespace Common.Services.Net.Modules
         private async Task ReceiveLoop(ClientWebSocket socket, CancellationToken ct)
         {
             var buffer = new byte[8192];
+            var ms = new MemoryStream();
 
             try
             {
@@ -146,21 +148,31 @@ namespace Common.Services.Net.Modules
                     if (socket == null || socket.State != WebSocketState.Open)
                         break;
 
-                    var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
+                    ms.SetLength(0);
 
-                    if (ct.IsCancellationRequested)
-                        break;
+                    WebSocketReceiveResult result;
 
-                    if (result.MessageType == WebSocketMessageType.Close)
+                    do
                     {
-                        _isConnected = false;
-                        onDisconnect?.Invoke();
-                        break;
-                    }
+                        result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
+
+                        if (ct.IsCancellationRequested)
+                            return;
+
+                        if (result.MessageType == WebSocketMessageType.Close)
+                        {
+                            _isConnected = false;
+                            onDisconnect?.Invoke();
+                            return;
+                        }
+
+                        ms.Write(buffer, 0, result.Count);
+
+                    } while (!result.EndOfMessage);
 
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        var json = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                        var json = Encoding.UTF8.GetString(ms.ToArray());
                         await HandleMessage(json);
                     }
                 }
@@ -349,6 +361,17 @@ namespace Common.Services.Net.Modules
                 _handlers.Remove(actionName);
         }
 
+        public void Off(string actionName, Func<string, Task> callback)
+        {
+            if (!_asyncHandlers.TryGetValue(actionName, out var list))
+                return;
+
+            list.Remove(callback);
+
+            if (list.Count == 0)
+                _asyncHandlers.Remove(actionName);
+        }
+
         private async Task HandleMessage(string json)
         {
             // Десериализация в конкретный тип вместо dynamic
@@ -381,7 +404,9 @@ namespace Common.Services.Net.Modules
             // sync handlers
             if (_handlers.TryGetValue(msg.Action, out var list))
             {
-                foreach (var handler in list)
+
+                var snapshot = list.ToArray();
+                foreach (var handler in snapshot)
                 {
                     handler.Invoke(data);
                 }
@@ -390,7 +415,9 @@ namespace Common.Services.Net.Modules
             // async handlers
             if (_asyncHandlers.TryGetValue(msg.Action, out var asyncList))
             {
-                var tasks = asyncList.Select(handler => SafeInvoke(handler, data));
+                var snapshot = asyncList.ToArray();
+
+                var tasks = snapshot.Select(handler => SafeInvoke(handler, data));
                 await Task.WhenAll(tasks);
             }
         }

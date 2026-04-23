@@ -1,5 +1,6 @@
 using Common.systems.ProfileSystem;
 using Common.systems.ProfileSystem.Entities;
+using Common.systems.UI;
 using Common.systems.UI.PagesSystem;
 using Scenes.Lobby;
 
@@ -10,12 +11,14 @@ public class LobbyViewModel
     private PagesContainer _pagesContainer;
     private readonly LobbyManager _lobbyManager;
     private readonly ProfileManager _profileManager;
+    private readonly UIManager _uiManager;
 
-    public LobbyViewModel(LobbyManager lobbyManager, ProfileManager profileManager)
+    public LobbyViewModel(LobbyManager lobbyManager, ProfileManager profileManager, UIManager uiManager)
     {
 
         _lobbyManager = lobbyManager;
         _profileManager = profileManager;
+        _uiManager = uiManager;
 
         _lobbyManager.onLobbyUpdated += HandleChanges;
         _profileManager.onProfileUpdated += HandleChanges;
@@ -50,6 +53,7 @@ public class LobbyViewModel
         if (lobby.Host == profile.UserId)
         {
             _pagesContainer.OpenPageByName("HostPanel");
+            _uiManager.TryOpen("JoinReqestPanel");
         }
         else
         {

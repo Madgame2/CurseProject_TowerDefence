@@ -57,14 +57,16 @@ namespace Scenes.Lobby
             get => _lobby;
             private set
             {
-                if( _lobby == null && value != null) {
-                    _socket.On("Lobby_updates", lobbyUpdatesHandle);
-                }
-                else
-                {
-                    _socket.Off("Lobby_updates", lobbyUpdatesHandle);
-                }
+                if (_lobby == value) return;
+
+                UnsubscribeFromLobbyEvents();
+
                 _lobby = value;
+
+                if (_lobby != null)
+                {
+                    SubscribeToLobbyEvents();
+                }
 
                 onLobbyUpdated?.Invoke();
             }
@@ -89,6 +91,33 @@ namespace Scenes.Lobby
 
         public async void Initialize()
         {
+        }
+
+
+        private void SubscribeToLobbyEvents()
+        {
+            _socket.On("Lobby_updates", lobbyUpdatesHandle);
+
+            if (IsHost(_lobby))
+            {
+                _socket.On("requestToJoin", handleResponsesToJoin);
+            }
+        }
+
+        private void UnsubscribeFromLobbyEvents()
+        {
+            _socket.Off("Lobby_updates", lobbyUpdatesHandle);
+            _socket.Off("requestToJoin", handleResponsesToJoin);
+        }
+
+        private bool IsHost(Lobby.Entities.Lobby lobby)
+        {
+            return lobby.Host == _profileMannager.Profile.UserId;
+        }
+
+        private void handleResponsesToJoin(string msg)
+        {
+
         }
 
         private void lobbyUpdatesHandle(string message)
