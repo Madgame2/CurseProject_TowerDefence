@@ -20,13 +20,13 @@ public class LobbyViewModel
         _profileManager = profileManager;
         _uiManager = uiManager;
 
-        _lobbyManager.onLobbyUpdated += HandleChanges;
-        _profileManager.onProfileUpdated += HandleChanges;
+        _lobbyManager.onLobbyUpdated += HandleLobbyChanges;
+        _profileManager.onProfileUpdated += HandleProfileChanges;
     }
 
     public void cleanUp() {
-        _lobbyManager.onLobbyUpdated -= HandleChanges;
-        _profileManager.onProfileUpdated -= HandleChanges;
+        _lobbyManager.onLobbyUpdated -= HandleLobbyChanges;
+        _profileManager.onProfileUpdated -= HandleProfileChanges;
     }
 
     public void InitViewModel(PagesContainer pagesContainer)
@@ -34,8 +34,12 @@ public class LobbyViewModel
         _pagesContainer = pagesContainer;
     }
 
-    private void HandleChanges()
+    private void HandleAllChanges()
     {
+        _uiManager.Close("InvitePage");
+        _uiManager.Close("JoinToLobby");
+        _uiManager.Close("HostPlay");
+
         if (_lobbyManager.Lobby == null)
         {
             Debug.LogError("Не реализовано когда нет лобби");
@@ -57,7 +61,18 @@ public class LobbyViewModel
         }
         else
         {
-            Debug.LogError("Не реализована панель когда не хост");
+            _pagesContainer.OpenPageByName("MembePanel");
+            _uiManager.Close("JoinReqestPanel");
         }
+    }
+
+    private void HandleProfileChanges()
+    {
+        HandleAllChanges();
+    }
+
+    private void HandleLobbyChanges(Scenes.Lobby.Entities.Lobby lobby)
+    {
+        HandleAllChanges();
     }
 }

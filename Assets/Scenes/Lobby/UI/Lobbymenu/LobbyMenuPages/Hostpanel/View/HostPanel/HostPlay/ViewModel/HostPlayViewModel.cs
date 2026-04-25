@@ -73,8 +73,7 @@ public class HostPlayViewModel
 
                     _lobbyManager.InGameSearch = true;
                     _uiManager.Close("HostPlay");
-                    _uiManager.TryOpen("SearchingPanel");
-
+                    
                     break;
 
                 case 500:

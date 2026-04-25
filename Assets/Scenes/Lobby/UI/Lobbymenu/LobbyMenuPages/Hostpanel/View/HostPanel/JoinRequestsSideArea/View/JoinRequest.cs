@@ -1,10 +1,11 @@
 using Common.systems.ProfileSystem.Entities;
+using System;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
-using System;
 
 public class JoinRequest : MonoBehaviour
 {
@@ -15,16 +16,18 @@ public class JoinRequest : MonoBehaviour
     [SerializeField] private Slider _TTlSlider;
 
     private Profile _profile;
+    private string RequestId;
 
     private float _maxTTL;
     private float _currentTTL;
     private bool _isInitialized;
 
-    public event Action<Profile> onApplyPlayerRequest;
+    public event Action<Profile, string> onApplyPlayerRequest;
 
-    public void Init(Profile profile, float TTL)
+    public void Init(Profile profile,string requestId , float TTL)
     {
         _profile = profile;
+        RequestId = requestId;
         _playerNicknameArea.text = profile.ProfileName;
 
         _maxTTL = TTL;
@@ -54,7 +57,7 @@ public class JoinRequest : MonoBehaviour
 
     private void ApplyHandler()
     {
-        onApplyPlayerRequest?.Invoke(_profile);
+        onApplyPlayerRequest?.Invoke(_profile, RequestId);
         Expire();
     }
 

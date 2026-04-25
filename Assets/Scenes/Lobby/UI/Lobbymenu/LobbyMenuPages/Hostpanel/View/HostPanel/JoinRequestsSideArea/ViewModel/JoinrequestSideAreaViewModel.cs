@@ -17,7 +17,7 @@ public class JoinRequestsSizeAreaViewModel
     [Inject] private DiContainer _container;
     [Inject] private LobbyManager _lobbyManager;
 
-    public event Action<Profile> onNewRequest;
+    public event Action<Profile,string> onNewRequest;
 
     public JoinRequestsSizeAreaViewModel(WebSocketModule socket)
     {
@@ -34,16 +34,16 @@ public class JoinRequestsSizeAreaViewModel
     {
         Debug.Log("ПРИШЕЛ ЗАПРОС)");
         Debug.Log(arg);
-        Profile ProfileRequest = JsonConvert.DeserializeObject<Profile>(arg);
+        RequestToJoinDTO ProfileRequest = JsonConvert.DeserializeObject<RequestToJoinDTO>(arg);
         _dispatcher.Run(() =>
         {
-            onNewRequest?.Invoke(ProfileRequest);
+            onNewRequest?.Invoke(ProfileRequest.profile, ProfileRequest.requestId);
         });
     }
 
-    internal void ApplyRequest(Profile profile)
+    internal void ApplyRequest(Profile profile, string requestId)
     {
-        ApplyRequestDTO dto = new ApplyRequestDTO { LobbyId = _lobbyManager.Lobby.Id, UserId = profile.UserId };
+        ApplyRequestDTO dto = new ApplyRequestDTO { LobbyId = _lobbyManager.Lobby.Id, requestId = requestId, UserId = profile.UserId };
         _ = _socket.Send("ApplyPlayerJoinRequest", dto);
     }
 }

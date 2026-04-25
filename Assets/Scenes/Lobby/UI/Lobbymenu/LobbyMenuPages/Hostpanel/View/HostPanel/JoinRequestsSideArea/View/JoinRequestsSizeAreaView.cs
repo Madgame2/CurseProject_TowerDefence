@@ -16,19 +16,19 @@ public class JoinRequestsSizeAreaView : ViewBase<JoinRequestsSizeAreaViewModel>
         ViewModel.onNewRequest += newRequesthandler;
     }
 
-    private void newRequesthandler(Profile profile)
+    private void newRequesthandler(Profile profile, string requestID)
     {
         GameObject request_gameObject = _container.InstantiatePrefab(_templatePrefab, _rootContainer);
         if(request_gameObject.TryGetComponent<JoinRequest>(out JoinRequest joinRequest))
         {
-            joinRequest.Init(profile, 30);
+            joinRequest.Init(profile, requestID, 30);
             joinRequest.onApplyPlayerRequest += ViewModel.ApplyRequest;
         }
     }
 
     public override void Cleanup()
     {
-        ViewModel.onNewRequest += newRequesthandler;
+        ViewModel.onNewRequest -= newRequesthandler;
 
         ViewModel.cleanUp();
     }

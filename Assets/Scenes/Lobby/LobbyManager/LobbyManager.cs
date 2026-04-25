@@ -35,7 +35,7 @@ namespace Scenes.Lobby
         public event Action onTimeOut;
         public event Action onServerError;
 
-        public event Action onLobbyUpdated;
+        public event Action<Lobby.Entities.Lobby> onLobbyUpdated;
 
         private bool _inGameSearch = false;
         public event Action<bool> gameSearchStateChanges;
@@ -68,7 +68,7 @@ namespace Scenes.Lobby
                     SubscribeToLobbyEvents();
                 }
 
-                onLobbyUpdated?.Invoke();
+                onLobbyUpdated?.Invoke(Lobby);
             }
         }
 
@@ -97,17 +97,11 @@ namespace Scenes.Lobby
         private void SubscribeToLobbyEvents()
         {
             _socket.On("Lobby_updates", lobbyUpdatesHandle);
-
-            if (IsHost(_lobby))
-            {
-                _socket.On("requestToJoin", handleResponsesToJoin);
-            }
         }
 
         private void UnsubscribeFromLobbyEvents()
         {
             _socket.Off("Lobby_updates", lobbyUpdatesHandle);
-            _socket.Off("requestToJoin", handleResponsesToJoin);
         }
 
         private bool IsHost(Lobby.Entities.Lobby lobby)
@@ -131,7 +125,51 @@ namespace Scenes.Lobby
                 case "STATE_UPDATE":
                     HandelUpdateState(lobbyEvent.state);
                     break;
+
+                case "NEW_HOST":
+                    handleHostUpdate(lobbyEvent.hostID);
+                    break;
+
+                case "PLAYER_JOIND":
+                    handleNewMember(lobbyEvent.profile);
+                    break;
+
+                case "PLAYER_LEFT":
+                    handlerMemberleft(lobbyEvent.userId);
+                    break;
+
+                case "NEW_LOBBY":
+                    Debug.Log("NEW_LOBBY");
+                    HandlerNewLobby(lobbyEvent.lobby);
+                    break;
             }
+        }
+
+        private void HandlerNewLobby(Entities.Lobby lobby)
+        {
+            this.Lobby = lobby;
+        }
+
+        private void handlerMemberleft(string userId)
+        {
+            this.Lobby.Users.Remove(userId);
+            this.Lobby.LobbyUsers.RemoveAll(u => u.PlayerId == userId);
+
+            onLobbyUpdated?.Invoke(Lobby);
+        }
+
+        private void handleNewMember(Player profile)
+        {
+            this.Lobby.Users.Add(profile.PlayerId);
+            this.Lobby.LobbyUsers.Add(profile);
+
+            onLobbyUpdated.Invoke(Lobby);
+        }
+
+        private void handleHostUpdate(string hostID)
+        {
+            this.Lobby.Host = hostID;
+            onLobbyUpdated.Invoke(Lobby);
         }
 
         private void HandelUpdateState(string state)
@@ -141,6 +179,11 @@ namespace Scenes.Lobby
                 case "IN_SEARCH":
                     _socket.On("sessionReady", HandleSessionReady);
                     Debug.Log("Subsrubet to: sessionReady");
+                    _uiManager.TryOpen("SearchingPanel");
+                    break;
+                case "IDLE":
+                    _socket.Off("sessionReady", HandleSessionReady);
+                    _uiManager.Close("SearchingPanel");
                     break;
             }
         }
@@ -161,58 +204,6 @@ namespace Scenes.Lobby
 
                 _gameStatemachine.tryMoveToState(typeof(GameSessionState));
             });
-
-            //SessionServerInfo sessionServerInfo;
-            //try
-            //{
-            //    Debug.Log(obj);
-            //    sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
-
-            //    if (sessionServerInfo == null)
-            //        throw new Exception("SessionServerInfo is null");
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.LogError($"Failed to parse sessionReady payload: {ex}");
-            //    return;
-            //}
-
-            //try
-            //{
-            //    using var cts = new CancellationTokenSource();
-
-            //    // ⏱️ таймаут (например 5 секунд)
-            //    cts.CancelAfter(TimeSpan.FromSeconds(5));
-
-            //    var headers = new Dictionary<string, string>
-            //            {
-            //                { "Authorization", $"{sessionServerInfo.passToken}" },
-            //                { "X-User-Id", _profileMannager.Profile.UserId },
-            //                { "x-session-id", sessionServerInfo.sessionId }
-            //            };
-
-            //    var newSocket = await WebSocketModule.CreateConnectionTo(
-            //        sessionServerInfo.host,
-            //        sessionServerInfo.port,
-            //        headers,
-            //        cts.Token
-            //    );
-
-            //    await _socket.ReplaceSessionSocketAsync(newSocket);
-            //}
-            //catch (OperationCanceledException)
-            //{
-            //    Debug.LogWarning("Connection to session server timed out");
-            //    return;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.LogError($"Failed to connect to session server: {ex}");
-            //    return;
-            //}
-
-
-            ///Debug.Log("Я ПОДКЛЮЧИЛСЯ");
         }
 
         public async Task Init()
