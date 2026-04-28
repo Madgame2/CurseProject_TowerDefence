@@ -8,9 +8,20 @@ using Zenject;
 public class SessionSceneInstaller : MonoInstaller
 {
     [SerializeField] private UIManager _uiManager;
-
     public override void InstallBindings()
     {
+        Container.Bind<PlayersController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<NetDispatcher>().AsSingle();
+
+        Container.Bind<BaseInputActions>().AsSingle();
+        Container.BindInterfacesTo<InputInitializer>().AsSingle();
+
+        Container.Bind<MoveCommandSender>().AsTransient();
+        Container.Bind<PlayerMovementController>().AsSingle(); //потом поменять на Transiate
+        Container.Bind<PlayerInputHandler>().FromComponentInHierarchy().AsSingle();
+
+        Container.Bind<ChankSystem>().FromComponentInHierarchy().AsSingle();
+
         Container.Bind<SceneStateMachine<GameSessionScene>>().AsSingle().NonLazy();
         Container.Bind<IInitializable>().To<SceneStateMachine<GameSessionScene>>().FromResolve();
 

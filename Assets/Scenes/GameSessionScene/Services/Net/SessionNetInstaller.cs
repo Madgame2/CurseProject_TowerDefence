@@ -14,6 +14,8 @@ public class SessionNetInstaller
     private WebSocketModule _socket;
     [Inject] private ProfileManager _profileManager;
     [Inject] private SceneStateMachine<GameSessionScene> _sceneStateMachine;
+    [Inject] private ChankSystem _chankSystem;
+    [Inject] private NetDispatcher _netDispatcher;
 
     private string _currentState;
     private float _currentProgress;
@@ -88,6 +90,7 @@ public class SessionNetInstaller
 
         void Subscribe()
         {
+            _chankSystem.InitSubscrationsToEvents();
             _socket.On("playerSyncFinished", FinishedSync);
         }
 
@@ -102,6 +105,12 @@ public class SessionNetInstaller
 
 
         return tcs.Task;
+    }
+
+    private async Task onPrealodedChunk(string arg)
+    {
+        Debug.Log(arg);
+        _ = _socket.Send("chankApply", new { });
     }
 
     private void SessionInstractionsHandler(string arg)

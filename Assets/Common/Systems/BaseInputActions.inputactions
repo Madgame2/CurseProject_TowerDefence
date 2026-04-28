@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "BaseInputActions",
+    "maps": [
+        {
+            "name": "SessionPlayer",
+            "id": "ec1a4a5e-c521-4a47-b6e8-b5fcd56aa669",
+            "actions": [
+                {
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "0dd0391e-64d9-4d79-9d57-d89d3954bd33",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6815ce29-2544-414c-bbab-5c3b5e820241",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

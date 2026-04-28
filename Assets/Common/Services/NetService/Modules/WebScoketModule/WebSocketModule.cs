@@ -1,5 +1,6 @@
 using Common.Services.Net.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -374,24 +375,51 @@ namespace Common.Services.Net.Modules
 
         private async Task HandleMessage(string json)
         {
-            // Десериализация в конкретный тип вместо dynamic
-            var msg = JsonConvert.DeserializeObject<WSResponse>(json);
+            var jObject = JObject.Parse(json);
 
-            string requestId = msg.RequestId;
+            // 👇 пробуем вытащить базовые поля
+            var action = jObject["action"]?.ToString();
+            var requestId = jObject["requestId"]?.ToString();
 
-            if (!string.IsNullOrEmpty(requestId) && _pendingRequests.ContainsKey(requestId))
+            // =========================
+            // 1. RESPONSE (старый механизм)
+            // =========================
+            if (!string.IsNullOrEmpty(requestId) &&
+                _pendingRequests.ContainsKey(requestId))
             {
-
                 _pendingRequests[requestId].SetResult(json);
-                //_pendingRequests.Remove(requestId);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(msg.Action))
+            // =========================
+            // 2. EVENT (новый или старый)
+            // =========================
+            if (!string.IsNullOrEmpty(action))
             {
-               await HandleEvent(msg);
+                // 👇 пробуем старый формат
+                WSResponse? msg = null;
+
+                try
+                {
+                    msg = jObject.ToObject<WSResponse>();
+                }
+                catch { }
+
+                // 👇 если это новый формат (без code/message и т.д.)
+                if (msg == null || msg.Action == null)
+                {
+                    msg = new WSResponse
+                    {
+                        Action = action,
+                        Data = jObject["data"]
+                    };
+                }
+
+                await HandleEvent(msg);
+                return;
             }
 
+            Console.WriteLine("Unknown message type: " + json);
         }
 
         private async Task HandleEvent(WSResponse msg)
