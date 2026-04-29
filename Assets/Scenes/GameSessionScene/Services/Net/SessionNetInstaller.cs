@@ -15,6 +15,7 @@ public class SessionNetInstaller
     [Inject] private ProfileManager _profileManager;
     [Inject] private SceneStateMachine<GameSessionScene> _sceneStateMachine;
     [Inject] private ChankSystem _chankSystem;
+    [Inject] private PlayersService _playersService;
     [Inject] private NetDispatcher _netDispatcher;
 
     private string _currentState;
@@ -91,6 +92,7 @@ public class SessionNetInstaller
         void Subscribe()
         {
             _chankSystem.InitSubscrationsToEvents();
+            _playersService.Init();
             _socket.On("playerSyncFinished", FinishedSync);
         }
 

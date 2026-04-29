@@ -1,62 +1,92 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class PlayersController : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-
+    [Inject] private readonly PlayerStorage _playersStorage;
     [SerializeField] private float positionSmooth = 10f;
     [SerializeField] private float rotationSmooth = 10f;
     [SerializeField] private float snapDistance = 5f;
 
-    private Vector3 targetPosition;
-    private Quaternion targetRotation;
+    private readonly Dictionary<string, PlayerViewState> _states = new();
 
     public void handlePlayerNewState(PlayerState state)
     {
+        var playerEntity = _playersStorage.GetPlayer(state.Id);
+        if (playerEntity == null)
+            return;
 
-        Debug.Log(state.Rotation.Y);
-        targetPosition = new Vector3(
+        if (!_states.TryGetValue(state.Id, out var viewState))
+        {
+            viewState = new PlayerViewState();
+            _states[state.Id] = viewState;
+        }
+
+        viewState.targetPosition = new Vector3(
             state.Position.X,
             state.Position.Y,
             state.Position.Z
         );
 
-        targetRotation = Quaternion.Euler(
+        viewState.targetRotation = Quaternion.Euler(
             state.Rotation.X,
             state.Rotation.Y,
             state.Rotation.Z
         );
 
-        Vector3 velocity = new Vector3(state.Velocity.X,
+        var velocity = new Vector3(
+            state.Velocity.X,
             state.Velocity.Y,
-            state.Velocity.Z);
+            state.Velocity.Z
+        );
 
-        player.gameObject.TryGetComponent<CharacterAnimController>(out CharacterAnimController component);
-        component.SetVelocity(velocity);
+        if (playerEntity.gameObject.TryGetComponent<CharacterAnimController>(out var anim))
+        {
+            anim.SetVelocity(velocity);
+        }
     }
 
     void Update()
     {
-        // если слишком далеко — телепорт (анти-лаг)
-        if (Vector3.Distance(player.position, targetPosition) > snapDistance)
+        foreach (var kvp in _states)
         {
-            player.position = targetPosition;
-        }
-        else
-        {
-            // плавное движение
-            player.position = Vector3.Lerp(
-                player.position,
-                targetPosition,
-                Time.deltaTime * positionSmooth
+            var playerId = kvp.Key;
+            var state = kvp.Value;
+
+            var player = _playersStorage.GetPlayer(playerId);
+            if (player == null)
+                continue;
+
+            Transform playerTransform = player.transform;
+
+            // snap check
+            if (Vector3.Distance(playerTransform.position, state.targetPosition) > snapDistance)
+            {
+                playerTransform.position = state.targetPosition;
+            }
+            else
+            {
+                playerTransform.position = Vector3.Lerp(
+                    playerTransform.position,
+                    state.targetPosition,
+                    Time.deltaTime * positionSmooth
+                );
+            }
+
+            playerTransform.rotation = Quaternion.Slerp(
+                playerTransform.rotation,
+                state.targetRotation,
+                Time.deltaTime * rotationSmooth
             );
         }
-
-        // плавный поворот
-        player.rotation = Quaternion.Slerp(
-            player.rotation,
-            targetRotation,
-            Time.deltaTime * rotationSmooth
-        );
     }
+
+
+    private class PlayerViewState
+    {
+        public Vector3 targetPosition;
+        public Quaternion targetRotation;
+    }
+
 }

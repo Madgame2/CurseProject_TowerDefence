@@ -25,13 +25,20 @@ public class NetDispatcher
 
     private async Task handleEvents(string arg)
     {
+        Debug.Log(arg);
         WorldUpdateData packet = JsonConvert.DeserializeObject<WorldUpdateData>(arg);
+
+        if (packet?.Players == null || packet.Players.Count == 0)
+            return;
 
         _mainThread.Run(() =>
         {
-            if (packet.Players != null)
+            foreach (var player in packet.Players)
             {
-                _playersController.handlePlayerNewState(packet.Players[0]);
+                if (player == null)
+                    continue;
+
+                _playersController.handlePlayerNewState(player);
             }
         });
     }

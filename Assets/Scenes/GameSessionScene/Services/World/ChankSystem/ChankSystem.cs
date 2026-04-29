@@ -44,6 +44,11 @@ public class ChankSystem : MonoBehaviour
         }
     }
 
+    private async Task HandlePlayersMetaData(string arg)
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task handlePreloadedChank(string arg)
     {
          ChankMetaData chankData = JsonConvert.DeserializeObject<ChankMetaData>(arg);
