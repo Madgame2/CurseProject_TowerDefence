@@ -2,6 +2,8 @@ using Common.Services.Net.Modules;
 using Common.systems.MainThread;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -11,10 +13,13 @@ public class ChankSystem : MonoBehaviour
     [SerializeField] private Transform _worldRoot;
     [Inject] private WebSocketModule _socket;
     [Inject] private MainThreadDispatcher _mainThread;
+    [Inject] private DecorationManager _decorationSystem;
 
-    [SerializeField] private GameObject _debugPlane;
+    [SerializeField] private GameObject _ChankPrefab;
 
+    private Dictionary<Vector2, Chank> _chanks = new();
 
+    ConcurrentQueue<ChankMetaData> queue = new();
     private bool _isInited = false;
 
     private void Start()
@@ -49,17 +54,45 @@ public class ChankSystem : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    private async Task handlePreloadedChank(string arg)
+    private void handlePreloadedChank(string arg)
     {
-         ChankMetaData chankData = JsonConvert.DeserializeObject<ChankMetaData>(arg);
-        
-        _mainThread.Run(() =>
-        {
-            Debug.Log($"{chankData.x}: {chankData.z}");
-            GameObject obj = Instantiate(_debugPlane, _worldRoot, false);
-            obj.transform.position= new Vector3(chankData.x * 160, 0, chankData.z * 160);
-        });
+        var chankData = JsonConvert.DeserializeObject<ChankMetaData>(arg);
 
         _ = _socket.Send("chankApply", new { });
+
+        _mainThread.Run(() =>
+        {
+            var obj = Instantiate(_ChankPrefab, _worldRoot);
+            obj.transform.position = new Vector3(chankData.x * 160, 0, chankData.z * 160);
+        });
     }
+
+    //private async Task handlePreloadedChank(string arg)
+    //{
+    //    var chankData = await Task.Run(() =>
+    //        JsonConvert.DeserializeObject<ChankMetaData>(arg));
+    //    _ = _socket.Send("chankApply", new { });
+
+    //    Debug.Log($"{chankData.x}: {chankData.z}");
+    //    _mainThread.Run(() =>
+    //    {
+    //        GameObject obj = Instantiate(_ChankPrefab, _worldRoot, false);
+    //        obj.transform.position= new Vector3(chankData.x * 160, 0, chankData.z * 160);
+
+    //        //if(obj.TryGetComponent<Chank>(out Chank outChank))
+    //        //{
+    //           // outChank.Position = new Vector2(chankData.x, chankData.z);
+    //            //foreach(var essence in chankData.essence)
+    //            //{
+    //            //    outChank.EntiersRecords[new Vector2(essence.x, essence.z)] = essence.value;
+    //            //}
+
+    //            //outChank.InitChank();
+    //       // }
+
+    //    });
+
+
+    //}
+
 }

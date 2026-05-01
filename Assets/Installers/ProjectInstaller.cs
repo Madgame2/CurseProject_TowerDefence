@@ -20,6 +20,7 @@ namespace Installers
         {
             NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
 
+            Container.Bind<BaseInputActions>().AsSingle();
             Container.Bind<GlobalStorage>().AsSingle();
 
             Container.Bind<WebSocketModule>().AsSingle();

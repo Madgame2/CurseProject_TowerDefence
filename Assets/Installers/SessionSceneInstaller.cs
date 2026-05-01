@@ -10,13 +10,18 @@ public class SessionSceneInstaller : MonoInstaller
     [SerializeField] private UIManager _uiManager;
     public override void InstallBindings()
     {
+        Container.Bind<EntityManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<DecorationManager>().FromComponentInHierarchy().AsSingle();
+
+        Container.Bind<ThirdPersonCamera>().FromComponentInHierarchy().AsSingle();
+
         Container.Bind<PlayerStorage>().FromComponentInHierarchy().AsSingle();
         Container.Bind<PlayersService>().AsSingle();
 
         Container.Bind<PlayersController>().FromComponentInHierarchy().AsSingle();
         Container.Bind<NetDispatcher>().AsSingle();
 
-        Container.Bind<BaseInputActions>().AsSingle();
+        
         Container.BindInterfacesTo<InputInitializer>().AsSingle();
 
         Container.Bind<MoveCommandSender>().AsTransient();

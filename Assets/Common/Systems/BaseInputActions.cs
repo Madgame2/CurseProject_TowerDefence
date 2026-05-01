@@ -100,6 +100,42 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""79b08a62-ebea-4e2e-952b-f409ecb3b0e2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""812aac0d-caad-4fe0-b593-243c5b1759ec"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""37e1499e-046e-4dc6-a0d4-3afcfc5c5dd7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AltRotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""db22fe04-baf0-4da6-a61c-6bc63077ffb0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -113,6 +149,72 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1310c47c-ebc2-482e-9d1f-8f2214524491"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9ce7ad3-74c5-4ac7-bfea-8fc57a441ff0"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6c8c1ff-55a2-41da-a60c-d3325030b2de"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64bb7f8c-5135-4a40-bd01-d89780b2e976"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53b61eca-8801-48c8-89ee-3d20ab031a0a"",
+                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2112bf98-d682-4a62-9e96-ba5258807f90"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +224,10 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         // SessionPlayer
         m_SessionPlayer = asset.FindActionMap("SessionPlayer", throwIfNotFound: true);
         m_SessionPlayer_RightClick = m_SessionPlayer.FindAction("RightClick", throwIfNotFound: true);
+        m_SessionPlayer_Look = m_SessionPlayer.FindAction("Look", throwIfNotFound: true);
+        m_SessionPlayer_Zoom = m_SessionPlayer.FindAction("Zoom", throwIfNotFound: true);
+        m_SessionPlayer_Rotate = m_SessionPlayer.FindAction("Rotate", throwIfNotFound: true);
+        m_SessionPlayer_AltRotate = m_SessionPlayer.FindAction("AltRotate", throwIfNotFound: true);
     }
 
     ~@BaseInputActions()
@@ -203,6 +309,10 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_SessionPlayer;
     private List<ISessionPlayerActions> m_SessionPlayerActionsCallbackInterfaces = new List<ISessionPlayerActions>();
     private readonly InputAction m_SessionPlayer_RightClick;
+    private readonly InputAction m_SessionPlayer_Look;
+    private readonly InputAction m_SessionPlayer_Zoom;
+    private readonly InputAction m_SessionPlayer_Rotate;
+    private readonly InputAction m_SessionPlayer_AltRotate;
     /// <summary>
     /// Provides access to input actions defined in input action map "SessionPlayer".
     /// </summary>
@@ -218,6 +328,22 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "SessionPlayer/RightClick".
         /// </summary>
         public InputAction @RightClick => m_Wrapper.m_SessionPlayer_RightClick;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Look".
+        /// </summary>
+        public InputAction @Look => m_Wrapper.m_SessionPlayer_Look;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Zoom".
+        /// </summary>
+        public InputAction @Zoom => m_Wrapper.m_SessionPlayer_Zoom;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Rotate".
+        /// </summary>
+        public InputAction @Rotate => m_Wrapper.m_SessionPlayer_Rotate;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/AltRotate".
+        /// </summary>
+        public InputAction @AltRotate => m_Wrapper.m_SessionPlayer_AltRotate;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -247,6 +373,18 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @RightClick.started += instance.OnRightClick;
             @RightClick.performed += instance.OnRightClick;
             @RightClick.canceled += instance.OnRightClick;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @AltRotate.started += instance.OnAltRotate;
+            @AltRotate.performed += instance.OnAltRotate;
+            @AltRotate.canceled += instance.OnAltRotate;
         }
 
         /// <summary>
@@ -261,6 +399,18 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @RightClick.started -= instance.OnRightClick;
             @RightClick.performed -= instance.OnRightClick;
             @RightClick.canceled -= instance.OnRightClick;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @AltRotate.started -= instance.OnAltRotate;
+            @AltRotate.performed -= instance.OnAltRotate;
+            @AltRotate.canceled -= instance.OnAltRotate;
         }
 
         /// <summary>
@@ -308,5 +458,33 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRightClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Rotate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AltRotate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAltRotate(InputAction.CallbackContext context);
     }
 }

@@ -1,6 +1,7 @@
 using Common.Services.Net.Modules;
 using Common.systems.MainThread;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
@@ -11,8 +12,8 @@ public class NetDispatcher
 {
     [Inject] private WebSocketModule _socket;
     [Inject] private PlayersController _playersController;
-    [Inject]private MainThreadDispatcher _mainThread;
-
+    [Inject] private MainThreadDispatcher _mainThread;
+    [Inject] private EntityManager _entityManager;
     public NetDispatcher()
     {
 

@@ -12,3 +12,13 @@ public class Vector3Dto
     [JsonProperty("z")]
     public float Z { get; set; }
 }
+
+
+public class Vector2Dto
+{
+    [JsonProperty("x")]
+    public float X { get; set; }
+
+    [JsonProperty("y")]
+    public float Y { get; set; }
+}

@@ -1,18 +1,25 @@
 using Common.Services.Net.Modules;
 using Common.systems.MainThread;
+using Common.systems.ProfileSystem;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Scenes.Lobby.Entities;
 using System;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
+using static UnityEditor.FilePathAttribute;
 
 public class PlayersService: IDisposable
 {
     private readonly WebSocketModule _socket;
     private readonly PlayerStorage _playersStorage;
     [Inject] private readonly MainThreadDispatcher _mainThread;
+    [Inject] private ProfileManager _profileManager;
+    [Inject] private ThirdPersonCamera _cameraController;
+
 
     public PlayersService(
         WebSocketModule socket,
@@ -59,7 +66,18 @@ public class PlayersService: IDisposable
             });
         }
 
+        _mainThread.Run(() =>
+        {
+            LinkCameraToPlayer();
+        });
+        
 
         _ = _socket.Send("meataDataApply", new { });
+    }
+
+    public void LinkCameraToPlayer()
+    {
+        GameObject playerObject = _playersStorage.GetByPlayerGameObjectId(_profileManager.Profile.UserId);
+        _cameraController.SetTarget(playerObject.transform);
     }
 }
