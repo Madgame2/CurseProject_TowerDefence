@@ -24,9 +24,9 @@ public class PlayersController : MonoBehaviour
         }
 
         viewState.targetPosition = new Vector3(
-            state.Position.X,
-            state.Position.Y,
-            state.Position.Z
+            state.Position.X*10,
+            state.Position.Y*10,
+            state.Position.Z*10
         );
 
         viewState.targetRotation = Quaternion.Euler(

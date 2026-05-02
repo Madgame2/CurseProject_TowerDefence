@@ -15,8 +15,8 @@ public class MoveCommandSender
         var payload = new MoveRequest
         {
             PlayerID = _profilemanager.Profile.UserId,
-            X = mousePos.x,
-            Z = mousePos.z
+            X = mousePos.x/10,
+            Z = mousePos.z/10
         };
 
         Debug.Log("Sended");

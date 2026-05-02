@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2adb40e0d392974a8b168bd6a1b5801, type: 3}
   m_Name: EntityDataBase
   m_EditorClassIdentifier: Assembly-CSharp::EntityDataBase
-  entityConfigDefinitions: []
+  entityConfigDefinitions:
+  - {fileID: 11400000, guid: ecb6a51e4162adc448df3f5a1aa5d87c, type: 2}
