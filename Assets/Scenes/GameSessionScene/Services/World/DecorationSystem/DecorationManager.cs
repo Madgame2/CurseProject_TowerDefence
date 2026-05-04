@@ -1,11 +1,22 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class DecorationManager : MonoBehaviour
 {
     private Dictionary<Chank, List<DecorationInstance>> chunkToDecorations = new();
     [SerializeField] private DecorationConfigDatabase config;
     [SerializeField] private DecorationFactory factory;
+
+    [Inject] private DiContainer _container;
+    private Dictionary<Vector2, GameObject> Placed_Decorations = new();
+
+    public void Start()
+    {
+        config.Init();
+    }
+
 
     public void LoadChankDecorations(Chank chank)
     {
@@ -46,5 +57,27 @@ public class DecorationManager : MonoBehaviour
                 deco.gameObject = null;
             }
         }
+    }
+
+    internal void PlaceDecorationAt(Chank chank, Vector2Dto chankCell, int cellData)
+    {
+        Vector3 localPos = new Vector3(chankCell.X, 0, chankCell.Y);
+        Vector3 globalPos = chank.transform.position + localPos * 10;
+
+        Vector2 _global2dpos = new Vector2(globalPos.x, globalPos.z);
+        if(Placed_Decorations.TryGetValue(_global2dpos, out GameObject gameobjec))
+        {
+            Destroy(gameobjec);
+        }
+        if (cellData == 0) return;
+
+        GameObject decorationPrefab = config.Get(cellData)?.prefab;
+        if (decorationPrefab == null) return;
+
+        GameObject spawnedDecorations = _container.InstantiatePrefab(decorationPrefab);
+        spawnedDecorations.transform.parent = chank.transform;
+        spawnedDecorations.transform.position = globalPos;
+
+        Placed_Decorations.Add(_global2dpos, spawnedDecorations);
     }
 }

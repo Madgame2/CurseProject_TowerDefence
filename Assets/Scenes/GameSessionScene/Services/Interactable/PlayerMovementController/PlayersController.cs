@@ -17,11 +17,14 @@ public class PlayersController : MonoBehaviour
         if (playerEntity == null)
             return;
 
+
         if (!_states.TryGetValue(state.Id, out var viewState))
         {
             viewState = new PlayerViewState();
             _states[state.Id] = viewState;
         }
+
+        viewState.State = state.State;
 
         viewState.targetPosition = new Vector3(
             state.Position.X*10,
@@ -58,7 +61,18 @@ public class PlayersController : MonoBehaviour
             if (player == null)
                 continue;
 
+
+
             Transform playerTransform = player.transform;
+
+            if (state.State == PlayerStates.BLOCKED_ADN_HIDE)
+            {
+                player.gameObject.SetActive(false);
+            }
+            else
+            {
+                player.gameObject.SetActive(true);
+            }
 
             // snap check
             if (Vector3.Distance(playerTransform.position, state.targetPosition) > snapDistance)
@@ -87,6 +101,7 @@ public class PlayersController : MonoBehaviour
     {
         public Vector3 targetPosition;
         public Quaternion targetRotation;
+        public PlayerStates State;
     }
 
 }

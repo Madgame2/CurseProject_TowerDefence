@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.XR;
 using Zenject;
 
 public class ChankSystem : MonoBehaviour
@@ -64,7 +65,23 @@ public class ChankSystem : MonoBehaviour
         {
             var obj = Instantiate(_ChankPrefab, _worldRoot);
             obj.transform.position = new Vector3(chankData.x * 160, 0, chankData.z * 160);
+
+            if(obj.TryGetComponent<Chank>(out Chank chank))
+            {
+                chank.Position = new Vector2(chankData.x,chankData.z);
+                _chanks.Add(chank.Position, chank);
+            }
         });
+    }
+
+    internal void handleChankUpdate(ChankUpdate message)
+    {
+        Vector2 chankPos = new Vector2(message.chankPos.X, message.chankPos.Y);
+         if( _chanks.TryGetValue(chankPos, out Chank chank))
+        {
+
+            _decorationSystem.PlaceDecorationAt(chank, message.chankCell, message.cellData);
+        }
     }
 
     //private async Task handlePreloadedChank(string arg)

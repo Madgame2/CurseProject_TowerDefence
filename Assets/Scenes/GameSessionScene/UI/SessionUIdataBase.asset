@@ -21,3 +21,35 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: GameMenu
+    prefab: {fileID: 9030227852359431992, guid: 763850d5d8c621e4aa9aae8365b96e68, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 87cb6665c7afd9046a78a79ec7f0fd8a, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: GrossCard
+    prefab: {fileID: 5126583271147989869, guid: 2ff3be6f79a5bc742b0f2566bf6c7239, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: TeslaTowerCard
+    prefab: {fileID: 5113597748852787693, guid: 217742bf6e0245247bb68120a109e014, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: KnightCampKnight
+    prefab: {fileID: 4225280975500364705, guid: d1cfcf963d7eb994e827499b45943dfa, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

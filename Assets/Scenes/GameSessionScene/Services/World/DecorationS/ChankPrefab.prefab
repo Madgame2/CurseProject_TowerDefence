@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3215735487509712737}
-  m_Layer: 0
+  - component: {fileID: 5524033513035829297}
+  m_Layer: 6
   m_Name: ChankPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 2415631559482508812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5524033513035829297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4333710789245525363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf418f20ac7beb440ab78730a8eaa44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chank
+  Position: {x: 0, y: 0}
 --- !u!1 &9214769569703235792
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,7 +59,7 @@ GameObject:
   - component: {fileID: 5985794621160239606}
   - component: {fileID: 648570532274642400}
   - component: {fileID: 2435216215229208944}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

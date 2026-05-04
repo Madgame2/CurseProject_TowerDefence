@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Zenject;
 
@@ -26,6 +27,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
+        if (EventSystem.current.IsPointerOverGameObject(-1))
+            return;
+
         Vector2 mousePos = Mouse.current.position.ReadValue();
 
         Ray ray = Camera.main.ScreenPointToRay(mousePos);

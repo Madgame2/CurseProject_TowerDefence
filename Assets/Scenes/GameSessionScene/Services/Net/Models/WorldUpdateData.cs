@@ -10,4 +10,10 @@ public class WorldUpdateData
 
     [JsonProperty("players")]
     public List<PlayerState> Players { get; set; } = new();
+
+    [JsonProperty("chanks")]
+    public List<ChankUpdate> chanks { get; set; } = new();
+
+    [JsonProperty("enities")]
+    public List<EntityEvent> enities { get; set; } = new();
 }

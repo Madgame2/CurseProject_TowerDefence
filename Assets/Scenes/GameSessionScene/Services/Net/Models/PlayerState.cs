@@ -23,5 +23,7 @@ public class PlayerState
 public enum PlayerStates
 {
     IDEL,
-    RUNING
+    RUNING,
+    IN_RUNNING_BUILD,
+    BLOCKED_ADN_HIDE
 }

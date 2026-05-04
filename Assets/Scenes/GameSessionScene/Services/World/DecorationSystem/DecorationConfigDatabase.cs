@@ -29,6 +29,6 @@ public class DecorationConfigDatabase : ScriptableObject
 
     public DecorationConfig Get(long id)
     {
-        return Llookup[id];
+        return Llookup.GetValueOrDefault(id);
     }
 }

@@ -1,15 +1,26 @@
+using Common.systems.GameStates;
 using Common.systems.SceneStates;
 using Common.systems.SceneStates.Graph;
 using Common.systems.UI;
 using System;
+using UnityEditor.Rendering;
 using UnityEngine;
 using Zenject;
 
 public class SessionSceneInstaller : MonoInstaller
 {
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] bool _debugState;
     public override void InstallBindings()
     {
+        if (_debugState)
+        {
+            var gameStatemachine = Container.Resolve<GameStateMachine>();
+            gameStatemachine.SetStartState<GameSessionState>();
+        }
+
+
+        Container.Bind<BuildSystem>().FromComponentInHierarchy().AsSingle();
         Container.Bind<EntityManager>().FromComponentInHierarchy().AsSingle();
         Container.Bind<DecorationManager>().FromComponentInHierarchy().AsSingle();
 
@@ -40,5 +51,8 @@ public class SessionSceneInstaller : MonoInstaller
 
 
         Container.BindInterfacesTo<SessionSceneEnterPoint>().AsSingle();
+
+
+
     }
 }

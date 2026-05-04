@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RootHouse
   m_EditorClassIdentifier: Assembly-CSharp::EntityConfigDefinition
   NetName: root_house
-  prefab: {fileID: 3996788158789423161, guid: 11d184f5b306aed4bbd70d2f4fce8066, type: 3}
+  prefab: {fileID: 8966807716789866363, guid: 2670d259d45ada74dbe1984f26384b58, type: 3}
   neverUnload: 1

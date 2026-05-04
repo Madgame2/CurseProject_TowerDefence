@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98a345865e509349afd533c228d7784, type: 3}
   m_Name: New Decoration Config Database
   m_EditorClassIdentifier: Assembly-CSharp::DecorationConfigDatabase
-  configs: []
+  configs:
+  - {fileID: 11400000, guid: 66103ec8f481084409dacbbcca073409, type: 2}

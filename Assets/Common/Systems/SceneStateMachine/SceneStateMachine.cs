@@ -85,6 +85,15 @@ namespace Common.systems.SceneStates
 
         }
 
+        public void SetState(Type stateType)
+        {
+            if (!typeof(BaseState).IsAssignableFrom(stateType))
+            {
+                Debug.LogError($"{stateType} не является наследником BaseState!");
+                return;
+            }
+        }
+
         public bool tryMoveToState(Type stateType) 
         {
             if (!typeof(BaseState).IsAssignableFrom(stateType))

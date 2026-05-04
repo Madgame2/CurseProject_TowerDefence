@@ -14,6 +14,7 @@ public class NetDispatcher
     [Inject] private PlayersController _playersController;
     [Inject] private MainThreadDispatcher _mainThread;
     [Inject] private EntityManager _entityManager;
+    [Inject] private ChankSystem _chankSystem;
     public NetDispatcher()
     {
 
@@ -36,11 +37,19 @@ public class NetDispatcher
         {
             foreach (var player in packet.Players)
             {
-                if (player == null)
-                    continue;
-
-                _playersController.handlePlayerNewState(player);
+                if (player != null)
+                    _playersController.handlePlayerNewState(player);
             }
+            foreach(var chank in packet.chanks)
+            {
+                if (chank != null)
+                    _chankSystem.handleChankUpdate(chank);
+            }
+            foreach(var entity in packet.enities)
+            {
+                _entityManager.handleEnityEvnet(entity);
+            }
+
         });
     }
     public void cleanUp()
