@@ -5,12 +5,20 @@ using UnityEngine;
 public enum EntityEventType
 {
     SPAWN,
-    TERMINATE
+    TERMINATE,
+    UPDATE
 }
 
 public enum EntityesEnum
 {
-    GrossCannonInBuild
+    GrossCannonInBuild,
+    GrossCannon,
+
+    TeslaTowerBuild,
+    TeslaTower,
+
+    CampInBuild,
+    Camp
 }
 
 public interface IWorldUpdateState

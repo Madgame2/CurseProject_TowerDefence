@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e117e3fb9522537498bb754876aa7cef, type: 3}
   m_Name: EntityDataBase
   m_EditorClassIdentifier: Assembly-CSharp::EntityDataBase_enum
-  configs: []
+  configs:
+  - type: 0
+    prefab: {fileID: 7447520749923101920, guid: 69ac91f90a3b89d469306e3a06d5f40a, type: 3}
+  - type: 1
+    prefab: {fileID: 3452455334609231016, guid: 1904a5e9ddf44a74f9649ddab804b327, type: 3}
+  - type: 2
+    prefab: {fileID: 6083615640738137926, guid: b96cadd5b2aaf4f43802d32678199391, type: 3}
+  - type: 3
+    prefab: {fileID: 1220291278206176655, guid: 71ea55cab531a2c43ad22dba83cb54fb, type: 3}
+  - type: 4
+    prefab: {fileID: 3014974013080921195, guid: 169113e0a503a0544a2d59e80cf89c69, type: 3}
+  - type: 5
+    prefab: {fileID: 976596671540706929, guid: 77367f73a17ea944c800f77d33a3cd0d, type: 3}

@@ -79,11 +79,83 @@ public class EntityManager : MonoBehaviour
                 entities.Add(entity.EnityId, newObject);
                 break;
             case EntityEventType.TERMINATE:
+                GameObject enityObject = entities.GetValueOrDefault(entity.EnityId);
+                if (!enityObject) return;
 
+                Destroy(enityObject);
+                entities.Remove(entity.EnityId);
+                break;
+            case EntityEventType.UPDATE:
+                handleUpdateEntity(entity.EnityId, entity.EnityType, entity.Data);
                 break;
         }
     }
 
+
+    private void handleUpdateEntity(string enityId, EntityesEnum enityType, object data)
+    {
+        GameObject gameObject = entities.GetValueOrDefault(enityId);
+        if(gameObject == null) return;
+
+        switch (enityType)
+        {
+            case EntityesEnum.GrossCannonInBuild:
+                {
+                    if(gameObject.TryGetComponent<GrossCannonInBuild>(out GrossCannonInBuild grossCannonInBuild))
+                    {
+                        var updates = ConvertData<GrossCannonInBuildUpdate>(data);
+                        grossCannonInBuild.SetProgress(updates.progress);
+                    }
+                    break;
+                }
+            case EntityesEnum.GrossCannon:
+                {
+
+                    break;
+                }
+            case EntityesEnum.TeslaTowerBuild:
+                {
+                    if (gameObject.TryGetComponent<TeslaTowerInBuild>(out TeslaTowerInBuild grossCannonInBuild))
+                    {
+                        var updates = ConvertData<TeslaTowerInBuildUpdate>(data);
+                        grossCannonInBuild.SetProgress(updates.progress);
+                    }
+                    break;
+                }
+
+            case EntityesEnum.CampInBuild:
+                {
+                    if (gameObject.TryGetComponent<CampInBuild>(out CampInBuild grossCannonInBuild))
+                    {
+                        var updates = ConvertData<CampInBuildUpdate>(data);
+                        grossCannonInBuild.SetProgress(updates.progress);
+                    }
+                    break;
+                }
+                
+        }
+    }
+
+    private T ConvertData<T>(object data)
+    {
+        // если пришёл уже нужный тип
+        if (data is T typed)
+            return typed;
+
+        // если это JObject (чаще всего при Newtonsoft)
+        if (data is Newtonsoft.Json.Linq.JObject jObj)
+            return jObj.ToObject<T>();
+
+        // fallback
+        try
+        {
+            return JsonConvert.DeserializeObject<T>(data.ToString());
+        }
+        catch
+        {
+            return default;
+        }
+    }
 
     private class EntityFactory
     {
@@ -108,10 +180,116 @@ public class EntityManager : MonoBehaviour
                 case EntityesEnum.GrossCannonInBuild:
                     HandleGrossCannon(go, entity);
                     break;
+                case EntityesEnum.GrossCannon:
+                    HandleGrossCannonBuilded(go, entity);
+                    break;
+
+                case EntityesEnum.TeslaTowerBuild:
+                    HandleTeslaTowerBuild(go, entity);
+                    break;
+                case EntityesEnum.TeslaTower:
+                    HandleTeslaTower(go, entity);
+                    break;
+
+                case EntityesEnum.CampInBuild:
+                    HandleCampBuild(go, entity);
+                    break;
+                case EntityesEnum.Camp:
+                    HandleCamp(go, entity);
+                    break;
             }
 
             return go;
         }
+
+        private void HandleCamp(GameObject go, EntityEvent entity)
+        {
+            var data = ConvertData<CampData>(entity.Data);
+
+            if (data == null)
+            {
+                Debug.LogError("Failed to parse GrossCannon data");
+                return;
+            }
+
+            // пример инициализации
+            go.transform.position = new Vector3(data.possiton.X * 10, 0, data.possiton.Y * 10);
+        }
+
+        private void HandleCampBuild(GameObject go, EntityEvent entity)
+        {
+            var data = ConvertData<CampInBuildData>(entity.Data);
+
+            if (data == null)
+            {
+                Debug.LogError("Failed to parse GrossCannon data");
+                return;
+            }
+
+            // пример инициализации
+            go.transform.position = new Vector3(data.possiton.X * 10, 0, data.possiton.Y * 10);
+        }
+
+        private void HandleTeslaTower(GameObject go, EntityEvent entity)
+        {
+            var data = ConvertData<TeslaTowerData>(entity.Data);
+
+            if (data == null)
+            {
+                Debug.LogError("Failed to parse GrossCannon data");
+                return;
+            }
+
+            // пример инициализации
+            go.transform.position = new Vector3(data.possiton.X * 10, 0, data.possiton.Y * 10);
+
+            //var component = go.GetComponent<GrossCannonInBuildView>();
+            //if (component != null)
+            //{
+            //    component.SetProgress(data.progress);
+            //}
+        }
+
+        private void HandleTeslaTowerBuild(GameObject go, EntityEvent entity)
+        {
+            var data = ConvertData<TeslaTowerBuildData>(entity.Data);
+
+            if (data == null)
+            {
+                Debug.LogError("Failed to parse GrossCannon data");
+                return;
+            }
+
+            // пример инициализации
+            go.transform.position = new Vector3(data.possiton.X * 10, 0, data.possiton.Y * 10);
+
+            //var component = go.GetComponent<GrossCannonInBuildView>();
+            //if (component != null)
+            //{
+            //    component.SetProgress(data.progress);
+            //}
+        }
+
+        private void HandleGrossCannonBuilded(GameObject go, EntityEvent entity)
+        {
+            var data = ConvertData<GrossCannonData>(entity.Data);
+
+            if (data == null)
+            {
+                Debug.LogError("Failed to parse GrossCannon data");
+                return;
+            }
+
+            // пример инициализации
+            go.transform.position = new Vector3(data.possiton.X * 10, 0, data.possiton.Y * 10);
+
+            //var component = go.GetComponent<GrossCannonInBuildView>();
+            //if (component != null)
+            //{
+            //    component.SetProgress(data.progress);
+            //}
+        }
+
 
         private void HandleGrossCannon(GameObject go, EntityEvent entity)
         {

@@ -16,9 +16,9 @@ MonoBehaviour:
   - NetID: 2
     type: 0
     previewPrefab: {fileID: 3766044901711243913, guid: 44a02d130e5a1c4439f1670404cad52e, type: 3}
-  - NetID: 3
+  - NetID: 5
     type: 1
     previewPrefab: {fileID: 7839380274470959354, guid: b9575e901c4f99043ab0327e4b8c1b4e, type: 3}
-  - NetID: 4
+  - NetID: 8
     type: 2
-    previewPrefab: {fileID: 0}
+    previewPrefab: {fileID: 3575418094148828853, guid: 715caf4fb6228ad46800b8368414475d, type: 3}
