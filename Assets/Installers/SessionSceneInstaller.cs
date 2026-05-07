@@ -19,6 +19,10 @@ public class SessionSceneInstaller : MonoInstaller
             gameStatemachine.SetStartState<GameSessionState>();
         }
 
+        Container.Bind<DirectorManager>().AsTransient();
+
+        Container.Bind<IVfxService>().To<VfxService>().AsSingle();
+        Container.Bind<NpcManager>().FromComponentInHierarchy().AsSingle();
 
         Container.Bind<BuildSystem>().FromComponentInHierarchy().AsSingle();
         Container.Bind<EntityManager>().FromComponentInHierarchy().AsSingle();

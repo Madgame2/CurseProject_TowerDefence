@@ -32,7 +32,7 @@ MonoBehaviour:
   - windowName: GrossCard
     prefab: {fileID: 5126583271147989869, guid: 2ff3be6f79a5bc742b0f2566bf6c7239, type: 3}
     viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
-    ShowInStart: 1
+    ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
     selfCanvas: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   - windowName: TeslaTowerCard
     prefab: {fileID: 5113597748852787693, guid: 217742bf6e0245247bb68120a109e014, type: 3}
     viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
-    ShowInStart: 1
+    ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
     selfCanvas: 0
@@ -48,7 +48,23 @@ MonoBehaviour:
   - windowName: KnightCampKnight
     prefab: {fileID: 4225280975500364705, guid: d1cfcf963d7eb994e827499b45943dfa, type: 3}
     viewModelScript: {fileID: 11500000, guid: 95b0675e998aa6040bc1a90a6bd93919, type: 3}
-    ShowInStart: 1
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: PreparePhaseView
+    prefab: {fileID: 9176891789753916410, guid: afa8760d33837ec4fa67447d8c6ce280, type: 3}
+    viewModelScript: {fileID: 11500000, guid: d78dbc19ccb0c9342b9ec47712638116, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: SeagePhaseView
+    prefab: {fileID: 9007554111674844667, guid: e4ac1b6039af7cd4eab8f4158ff7acfb, type: 3}
+    viewModelScript: {fileID: 11500000, guid: ecd78ae0be11f734ca1e8d56b76b9ef4, type: 3}
+    ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
     selfCanvas: 0

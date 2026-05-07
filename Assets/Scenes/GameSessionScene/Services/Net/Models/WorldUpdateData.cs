@@ -16,4 +16,10 @@ public class WorldUpdateData
 
     [JsonProperty("enities")]
     public List<EntityEvent> enities { get; set; } = new();
+
+    [JsonProperty("npc")]
+    public List<NpcEvent> npc { get; set; } = new();
+
+    [JsonProperty("director")]
+    public List<DirectorEvent> director { get; set; } = new();
 }

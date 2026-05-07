@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3363e402fd886f141a8df6c76d2bd3ba, type: 3}
   m_Name: CampTowerTransparent
   m_EditorClassIdentifier: Assembly-CSharp::DecorationConfig
-  id: 5
-  name: TeslaTowerTranssparent
-  prefab: {fileID: 7839380274470959354, guid: b9575e901c4f99043ab0327e4b8c1b4e, type: 3}
+  id: 8
+  name: CampTransparent
+  prefab: {fileID: 3575418094148828853, guid: 715caf4fb6228ad46800b8368414475d, type: 3}
   neverUnload: 0

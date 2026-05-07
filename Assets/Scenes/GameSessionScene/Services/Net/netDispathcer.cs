@@ -15,6 +15,8 @@ public class NetDispatcher
     [Inject] private MainThreadDispatcher _mainThread;
     [Inject] private EntityManager _entityManager;
     [Inject] private ChankSystem _chankSystem;
+    [Inject] private NpcManager _npcManager;
+    [Inject] private DirectorManager _director;
     public NetDispatcher()
     {
 
@@ -49,7 +51,14 @@ public class NetDispatcher
             {
                 _entityManager.handleEnityEvnet(entity);
             }
-
+            foreach(var npc in packet.npc)
+            {
+                _npcManager.HandleNpcUpdate(npc);
+            }
+            foreach(var director in packet.director)
+            {
+                _director.HandleUpdate(director);
+            }
         });
     }
     public void cleanUp()
