@@ -3,6 +3,17 @@ using UnityEngine;
 
 public class Vector3Dto
 {
+    public Vector3Dto()
+    {
+
+    }
+
+
+    public Vector3Dto(float  x, float y, float z)
+    {
+        this.X = x; this.Y = y; this.Z = z;
+    }
+
     [JsonProperty("x")]
     public float X { get; set; }
 

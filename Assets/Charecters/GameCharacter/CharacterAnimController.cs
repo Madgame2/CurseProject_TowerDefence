@@ -1,8 +1,6 @@
 using Scenes.Lobby.Entities;
 using UnityEngine;
 
-using UnityEngine;
-
 public class CharacterAnimController : MonoBehaviour
 {
     [SerializeField] private Animator animator;

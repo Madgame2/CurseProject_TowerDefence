@@ -13,7 +13,13 @@ public class NpcManager : MonoBehaviour
     [Inject] private IVfxService _VFX;
 
     private Dictionary<string, GameObject> _spawnedNpcs = new();
+    public Dictionary<string, NpcState> _npcStates = new();
     private NpcFactory _factory;
+
+
+    [SerializeField] private float positionSmooth = 10f;
+    [SerializeField] private float rotationSmooth = 10f;
+    [SerializeField] private float snapDistance = 5f;
 
 
     private void Awake()
@@ -47,6 +53,7 @@ public class NpcManager : MonoBehaviour
 
             case NpcEventType.UPDATE:
                 {
+                    Debug.Log($"Пришло обновление {npc.npcId}");
                     var data = npc.data.ToObject<NpcUpdateData>();
                     if (data!=null)
                     {
@@ -62,7 +69,7 @@ public class NpcManager : MonoBehaviour
     }
     private Vector3 ConvertPosition(Vector2Dto pos)
     {
-        return new Vector3(pos.X, 0, pos.Y);
+        return new Vector3(pos.X*10, 0, pos.Y*10);
     }
 
     private void TerminateNpc(NpcEvent npc)
@@ -75,6 +82,7 @@ public class NpcManager : MonoBehaviour
 
         Destroy(go);
         _spawnedNpcs.Remove(npc.npcId);
+        _npcStates.Remove(npc.npcId);
     }
 
     private void SpawnNewNpc(NpcEvent npc, NpcSpawnData data)
@@ -86,12 +94,16 @@ public class NpcManager : MonoBehaviour
         }
 
         Vector3 position = ConvertPosition(data.position);
-
         var go = _factory.Create(npc.npcType, position);
 
-        _spawnedNpcs.Add(npc.npcId, go);
 
-        if(data.behaver== Npcbehavior.ENEMY)
+        var npcState = new NpcState();
+        npcState.targetPosition = position;
+
+        _spawnedNpcs.Add(npc.npcId, go);
+        _npcStates.Add(npc.npcId, npcState);
+
+        if (data.behaver== Npcbehavior.ENEMY)
         {
             _VFX.PlayEffect(_enemySpawnVFX, go.transform.position);
         }
@@ -104,10 +116,61 @@ public class NpcManager : MonoBehaviour
             Debug.LogWarning($"NPC with id {npc.npcId} not found");
             return;
         }
-
+        var state = _npcStates[npc.npcId];
         Vector3 position = ConvertPosition(data.position);
 
-        go.transform.position = position;
+
+        if (state != null)
+        {
+            state.targetPosition = position;
+
+            state.targetRotation = Quaternion.Euler(
+                data.rotation.X,
+                data.rotation.Y,
+                data.rotation.Z
+            );
+
+            if(_spawnedNpcs[npc.npcId].TryGetComponent<CharacterAnimController>(out CharacterAnimController controller))
+            {
+                controller.SetVelocity(new Vector3( data.velocity.X, 0, data.velocity.Y));
+            }
+        }
+    }
+
+
+    private void Update()
+    {
+        foreach (var kvp in _npcStates)
+        {
+            var npcId = kvp.Key;
+            var state = kvp.Value;
+
+            var npc = _spawnedNpcs.GetValueOrDefault(npcId);
+            if (npc == null)
+                continue;
+
+            Transform npcTransform = npc.transform;
+
+            // snap check
+            if (Vector3.Distance(npcTransform.position, state.targetPosition) > snapDistance)
+            {
+                npcTransform.position = state.targetPosition;
+            }
+            else
+            {
+                npcTransform.position = Vector3.Lerp(
+                    npcTransform.position,
+                    state.targetPosition,
+                    Time.deltaTime * positionSmooth
+                );
+            }
+
+            npcTransform.rotation = Quaternion.Slerp(
+                npcTransform.rotation,
+                state.targetRotation,
+                Time.deltaTime * rotationSmooth
+            );
+        }
     }
 
     public class NpcFactory

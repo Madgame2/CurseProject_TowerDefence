@@ -2078,6 +2078,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NpcManager
   _npcDataBase: {fileID: 11400000, guid: c277bc08449a2a74ab19fa68b721fa93, type: 2}
   _enemySpawnVFX: {fileID: 497553828173447606, guid: 73ce15384dc67e44bb905e1f068c8687, type: 3}
+  positionSmooth: 10
+  rotationSmooth: 10
+  snapDistance: 5
 --- !u!1 &862023180 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2984446002266547256, guid: d0834c47ee6b02b409c025800378350a, type: 3}
