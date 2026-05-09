@@ -132,7 +132,16 @@ public class EntityManager : MonoBehaviour
                     }
                     break;
                 }
-                
+
+            case EntityesEnum.RootHouse:
+                {
+                    if(gameObject.TryGetComponent<RooObjectStatesView>(out RooObjectStatesView view))
+                    {
+                        var updates = ConvertData<RootHouseUpdate>(data);
+                        view.SetHealth(updates.health_present);
+                    }
+                }
+                break;
         }
     }
 

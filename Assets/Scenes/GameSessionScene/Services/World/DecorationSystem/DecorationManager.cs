@@ -8,6 +8,7 @@ public class DecorationManager : MonoBehaviour
     private Dictionary<Chank, List<DecorationInstance>> chunkToDecorations = new();
     [SerializeField] private DecorationConfigDatabase config;
     [SerializeField] private DecorationFactory factory;
+    [SerializeField] private EntityManager entityManager;
 
     [Inject] private DiContainer _container;
     private Dictionary<Vector2, GameObject> Placed_Decorations = new();

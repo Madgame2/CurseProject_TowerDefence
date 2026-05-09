@@ -11,6 +11,8 @@ public enum EntityEventType
 
 public enum EntityesEnum
 {
+    RootHouse,
+
     GrossCannonInBuild,
     GrossCannon,
 

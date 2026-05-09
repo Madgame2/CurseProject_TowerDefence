@@ -116,25 +116,48 @@ public class NpcManager : MonoBehaviour
             Debug.LogWarning($"NPC with id {npc.npcId} not found");
             return;
         }
-        var state = _npcStates[npc.npcId];
-        Vector3 position = ConvertPosition(data.position);
 
-
-        if (state != null)
+        switch (data.dataType)
         {
-            state.targetPosition = position;
+            case DataType.NPC_STATE:
+                {
+                    var state = _npcStates[npc.npcId];
+                    Vector3 position = ConvertPosition(data.position);
 
-            state.targetRotation = Quaternion.Euler(
-                data.rotation.X,
-                data.rotation.Y,
-                data.rotation.Z
-            );
 
-            if(_spawnedNpcs[npc.npcId].TryGetComponent<CharacterAnimController>(out CharacterAnimController controller))
-            {
-                controller.SetVelocity(new Vector3( data.velocity.X, 0, data.velocity.Y));
-            }
+                    if (state != null)
+                    {
+                        state.targetPosition = position;
+
+                        state.targetRotation = Quaternion.Euler(
+                            data.rotation.X,
+                            data.rotation.Y,
+                            data.rotation.Z
+                        );
+
+                        if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                        {
+                            controller.SetVelocity(new Vector3(data.velocity.X, 0, data.velocity.Y));
+                        }
+                    }
+                }
+                break;
+
+            case DataType.ACTION:
+                {
+                    switch (data.action)
+                    {
+                        case ActionTypes.ATTACK:
+                            if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                            {
+                                controller.PlayAttack();
+                            }
+                            break;
+                    }
+                }
+                break;
         }
+
     }
 
 
