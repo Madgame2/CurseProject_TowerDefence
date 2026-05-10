@@ -1,4 +1,5 @@
 using Common.Services.Net.Modules;
+using ModestTree;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,6 +14,7 @@ public class EntityManager : MonoBehaviour
     [SerializeField] private EntityDataBase entityDataBase;
     [SerializeField] private EnityFactory _factory;
 
+    [Inject] private NpcManager _npcManager;
     [Inject] private WebSocketModule _socket;
     [Inject] private DiContainer _container;
 
@@ -110,7 +112,8 @@ public class EntityManager : MonoBehaviour
                 }
             case EntityesEnum.GrossCannon:
                 {
-
+                    var udpate = ConvertData<GrossCannonUpdatesDTO>(data);
+                    HandleGrossCannonUpdate(enityId, udpate);
                     break;
                 }
             case EntityesEnum.TeslaTowerBuild:
@@ -139,6 +142,65 @@ public class EntityManager : MonoBehaviour
                     {
                         var updates = ConvertData<RootHouseUpdate>(data);
                         view.SetHealth(updates.health_present);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void HandleGrossCannonUpdate(string EnityId,GrossCannonUpdatesDTO udpate)
+    {
+        switch (udpate.updateType)
+        {
+            case GrossCannonUpdateTypes.ACTION:
+                {
+                    var payload = ConvertData<ActionDTO>(udpate.data);
+                    HandleAction(EnityId, payload);
+                }
+                break;
+        }
+    }
+
+    private void HandleAction(string EnityId,ActionDTO payload)
+    {
+
+        GameObject GrossCannon = entities.GetValueOrDefault(EnityId);
+        if (!GrossCannon) return;
+
+        switch (payload.type)
+        {
+            case GrossCannonActionTypes.SET_TARGET:
+                {
+
+
+                    var data = ConvertData<setTargetDTO>(payload.data);
+                    if (data.target != null&& !data.target.IsEmpty())
+                    {
+                        var npc = _npcManager.GetNpc(data.target);
+                        if (GrossCannon.TryGetComponent<GrossCannonController>(out GrossCannonController controller))
+                        {
+                            controller.SetTarget(npc);
+                        }
+                    }
+                    else
+                    {
+                        if (GrossCannon.TryGetComponent<GrossCannonController>(out GrossCannonController controller))
+                        {
+                            controller.SetTarget(null);
+                        }
+                    }
+                }
+                break;
+            case GrossCannonActionTypes.SHOOT:
+                {
+                    var data = ConvertData<ShootToTargetDTO>(payload.data);
+                    if (data.target != null && !data.target.IsEmpty())
+                    {
+                        var npc = _npcManager.GetNpc(data.target);
+                        if (GrossCannon.TryGetComponent<GrossCannonController>(out GrossCannonController controller))
+                        {
+                            controller.ShootTo(npc);
+                        }
                     }
                 }
                 break;

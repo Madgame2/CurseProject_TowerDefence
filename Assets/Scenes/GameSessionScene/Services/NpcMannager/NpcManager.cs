@@ -27,6 +27,11 @@ public class NpcManager : MonoBehaviour
         _factory = new NpcFactory(_npcDataBase, _container);
     }
 
+    public GameObject GetNpc(string Id)
+    {
+        return _spawnedNpcs.GetValueOrDefault(Id);
+    }
+
     public void HandleNpcUpdate(NpcEvent npc)
     {
         switch (npc.enventType)

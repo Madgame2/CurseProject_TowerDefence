@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 
@@ -40,5 +41,5 @@ public class EntityEvent : IWorldUpdateState
     public EntityesEnum EnityType { get; set; }
 
     [JsonProperty("data")]
-    public object Data { get; set; }
+    public JObject Data { get; set; }
 }
