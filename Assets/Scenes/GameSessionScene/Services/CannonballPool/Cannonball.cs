@@ -12,11 +12,9 @@ public class Cannonball : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            vfx.PlayEffect(explosionPrefab, collision.transform.position);
-            gameObject.SetActive(false);
-        }
+        vfx.PlayEffect(explosionPrefab, collision.contacts[0].point);
+
+        gameObject.SetActive(false);
     }
 
     public void Init(Vector3 dir)

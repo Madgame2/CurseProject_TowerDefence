@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -126,6 +127,12 @@ public class EntityManager : MonoBehaviour
                     break;
                 }
 
+            case EntityesEnum.TeslaTower:
+                {
+                    var udpate = ConvertData<TeslaTowerUpdatesDTO>(data);
+                    HandleTeslaTowerUpdate(enityId, udpate);
+                }
+                break;
             case EntityesEnum.CampInBuild:
                 {
                     if (gameObject.TryGetComponent<CampInBuild>(out CampInBuild grossCannonInBuild))
@@ -142,6 +149,25 @@ public class EntityManager : MonoBehaviour
                     {
                         var updates = ConvertData<RootHouseUpdate>(data);
                         view.SetHealth(updates.health_present);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void HandleTeslaTowerUpdate(string enityId, TeslaTowerUpdatesDTO udpate)
+    {
+        var entity = entities.GetValueOrDefault(enityId);
+        if (entity == null) return;
+
+        switch (udpate.actionType)
+        {
+            case TeslaTowerActionTypes.ATTACk:{
+
+                    var payload = ConvertData<TeslaTowerAttackDTO>(udpate.data);
+                    if (entity.TryGetComponent<TeslaTowerController>(out TeslaTowerController teslaTower))
+                    {
+                        teslaTower.ProcessAttack(payload);
                     }
                 }
                 break;

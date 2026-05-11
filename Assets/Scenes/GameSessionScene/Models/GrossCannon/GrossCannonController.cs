@@ -6,7 +6,7 @@ using Zenject;
 public class GrossCannonController : MonoBehaviour
 {
     [Inject] private CannonballPool pool;
-    [Inject] private VfxService vfxService;
+    [Inject] private IVfxService vfxService;
 
 
     [SerializeField] private Transform HorizontalAxis;

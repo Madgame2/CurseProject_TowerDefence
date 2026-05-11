@@ -33,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 23.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 985167142026601808}
   m_Father: {fileID: 2051901039222840370}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &381264198634198956
@@ -34463,6 +34464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2051901039222840370}
+  - component: {fileID: 4742959649815939158}
   m_Layer: 0
   m_Name: TeslaTower
   m_TagString: Untagged
@@ -34496,6 +34498,20 @@ Transform:
   - {fileID: 1912773946889586590}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4742959649815939158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220291278206176655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9345dfb063dc6d46896afc9482a505d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TeslaTowerController
+  spawnPosition: {fileID: 985167142026601808}
+  LightPrefab: {fileID: 4084303941873263095, guid: 5d53ebc1087e0b64ca39a754e777c3fe, type: 3}
 --- !u!1 &3434968760214411344
 GameObject:
   m_ObjectHideFlags: 0
@@ -37128,6 +37144,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &5257652462154270722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 985167142026601808}
+  m_Layer: 0
+  m_Name: SpawnPosotion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &985167142026601808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257652462154270722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2423341774222235626}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6052425387973779495
 GameObject:
   m_ObjectHideFlags: 0
