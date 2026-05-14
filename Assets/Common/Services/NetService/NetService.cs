@@ -27,7 +27,7 @@ namespace Common.Services.Net
         public  WebSocketModule _webSocketModule { get; private set; }
 
         public NetworkConfig _netConfig;
-        public string BaseUrl = "http://localhost:3000"; // TEMP
+        public string BaseUrl = "http://DESKTOP-JVVQE2J:3000"; // TEMP
         private readonly GameStateMachine _gameStateMachine;
         private readonly LiveConnectionService _liveConnectionService;
         private readonly MainThreadDispatcher _dispathcer;

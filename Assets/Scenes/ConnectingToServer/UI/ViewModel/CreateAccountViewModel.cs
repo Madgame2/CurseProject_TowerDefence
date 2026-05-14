@@ -6,11 +6,9 @@ using Common.Services.Net.Services;
 using Common.systems.GameStates;
 using Common.systems.UI;
 using Common.Validation;
-using ModestTree;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class CreateAccountViewModel

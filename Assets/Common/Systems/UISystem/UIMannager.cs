@@ -1,9 +1,7 @@
 using Common.systems.UI.Prefabs;
 using Common.systems.UI.View;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using Zenject;
 

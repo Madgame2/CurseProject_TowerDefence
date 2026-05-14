@@ -2,15 +2,10 @@ using Common.Services.Net.Modules;
 using Common.systems.MainThread;
 using Common.systems.ProfileSystem;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Scenes.Lobby.Entities;
 using System;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Zenject;
-using static UnityEditor.FilePathAttribute;
 
 public class PlayersService: IDisposable
 {
@@ -37,7 +32,6 @@ public class PlayersService: IDisposable
     {
         _socket.On("playersInit_metadata", handleInitNewPlayer);
     }
-
 
 
     private async Task handleInitNewPlayer(string arg)

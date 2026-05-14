@@ -1,5 +1,7 @@
+using Common.Services.Global;
 using Common.Services.Net.Modules;
 using Common.systems.MainThread;
+using Common.systems.SceneStates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,6 +19,9 @@ public class NetDispatcher
     [Inject] private ChankSystem _chankSystem;
     [Inject] private NpcManager _npcManager;
     [Inject] private DirectorManager _director;
+    [Inject] private SceneStateMachine<GameSessionScene> _sceneStateMachine;
+    [Inject] private GlobalStorage _globalStorage;
+
     public NetDispatcher()
     {
 
@@ -25,6 +30,8 @@ public class NetDispatcher
     public void Init()
     {
         _socket.On("world_update", handleEvents);
+        _socket.On("sessionEnded", handleSessionEnd);
+
     }
 
     private async Task handleEvents(string arg)
@@ -61,8 +68,19 @@ public class NetDispatcher
             }
         });
     }
+
+    private async Task handleSessionEnd(string arg)
+    {
+        Debug.Log(arg);
+        var dto = JsonConvert.DeserializeObject<SessionEndDTO>(arg);
+        _globalStorage.Set<int>("WaveNum", dto.waveNum);
+        _sceneStateMachine.tryMoveToState(typeof(EndSessionState));
+    }
+
     public void cleanUp()
     {
         _socket.Off("world_update", handleEvents);
+        _socket.Off("sessionEnded", handleSessionEnd);
+
     }
 }

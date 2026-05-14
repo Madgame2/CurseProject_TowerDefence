@@ -69,3 +69,11 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: EndGameScrean
+    prefab: {fileID: 3363657135453919543, guid: b397cc75635828f43ad28f2331f3d8ec, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 916c92cb0507f3b429de703fed21f0ed, type: 3}
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

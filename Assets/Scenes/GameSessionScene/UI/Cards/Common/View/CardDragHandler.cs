@@ -1,8 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
+
 
 public class CardDragHandler : MonoBehaviour,
     IPointerEnterHandler,

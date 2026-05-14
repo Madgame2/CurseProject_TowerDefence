@@ -1,10 +1,7 @@
 using Common.systems.ProfileSystem.Entities;
 using System;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UI;
 
 public class JoinRequest : MonoBehaviour

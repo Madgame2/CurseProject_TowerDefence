@@ -140,9 +140,24 @@ public class NpcManager : MonoBehaviour
                             data.rotation.Z
                         );
 
-                        if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                        switch (npc.npcType)
                         {
-                            controller.SetVelocity(new Vector3(data.velocity.X, 0, data.velocity.Y));
+                            case NpcTypes.SKELETON:
+                                {
+                                    if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                                    {
+                                        controller.SetVelocity(new Vector3(data.velocity.X, 0, data.velocity.Y));
+                                    }
+                                }
+                                break;
+                            case NpcTypes.KNIGHT:
+                                {
+                                    if (_spawnedNpcs[npc.npcId].TryGetComponent<KhightAnimController>(out KhightAnimController controller))
+                                    {
+                                        controller.SetVelocity(new Vector3(data.velocity.X, 0, data.velocity.Y));
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -153,9 +168,28 @@ public class NpcManager : MonoBehaviour
                     switch (data.action)
                     {
                         case ActionTypes.ATTACK:
-                            if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                             
+
+                            switch (npc.npcType)
                             {
-                                controller.PlayAttack();
+
+                                case NpcTypes.SKELETON:
+                                    {
+                                        if (_spawnedNpcs[npc.npcId].TryGetComponent<SkeletonAnimController>(out SkeletonAnimController controller))
+                                        {
+                                            controller.PlayAttack();
+                                        }
+                                    }
+                                    break;
+
+                                case NpcTypes.KNIGHT:
+                                    {
+                                        if (_spawnedNpcs[npc.npcId].TryGetComponent<KhightAnimController>(out KhightAnimController controller))
+                                        {
+                                            controller.PlayAttack();
+                                        }
+                                    }
+                                    break;
                             }
                             break;
                     }

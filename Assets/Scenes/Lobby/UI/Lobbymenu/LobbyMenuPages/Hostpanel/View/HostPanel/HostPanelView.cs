@@ -2,7 +2,6 @@ using Common.systems.MainThread;
 using Common.systems.UI.View;
 using Scenes.Lobby;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
