@@ -1,3 +1,4 @@
+using Common.Exceptions.Net;
 using Common.Services.Net.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -72,7 +73,59 @@ namespace Common.Services.Net.Modules
                 throw new Exception($"Failed to connect to session server: {uri}", ex);
             }
         }
+        public static async Task<ClientWebSocket> tryCreateConnectionTo(string serverAdrr, int port, CancellationToken ct = default, string token = "")
+        {
+            var ws = new ClientWebSocket();
+            string tokenQwery = token.Length>0? $"?token={token}" : string.Empty;
+            var uri = new Uri($"ws://{serverAdrr}:{port}{tokenQwery}");
 
+            try
+            {
+                await ws.ConnectAsync(uri, ct);
+                var buffer = new byte[1024];
+                var result = await ws.ReceiveAsync(buffer, ct);
+
+                var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                var responce = JsonConvert.DeserializeObject<WSResponse>(msg);
+
+                switch (responce.Code){
+                    case 401:
+                        await ws.CloseAsync(
+                                WebSocketCloseStatus.NormalClosure,
+                                "Session expired",
+                                ct
+                            );
+
+                         ws.Dispose();
+
+                        throw new InvalidTokenException();
+                        break;
+                    case 404:
+                        await ws.CloseAsync(
+                            WebSocketCloseStatus.NormalClosure,
+                            "Session expired",
+                            ct
+                        );
+
+                        ws.Dispose();
+
+
+                        throw new InvalidTokenException();
+                        break;
+                }
+
+                return ws;
+            }
+            catch (OperationCanceledException)
+            {
+                ws.Dispose();
+                throw;
+            }
+            catch (Exception ex) {
+                ws.Dispose();
+                throw ex;
+            }
+        }
 
         public async Task ReplaceSessionSocketAsync(ClientWebSocket newSocket)
         {
@@ -230,6 +283,21 @@ namespace Common.Services.Net.Modules
             return false;
         }
 
+        private void ClearHandlers()
+        {
+            _handlers.Clear();
+            _asyncHandlers.Clear();
+        }
+
+        private void FailPendingRequests(string reason)
+        {
+            foreach (var req in _pendingRequests.Values)
+            {
+                req.TrySetException(new Exception(reason));
+            }
+
+            _pendingRequests.Clear();
+        }
 
         public async Task Disconnect()
         {
@@ -240,6 +308,17 @@ namespace Common.Services.Net.Modules
                 var socket = _WebSocket;
                 _WebSocket = null;
                 _isConnected = false;
+
+                // остановка receive loop
+                _receiveCts?.Cancel();
+                _receiveCts?.Dispose();
+                _receiveCts = null;
+
+                // очистка handlers и подписок
+                ClearHandlers();
+
+                // завершение pending requests
+                FailPendingRequests("Disconnected");
 
                 if (socket == null)
                     return;
@@ -264,9 +343,6 @@ namespace Common.Services.Net.Modules
                 {
                     socket.Dispose();
                 }
-
-                // остановка receive loop
-                _receiveCts?.Cancel();
             }
             finally
             {

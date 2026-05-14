@@ -16,6 +16,8 @@ MonoBehaviour:
   - windowName: Main
     prefab: {fileID: 6764303636543539774, guid: 581b75ad613e21e499486db2c431bfcb, type: 3}
     viewModelScript: {fileID: 11500000, guid: 3726440c278b68f468b143d7fc66d7cc, type: 3}
+    viewModelTypeName: MainMenuViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 1
     canOpenWith: []
     cannotOpenWith: []
@@ -24,6 +26,8 @@ MonoBehaviour:
   - windowName: SettingsOpt
     prefab: {fileID: 6283363634483344776, guid: 53d15d2c254567b45800c8fb5ef25bfa, type: 3}
     viewModelScript: {fileID: 11500000, guid: 6f533626ab93e814aa2e79615f8fbd3f, type: 3}
+    viewModelTypeName: SettingsOptViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 1
     canOpenWith: []
     cannotOpenWith: []
@@ -32,6 +36,8 @@ MonoBehaviour:
   - windowName: SettingsImp
     prefab: {fileID: 1126186671457653875, guid: 3c7c7c7eba465e848aef01e218ad1066, type: 3}
     viewModelScript: {fileID: 11500000, guid: d48136a318975a14dbc5fa743ba21f6a, type: 3}
+    viewModelTypeName: SettingImpViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -40,6 +46,8 @@ MonoBehaviour:
   - windowName: Lobbypanel
     prefab: {fileID: 1209134513866853994, guid: cb7da8743a8abc54f9a7d87efcf89c8b, type: 3}
     viewModelScript: {fileID: 11500000, guid: 3701299195cbd6845946cf2f72bc870c, type: 3}
+    viewModelTypeName: LobbyViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 1
     canOpenWith: []
     cannotOpenWith: []
@@ -48,6 +56,8 @@ MonoBehaviour:
   - windowName: HostPlay
     prefab: {fileID: 7376394928587520631, guid: 6a53ffa047048a74480ba7ef814f4390, type: 3}
     viewModelScript: {fileID: 11500000, guid: 14f8427dab3e518439ce5edb6472750f, type: 3}
+    viewModelTypeName: HostPlayViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -56,6 +66,8 @@ MonoBehaviour:
   - windowName: InvitePage
     prefab: {fileID: 9144030910134240710, guid: 94e577ebb3a64fe4590db6c86ea7fa22, type: 3}
     viewModelScript: {fileID: 11500000, guid: fe2580d8b0d80bb4bbf30881f5ec0fcb, type: 3}
+    viewModelTypeName: InvitePageViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -64,6 +76,8 @@ MonoBehaviour:
   - windowName: JoinToLobby
     prefab: {fileID: 284483321669837219, guid: de61c8728399fe74280482f16407b482, type: 3}
     viewModelScript: {fileID: 11500000, guid: 7e647e011c502a343babd1bb7f018cf0, type: 3}
+    viewModelTypeName: JoinToLobbyViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -72,6 +86,8 @@ MonoBehaviour:
   - windowName: SearchingPanel
     prefab: {fileID: 5776042976217766742, guid: 95422af422375e04c848674e3e4a0e6a, type: 3}
     viewModelScript: {fileID: 11500000, guid: b598288bd74d7cb488c6476b8fbf1aa5, type: 3}
+    viewModelTypeName: SearchingPanelViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -80,6 +96,8 @@ MonoBehaviour:
   - windowName: SearchingComplite
     prefab: {fileID: 5776042976217766742, guid: 9f7f83ee778b1c74dac0db0a765a0fc6, type: 3}
     viewModelScript: {fileID: 11500000, guid: 731d3c69bb12519488f20e4d139e9d01, type: 3}
+    viewModelTypeName: SearchingCompliteViewModle, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
@@ -88,6 +106,8 @@ MonoBehaviour:
   - windowName: JoinReqestPanel
     prefab: {fileID: 6304360396867175015, guid: c1916e9d68fe2a24c8d8efe20f87731b, type: 3}
     viewModelScript: {fileID: 11500000, guid: 4debf14ba1a687d45adbdb308d9bbd4a, type: 3}
+    viewModelTypeName: JoinRequestsSizeAreaViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []

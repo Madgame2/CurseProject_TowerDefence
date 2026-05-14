@@ -16,9 +16,15 @@ MonoBehaviour:
   - pageUri: Graphics
     prefab: {fileID: 6851656526966238084, guid: 59add8f85c5fd204d96d76884baa9053, type: 3}
     viewModelScript: {fileID: 11500000, guid: eb0e23b97cc19e3449848529bb23ddfa, type: 3}
+    viewModelTypeName: GraphicsPageViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - pageUri: Audio
     prefab: {fileID: 2169821546363955051, guid: 78bc70ef3d3bc5a4abcb229e7236e9b0, type: 3}
     viewModelScript: {fileID: 11500000, guid: 1561a1e364b72344fbc9f542a1c17109, type: 3}
+    viewModelTypeName: AudioPageViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - pageUri: Controls
     prefab: {fileID: 3672992715131756768, guid: bedaea95b557c694c981e39142787174, type: 3}
     viewModelScript: {fileID: 11500000, guid: c6a1e677e99e0324ea8a21f0cc669a31, type: 3}
+    viewModelTypeName: ControlsPageViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null

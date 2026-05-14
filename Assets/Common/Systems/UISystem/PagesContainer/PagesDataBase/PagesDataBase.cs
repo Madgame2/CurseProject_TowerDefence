@@ -18,5 +18,19 @@ namespace Common.systems.UI.PagesSystem.DataBase
                 return null; 
         }
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            foreach (var page in pages)
+            {
+                if (page != null)
+                {
+                    page.UpdateType();
+                }
+            }
+
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

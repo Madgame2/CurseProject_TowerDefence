@@ -15,6 +15,7 @@ public class EndGameView : ViewBase<EndGameViewModel>
         ViewModel.onWaveSelected += handleWaveSelected;
 
         _leaveGame.onClick.AddListener(ViewModel.onExitGameHandler);
+        _toLobby.onClick.AddListener(ViewModel.onToLobby);
     }
 
     private void handleWaveSelected(int obj)
@@ -27,6 +28,6 @@ public class EndGameView : ViewBase<EndGameViewModel>
         ViewModel.onWaveSelected -= handleWaveSelected;
 
         _leaveGame.onClick.RemoveAllListeners();
-
+        _toLobby.onClick.RemoveAllListeners();
     }
 }

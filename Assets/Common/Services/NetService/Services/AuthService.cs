@@ -46,6 +46,12 @@ namespace Common.Services.Net.Services
             var json = $"{{\"email\":\"{profileEmail}\",\"password\":\"{password}\"}}";
             return await _httpModule.PostJsonAsync($"{_baseUrl}/profile/login", json);
         }
+
+        internal async Task<HttpResponse> tryUseRefrashToken(string refreshToken)
+        {
+            var json = $"{{\"refreshtoken\":\"{refreshToken}\"}}";
+            return await _httpModule.PostJsonAsync($"{_baseUrl}/profile/refrash", json);
+        }
     }
 
 

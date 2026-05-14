@@ -44,7 +44,7 @@ namespace Common.Services.Net
             _gameStateMachine = gameStateMachine;
             _dispathcer = dispathc;
 
-            _webSocketModule.setServerAdress("localhost:3000");
+            _webSocketModule.setServerAdress("DESKTOP-JVVQE2J:3000");
 
             _liveConnectionService.OnConnectionLost += HandleConnectionLost;
             _liveConnectionService.OnConnectionRestored += HandleConnectionRestored;
