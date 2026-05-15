@@ -2,6 +2,8 @@ using Common.systems.UI.Prefabs;
 using Common.systems.UI.View;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using Zenject;
 
@@ -18,6 +20,19 @@ namespace Common.systems.UI
 
         [Inject]private readonly DiContainer container;
         private readonly Dictionary<WindowInfo, IViewFor> openedWindows = new();
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (_dangerActionQuestionWindow == null)
+                return;
+
+             _dangerActionQuestionWindow.UpdateType();
+   
+
+            EditorUtility.SetDirty(this);
+        }
+#endif
 
         public void Start()
         {

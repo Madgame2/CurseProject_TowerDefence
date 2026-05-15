@@ -10,5 +10,8 @@ namespace Common.systems.ProfileSystem.Entities
 
         [JsonProperty("nickname")]
         public string ProfileName;
+
+        [JsonProperty("email")]
+        public string Email;
     }
 }

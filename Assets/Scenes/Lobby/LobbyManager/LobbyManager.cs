@@ -11,11 +11,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Scenes.Lobby.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Zenject;
 
@@ -27,7 +25,7 @@ namespace Scenes.Lobby
         private UIManager _uiManager;
         private MainThreadDispatcher _threadDispatcher;
         private readonly WebSocketModule _socket;
-        private Lobby.Entities.Lobby _lobby = null;
+        private Lobby.Entities.Lobby _lobby;
         private readonly ProfileManager _profileMannager;
         private readonly GameStateMachine _gameStatemachine;
         private GlobalStorage _globalStorage;
@@ -61,7 +59,8 @@ namespace Scenes.Lobby
 
                 UnsubscribeFromLobbyEvents();
 
-                _lobby = value;
+                this._lobby = value;
+                Debug.Log(this._lobby.Id);
 
                 if (_lobby != null)
                 {
@@ -138,11 +137,22 @@ namespace Scenes.Lobby
                     handlerMemberleft(lobbyEvent.userId);
                     break;
 
+                case "PLAYER_PROFILE_UPDATE":
+                    handlerMemberUpdated(lobbyEvent.profile);
+                    break;
+
                 case "NEW_LOBBY":
-                    Debug.Log("NEW_LOBBY");
                     HandlerNewLobby(lobbyEvent.lobby);
                     break;
             }
+        }
+
+        private void  handlerMemberUpdated(Player updatedProfile){
+
+            var userProfile = this.Lobby.LobbyUsers.FirstOrDefault(i=>  i.PlayerId==updatedProfile.PlayerId);
+            userProfile.Name = updatedProfile.Name;
+
+            onLobbyUpdated?.Invoke(Lobby);
         }
 
         private void HandlerNewLobby(Entities.Lobby lobby)

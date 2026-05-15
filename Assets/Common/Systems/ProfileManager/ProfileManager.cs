@@ -1,10 +1,12 @@
 using Common.Services.Net.Modules;
 using Common.systems.ProfileSystem.Entities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.Audio.ProcessorInstance;
 
 namespace Common.systems.ProfileSystem
 {
@@ -31,6 +33,13 @@ namespace Common.systems.ProfileSystem
         public ProfileManager(WebSocketModule socket)
         {
             _socket = socket;
+
+            _socket.On("ProfileUpdated", UpdateProfileInfo);
+        }
+
+        private async Task UpdateProfileInfo(string arg)
+        {
+            Profile = JsonConvert.DeserializeObject<Profile>(arg);
         }
 
         public async Task Init()

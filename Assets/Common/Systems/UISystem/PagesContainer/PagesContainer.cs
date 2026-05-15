@@ -36,18 +36,19 @@ namespace Common.systems.UI.PagesSystem
 
         public AdvancedOptions OpenPageByName(string Uri)
         {
+            var config = _pagesDatabase.GetWindow(Uri);
             if (_currentPage != null)
             {
                 if (_pagesBuffer.ContainsValue(_currentPage))
                 {
                     _currentPage.SetActive(false);
                 }
-                else { 
-                    Destroy(_currentPage);
+                else {
+                    return new AdvancedOptions(this, config, _currentPage);
+                    //Destroy(_currentPage);
                 }
             }
 
-            var config = _pagesDatabase.GetWindow(Uri);
             GameObject page = CreatePage(config);
             _currentPage = page;
             _currentPage.transform.SetParent(_canvas, false);

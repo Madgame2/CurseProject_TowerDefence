@@ -73,6 +73,7 @@ public class LobbyViewModel
 
     private void HandleLobbyChanges(Scenes.Lobby.Entities.Lobby lobby)
     {
+        Debug.Log("PROFILE UPDATED -> checking lobby still: " + _lobbyManager.Lobby?.Id);
         HandleAllChanges();
     }
 }

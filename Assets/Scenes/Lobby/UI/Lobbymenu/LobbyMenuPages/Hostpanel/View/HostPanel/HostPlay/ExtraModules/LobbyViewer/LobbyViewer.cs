@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Scenes.Lobby;
 using Scenes.Lobby.Entities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -14,6 +15,18 @@ public class LobbyViewer : MonoBehaviour
     [Inject] private LobbyManager _lobbyManager;
 
     private void Start()
+    {
+        Render();
+
+        _lobbyManager.onLobbyUpdated += HandleLobbyUpdated;
+    }
+    private void OnDisable()
+    {
+        _lobbyManager.onLobbyUpdated -= HandleLobbyUpdated;
+
+    }
+
+    private void HandleLobbyUpdated(Scenes.Lobby.Entities.Lobby lobby)
     {
         Render();
     }

@@ -605,6 +605,8 @@ MonoBehaviour:
     windowName: DangerAction
     prefab: {fileID: 7734724220944768788, guid: 7dd56f79704a48e4e93cf7a1c8c72bc2, type: 3}
     viewModelScript: {fileID: 11500000, guid: dd85ea9e170bc9d44941761f181aba29, type: 3}
+    viewModelTypeName: Common.systems.UI.Prefabs.DangerActionViewModel, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []

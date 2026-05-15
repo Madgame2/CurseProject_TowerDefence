@@ -16,24 +16,40 @@ MonoBehaviour:
   - windowName: LogIn
     prefab: {fileID: 5725554655251794815, guid: d4bf2a03a1b0f1b479bb1d255e4eba7d, type: 3}
     viewModelScript: {fileID: 11500000, guid: 52232f6487ea7fb46aea9b3071f08bba, type: 3}
+    viewModelTypeName: ConnectingToServerViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 1
     canOpenWith: []
     cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
   - windowName: CreateAccount
     prefab: {fileID: 338979208045072193, guid: eabd45de3f998ec47955720f59e27427, type: 3}
     viewModelScript: {fileID: 11500000, guid: 5ad203db89fd309438f9f59a318f3b71, type: 3}
+    viewModelTypeName: CreateAccountViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
   - windowName: ConfirmProfile
     prefab: {fileID: 1655356106556756533, guid: 83ed395f66eeaaa4b8854f71f338da88, type: 3}
     viewModelScript: {fileID: 11500000, guid: 09d5ee7aa0a62da4b9d51887f7cae3d3, type: 3}
+    viewModelTypeName: ConfirmProfileViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
   - windowName: Loading
     prefab: {fileID: 5061182673598158224, guid: 8ae9bb9f896ade649b5bfcfa78f14b5b, type: 3}
     viewModelScript: {fileID: 11500000, guid: 7209f9250538ad84783ee54353c7b2fd, type: 3}
+    viewModelTypeName: LoadingViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     ShowInStart: 0
     canOpenWith: []
     cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

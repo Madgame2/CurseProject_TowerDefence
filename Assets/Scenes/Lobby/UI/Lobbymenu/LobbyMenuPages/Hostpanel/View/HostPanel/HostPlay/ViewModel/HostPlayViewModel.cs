@@ -24,6 +24,22 @@ public class HostPlayViewModel
         _lobbyManager = lobby;
     }
 
+    public void Init()
+    {
+        _lobbyManager.onLobbyUpdated += HandleLobbyUpdate;
+    }
+
+    private void HandleLobbyUpdate(Scenes.Lobby.Entities.Lobby lobby)
+    {
+
+    }
+
+    public void CleanUp()
+    {
+        _lobbyManager.onLobbyUpdated -= HandleLobbyUpdate;
+    }
+
+
     internal void OnBack()
     {
         _uiManager.Close("HostPlay");

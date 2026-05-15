@@ -113,3 +113,33 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: UserInfoPanel
+    prefab: {fileID: 6363560097393418278, guid: 029e52addb21df04c8d22edec31adc4b, type: 3}
+    viewModelScript: {fileID: 11500000, guid: bdd3357573cb8654e817c6a691405f52, type: 3}
+    viewModelTypeName: UserInfoPanelViewModel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    ShowInStart: 1
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: PopUpPanel
+    prefab: {fileID: 3373500598572434911, guid: 25be9f5a56be4434d8a2bfec9c610195, type: 3}
+    viewModelScript: {fileID: 11500000, guid: fbc2802facd268a478a40c19796ca046, type: 3}
+    viewModelTypeName: PopUpPanelViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0
+  - windowName: EditProfilePanel
+    prefab: {fileID: 3695451292932532631, guid: 251bbd8e5bbd8e444b6cff76b4d144e9, type: 3}
+    viewModelScript: {fileID: 11500000, guid: c363057539468314f9e5f9351285750c, type: 3}
+    viewModelTypeName: EditProfileViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

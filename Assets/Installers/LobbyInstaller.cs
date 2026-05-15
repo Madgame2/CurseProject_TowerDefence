@@ -33,8 +33,9 @@ public class LobbyInstaller : MonoInstaller
         Container.Bind<SceneStateMachine<LobbyScene>>().AsSingle().NonLazy();
         Container.Bind<IInitializable>().To<SceneStateMachine<LobbyScene>>().FromResolve();
 
-        Container.Bind<LobbyManager>().AsSingle().NonLazy();
-        Container.Bind<IInitializable>().To<LobbyManager>().FromResolve();
+        Container.BindInterfacesAndSelfTo<LobbyManager>()
+            .AsSingle()
+            .NonLazy();
 
         Container.BindInterfacesTo<LobbySceneEntryPoint>().AsSingle();
     }
