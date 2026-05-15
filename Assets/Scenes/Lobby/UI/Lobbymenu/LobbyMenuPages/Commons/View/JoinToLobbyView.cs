@@ -1,5 +1,6 @@
 using Common.systems.MainThread;
 using Common.systems.UI.View;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,10 +26,17 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
         _closeButton.onClick.AddListener(ViewModel.onClose);
         _inputCode.onValueChanged.AddListener(FormatInput);
 
+        _JoinButton.onClick.AddListener(hadnleJounRquest);
+
         ViewModel.InitArray += InitLobbyList;
         ViewModel.LobbyRemover += LobbyremovetHandle;
         ViewModel.LobbyCreated += LobbyAdeddHandle;
         ViewModel.LobbyUpdated += LobbyUpdateHandler;
+    }
+
+    private void hadnleJounRquest()
+    {
+        ViewModel.SendRequestToJoin(_inputCode.text);
     }
 
     private void LobbyUpdateHandler(string lobbyId, Scenes.Lobby.Entities.Lobby lobby)
@@ -107,11 +115,13 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
     {
         _closeButton.onClick.RemoveAllListeners();
         _inputCode.onValueChanged.RemoveAllListeners();
+        _JoinButton.onClick.RemoveAllListeners();
 
         ViewModel.InitArray -= InitLobbyList;
         ViewModel.LobbyRemover -= LobbyremovetHandle;
         ViewModel.LobbyCreated -= LobbyAdeddHandle;
         ViewModel.LobbyUpdated -= LobbyUpdateHandler;
+
 
         await ViewModel.ClearAll();
     }

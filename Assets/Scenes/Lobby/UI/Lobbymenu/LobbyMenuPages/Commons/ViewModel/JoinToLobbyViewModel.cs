@@ -150,4 +150,10 @@ public class JoinToLobbyViewModel
         LobbyCreated?.Invoke(baseEvent.lobby);
             
     }
+
+    internal void SendRequestToJoin(string code)
+    {
+        if(string.IsNullOrEmpty(code)) return;
+       _ = _socket.SendRequest("LobbyrequestToJoinByInviteCode", new RequestToGoinByInviteCode(code));
+    }
 }

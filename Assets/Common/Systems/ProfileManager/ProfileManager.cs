@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Audio.ProcessorInstance;
 
@@ -33,8 +34,22 @@ namespace Common.systems.ProfileSystem
         public ProfileManager(WebSocketModule socket)
         {
             _socket = socket;
+        }
 
+        public void SubscripeToProfileUpdate()
+        {
             _socket.On("ProfileUpdated", UpdateProfileInfo);
+        }
+
+        public void CleanUp()
+        {
+            onServerError = null;
+            onPlayerNotFound = null;
+            onTimeOut = null;
+
+            onProfileUpdated = null;
+
+            _socket.Off("ProfileUpdated", UpdateProfileInfo);
         }
 
         private async Task UpdateProfileInfo(string arg)

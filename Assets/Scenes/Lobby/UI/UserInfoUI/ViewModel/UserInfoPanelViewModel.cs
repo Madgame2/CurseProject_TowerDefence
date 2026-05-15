@@ -17,6 +17,8 @@ public class UserInfoPanelViewModel
     public void Init()
     {
         _profileManager.onProfileUpdated += handlerUpdatedProfile;
+
+        _profileManager.SubscripeToProfileUpdate();
     }
     public void CleanUp()
     {

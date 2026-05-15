@@ -3,7 +3,6 @@ using Common.systems.UI.View;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using Zenject;
 
