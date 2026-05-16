@@ -20,19 +20,33 @@ public class NavController : MonoBehaviour
 
     private Tween moveTween;
     private Coroutine rotationCoroutine;
+    private Sequence _cinematicSeq;
 
     public bool IsAnimating => moveTween != null && moveTween.IsActive() && moveTween.IsPlaying();
 
-
-    public void PlayCinematicTransitionToSession()
+    private void OnDestroy()
     {
         Stop();
 
-        Sequence seq = DOTween.Sequence();
+        _cinematicSeq?.Kill();
+        _cinematicSeq = null;
+    }
 
-        seq.Join(_transformObject.DOMoveY(_transformObject.position.y + moveUpHeight, duration));
-        seq.Join(_transformObject.DORotate(new Vector3(-80, 0, 0), duration));
-        seq.Join(vignette.FadeOut());
+    public void PlayCinematicTransitionToSession()
+    {
+        if (!this || !isActiveAndEnabled)
+            return;
+
+        if (!_transformObject)
+            return;
+
+        Stop();
+
+        _cinematicSeq = DOTween.Sequence();
+
+        _cinematicSeq.Join(_transformObject.DOMoveY(_transformObject.position.y + moveUpHeight, duration));
+        _cinematicSeq.Join(_transformObject.DORotate(new Vector3(-80, 0, 0), duration));
+        _cinematicSeq.Join(vignette.FadeOut());
     }
 
     public async Task WaitIfAnimating()

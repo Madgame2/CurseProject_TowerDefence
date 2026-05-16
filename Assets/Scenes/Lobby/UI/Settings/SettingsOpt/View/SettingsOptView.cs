@@ -22,6 +22,8 @@ public class SettingsOptView : ViewBase<SettingsOptViewModel>
 
     private bool _isUpdating = false;
 
+    private bool _disposed;
+
     protected override void OnViewModelAssigned()
     {
         ViewModel.ChangeButtonsAvailable += setButtonsActive;
@@ -39,6 +41,8 @@ public class SettingsOptView : ViewBase<SettingsOptViewModel>
 
     public override void Cleanup()
     {
+        _disposed = true;
+
         GraphicsOption.onValueChanged.RemoveAllListeners();
         AudioSettings.onValueChanged.RemoveAllListeners();
         ControlsSettings.onValueChanged.RemoveAllListeners();
@@ -48,10 +52,16 @@ public class SettingsOptView : ViewBase<SettingsOptViewModel>
 
         ViewModel.ChangeButtonsAvailable -= setButtonsActive;
         ViewModel.HasChanges -= ProcessChanges;
+
+        ViewModel.CleanUp();
     }
 
     private void ProcessChanges(bool isUpdating)
     {
+        if (_disposed || !this || !gameObject)
+            return;
+
+
         ApplyButton.interactable = isUpdating;
         ApplyButton.enabled = isUpdating;
         ApplyButton.gameObject.SetActive(isUpdating);

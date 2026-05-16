@@ -7,8 +7,10 @@ using Zenject;
 
 public class SessionSceneInstaller : MonoInstaller
 {
+    [SerializeField] private GameObject PlayerStoragePrefab;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] bool _debugState;
+
     public override void InstallBindings()
     {
         if (_debugState)
@@ -31,13 +33,18 @@ public class SessionSceneInstaller : MonoInstaller
 
         Container.Bind<ThirdPersonCamera>().FromComponentInHierarchy().AsSingle();
 
-        Container.Bind<PlayerStorage>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<PlayersService>().AsSingle();
+        Container.Bind<PlayerStorage>()
+            .FromComponentInNewPrefab(PlayerStoragePrefab)
+            .AsSingle()
+            .NonLazy();
+        Container.BindInterfacesAndSelfTo<PlayersService>().AsSingle();
 
         Container.Bind<PlayersController>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<NetDispatcher>().AsSingle();
+        Container.BindInterfacesAndSelfTo<NetDispatcher>()
+                .AsSingle()
+                .NonLazy();
 
-        
+
         Container.BindInterfacesTo<InputInitializer>().AsSingle();
 
         Container.Bind<MoveCommandSender>().AsTransient();

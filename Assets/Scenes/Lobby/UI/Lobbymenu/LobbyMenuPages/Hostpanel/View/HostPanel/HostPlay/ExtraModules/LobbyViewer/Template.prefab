@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 361.55, y: -50}
+  m_AnchoredPosition: {x: 311.55, y: -50}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2839765918051262315
@@ -993,6 +993,7 @@ GameObject:
   - component: {fileID: 1689437066493927930}
   - component: {fileID: 4988718848262848809}
   - component: {fileID: 3713589064366089120}
+  - component: {fileID: 3717269544135054445}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -1009,7 +1010,7 @@ RectTransform:
   m_GameObject: {fileID: 5911147483507692926}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4632988505976918075}
@@ -1018,7 +1019,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1689437066493927930
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1072,11 +1073,24 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 130
+  m_PreferredWidth: 80
   m_PreferredHeight: 80
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &3717269544135054445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911147483507692926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d672bc6af726545b1cc4d6afef24e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AvatarLoader
+  targetImage: {fileID: 4988718848262848809}
 --- !u!1 &6057679731096952007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,3 +1279,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LobbyViewerElem
   userNickName: {fileID: 5971914391793155678}
   extraOptionRoot: {fileID: 1003062788425058518}
+  avatar: {fileID: 3717269544135054445}

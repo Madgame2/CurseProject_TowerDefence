@@ -10,5 +10,8 @@ namespace Scenes.Lobby.Entities
 
         [JsonProperty("NickName")]
         public string Name { get; set; }
+
+        [JsonProperty("HeaderImage")]
+        public string avatarSource {  get; set; }
     }
 }

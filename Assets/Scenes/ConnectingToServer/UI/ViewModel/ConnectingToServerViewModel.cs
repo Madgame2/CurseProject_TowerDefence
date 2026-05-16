@@ -114,25 +114,21 @@ public class ConnectingToServerViewModel
     private void Handle400(HttpResponse response)
     {
         Debug.LogError("400 Bad Request - handler not implemented");
-        throw new NotImplementedException(nameof(Handle400));
     }
 
     private void Handle403(HttpResponse response)
     {
         Debug.LogError("403 Forbidden - handler not implemented");
-        throw new NotImplementedException(nameof(Handle403));
     }
 
     private void Handle404(HttpResponse response)
     {
         Debug.LogError("404 Not Found - handler not implemented");
-        throw new NotImplementedException(nameof(Handle404));
     }
 
     private void Handle500(HttpResponse response)
     {
         Debug.LogError("500 Internal Server Error - handler not implemented");
-        throw new NotImplementedException(nameof(Handle500));
     }
 
 

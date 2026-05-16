@@ -44,8 +44,37 @@ namespace Common.systems.UI
             }
         }
 
+        private void OnDestroy()
+        {
+            foreach (var window in openedWindows.Values)
+            {
+                if (window is MonoBehaviour view && view)
+                {
+                    window.Cleanup();
+                    Destroy(view.gameObject);
+                }
+            }
+
+            openedWindows.Clear();
+        }
+
+        private void CleanupWindows()
+        {
+            var keysToRemove = new List<WindowInfo>();
+
+            foreach (var kv in openedWindows)
+            {
+                if (kv.Value==null)
+                    keysToRemove.Add(kv.Key);
+            }
+
+            foreach (var key in keysToRemove)
+                openedWindows.Remove(key);
+        }
+
         public bool IsOpen(string windowName)
         {
+            CleanupWindows();
             var winInfo = windowsDatabase.GetWindow(windowName);
             return openedWindows.ContainsKey(winInfo);
         }
@@ -105,6 +134,14 @@ namespace Common.systems.UI
         {
             AdvancedOptions options = new AdvancedOptions(this);
             ViewModel = null;
+
+            if (!canvas)
+            {
+                Debug.LogWarning("UIManager: Canvas destroyed");
+                return options;
+            }
+
+
             var winInfo = windowsDatabase.GetWindow(windowName);
             if (openedWindows.ContainsKey(winInfo)) return options;
 
@@ -130,9 +167,12 @@ namespace Common.systems.UI
         {
             var winInfo = windowsDatabase.GetWindow(windowName);
 
-            if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
-                return false; // окно не открыто
 
+            if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
+            {
+                openedWindows.Remove(winInfo);
+                    return false;
+            }
 
             view.Cleanup();
 
@@ -175,9 +215,9 @@ namespace Common.systems.UI
             if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
                 return; // окно не открыто
 
-            if (view is MonoBehaviour viewMono)
+            if (view is MonoBehaviour viewMono && viewMono)
             {
-                viewMono.gameObject.SetActive(true);
+                viewMono.gameObject.SetActive(false);
             }
         }
 

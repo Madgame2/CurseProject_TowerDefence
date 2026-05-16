@@ -22,9 +22,11 @@ public class ChankSystem : MonoBehaviour
 
     ConcurrentQueue<ChankMetaData> queue = new();
     private bool _isInited = false;
+    private bool _isSubscribed;
 
     private void Start()
     {
+        Clear();
         _socket.onConnect += InitSubscrationsToEvents;
     }
 
@@ -38,16 +40,23 @@ public class ChankSystem : MonoBehaviour
     private void OnDestroy()
     {
         _isInited = false;
+        _isSubscribed = false;
         _socket.onConnect -= InitSubscrationsToEvents;
+
+        _socket.Off("chankPreload", handlePreloadedChank);
     }
+
+
 
     public void InitSubscrationsToEvents()
     {
-        if (!_isInited)
-        {
-            _socket.On("chankPreload", handlePreloadedChank);
-            _isInited = true;
-        }
+        if (_isInited) return;
+
+        if (_isSubscribed) return;
+
+        _socket.On("chankPreload", handlePreloadedChank);
+        _isSubscribed = true;
+        _isInited = true;
     }
 
     private async Task HandlePlayersMetaData(string arg)
@@ -69,11 +78,20 @@ public class ChankSystem : MonoBehaviour
             if(obj.TryGetComponent<Chank>(out Chank chank))
             {
                 chank.Position = new Vector2(chankData.x,chankData.z);
-                _chanks.Add(chank.Position, chank);
+                if (_chanks.ContainsKey(chank.Position))
+                    return;
+
+                _chanks[chank.Position] = chank;
             }
         });
     }
 
+    public void Clear()
+    {
+        _chanks.Clear();
+        queue.Clear();
+        _isInited = false;
+    }
     internal void handleChankUpdate(ChankUpdate message)
     {
         Vector2 chankPos = new Vector2(message.chankPos.X, message.chankPos.Y);

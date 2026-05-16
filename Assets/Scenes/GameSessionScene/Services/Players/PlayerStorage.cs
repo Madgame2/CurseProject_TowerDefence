@@ -1,6 +1,7 @@
 using Scenes.Session.Players;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 public class PlayerStorage : MonoBehaviour
@@ -10,10 +11,12 @@ public class PlayerStorage : MonoBehaviour
 
     [Inject] private DiContainer _container;
 
+    public bool HasPlayer(string playerName)
+    {
+        return _players.ContainsKey(playerName);
+    }
     public void AddPlayer(string PlayerID, string nickName, int CurrentHP, Vector3 postiontion, Vector3 rotation)
     {
-        Debug.Log("ДОБАВИЛ ИГРОКА ");
-        Debug.Log(PlayerID);
         if (_players.ContainsKey(PlayerID)) return;
 
         var playerObject = _container.InstantiatePrefab(PlayerPrefab);
@@ -32,13 +35,58 @@ public class PlayerStorage : MonoBehaviour
         _players.Add(PlayerID, playerStates);
     }
 
-    public GameObject GetByPlayerGameObjectId(string PlayerID)
+    public void RemovePlayer(string playerID)
     {
-        return _players[PlayerID].gameObject;
+        _players.Remove(playerID);
     }
 
-    public Scenes.Session.Players.PlayerStates GetPlayer(string PlayerID)
+    public GameObject GetByPlayerGameObjectId(string playerID)
     {
-        return _players[PlayerID];
+        if (!_players.TryGetValue(playerID, out var player) || !player)
+        {
+            _players.Remove(playerID);
+            return null;
+        }
+
+        if (!player)
+        {
+            _players.Remove(playerID);
+            return null;
+        }
+
+        return player.gameObject;
     }
+
+    public Scenes.Session.Players.PlayerStates GetPlayer(string playerID)
+    {
+        if (!_players.TryGetValue(playerID, out var player) || !player)
+        {
+            _players.Remove(playerID);
+            return null;
+        }
+
+        if (!player)
+        {
+            _players.Remove(playerID);
+            return null;
+        }
+
+        return player;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _players.Clear();
+    }
+
 }

@@ -1,3 +1,4 @@
+using Common.Services.Net.Modules;
 using Common.systems.SceneStates;
 using Common.systems.UI;
 using System;
@@ -9,6 +10,7 @@ public class MemberLobbyVewModel
     private SceneStateMachine<LobbyScene> _sceneStateMachine;
     private NavController _navController;
     private UIManager _uiManager;
+    [Inject] private WebSocketModule _socket;
 
     public event Action<bool> ChangeButtonsAvailable;
 
@@ -28,7 +30,7 @@ public class MemberLobbyVewModel
 
     internal void LeavTheLobbyHandler()
     {
-        
+        _ = _socket.Send("LeaveFromLobby", new { });
     }
 
     internal void onBackHandler()

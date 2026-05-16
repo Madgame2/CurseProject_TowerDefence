@@ -34,36 +34,67 @@ namespace Common.systems.UI.PagesSystem
             return new AdvancedOptions(this, config, page);
         }
 
-        public AdvancedOptions OpenPageByName(string Uri)
+        public AdvancedOptions OpenPageByName(string uri)
         {
-            var config = _pagesDatabase.GetWindow(Uri);
+            var config = _pagesDatabase.GetWindow(uri);
+
+            // Скрываем текущую страницу
             if (_currentPage != null)
             {
-                if (_pagesBuffer.ContainsValue(_currentPage))
-                {
-                    _currentPage.SetActive(false);
-                }
-                else {
-                    return new AdvancedOptions(this, config, _currentPage);
-                    //Destroy(_currentPage);
-                }
+                _currentPage.SetActive(false);
             }
 
-            GameObject page = CreatePage(config);
-            _currentPage = page;
-            _currentPage.transform.SetParent(_canvas, false);
+            // Проверяем: уже есть такая страница?
+            if (_pagesBuffer.TryGetValue(config, out GameObject existingPage))
+            {
+                if (!existingPage)
+                {
+                    _pagesBuffer.Remove(config);
+                }
+                else
+                {
+                    existingPage.SetActive(true);
+                    _currentPage = existingPage;
+                    return new AdvancedOptions(this, config, existingPage);
+                }
+            }
+            // Если страницы нет — создаём
+            GameObject newPage = CreatePage(config);
 
-            return new AdvancedOptions(this, config, page);
+            newPage.transform.SetParent(_canvas, false);
+
+            _pagesBuffer.Add(config, newPage);
+
+            _currentPage = newPage;
+
+            return new AdvancedOptions(this, config, newPage);
+        }
+
+        private void CleanupBuffer()
+        {
+            var keysToRemove = new List<PagesInfo>();
+
+            foreach (var kv in _pagesBuffer)
+            {
+                if (!kv.Value)
+                    keysToRemove.Add(kv.Key);
+            }
+
+            foreach (var key in keysToRemove)
+                _pagesBuffer.Remove(key);
         }
 
         private GameObject CreatePage(PagesInfo pageInfo)
         {
-            if (_pagesBuffer.ContainsKey(pageInfo))
+            if (_pagesBuffer.TryGetValue(pageInfo, out var page))
             {
-                GameObject page = _pagesBuffer[pageInfo];
-                page.SetActive(true);
+                if (page)
+                {
+                    page.SetActive(true);
+                    return page;
+                }
 
-                return page;
+                _pagesBuffer.Remove(pageInfo);
             }
 
             var go = container.InstantiatePrefab(pageInfo.prefab);

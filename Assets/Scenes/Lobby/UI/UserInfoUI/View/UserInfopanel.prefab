@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8857231888506562880}
   - component: {fileID: 716013520142148229}
   - component: {fileID: 7030267793432795668}
+  - component: {fileID: 7706660221400253702}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.3529412}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -75,6 +76,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7706660221400253702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455727799293152902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d672bc6af726545b1cc4d6afef24e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AvatarLoader
+  targetImage: {fileID: 7030267793432795668}
 --- !u!1 &4602105658538240929
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInfoPanelView
   _userNickname: {fileID: 4201474194172200613}
-  _profileAvatar: {fileID: 7030267793432795668}
+  _profileAvatar: {fileID: 7706660221400253702}
   _avatarButton: {fileID: 1155098946059546451}
 --- !u!1 &6694422845627353003
 GameObject:

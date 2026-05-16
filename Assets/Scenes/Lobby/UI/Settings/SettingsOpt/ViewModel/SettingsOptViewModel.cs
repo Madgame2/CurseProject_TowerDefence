@@ -25,6 +25,8 @@ public class SettingsOptViewModel
     public event Action<bool> ChangeButtonsAvailable;
     public event Action<bool> HasChanges;
 
+    private bool _disposed;
+
     public SettingsOptViewModel(SceneStateMachine<LobbyScene> sceneStateMachine,
         NavController navController,
         UIManager uIManager,
@@ -38,6 +40,13 @@ public class SettingsOptViewModel
         _sceneStateMachine.onStateChanges += StateChangesHandle;
 
         _configs.hasChanges += ConfigChangesHandler;
+    }
+
+    public void CleanUp()
+    {
+        _disposed = true;
+        _sceneStateMachine.onStateChanges -= StateChangesHandle;
+        _configs.hasChanges -= ConfigChangesHandler;
     }
 
     private void ConfigChangesHandler()

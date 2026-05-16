@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-public class PlayersService: IDisposable
+public class PlayersService : IInitializable,
+    IDisposable
 {
     private readonly WebSocketModule _socket;
     private readonly PlayerStorage _playersStorage;
@@ -30,7 +31,7 @@ public class PlayersService: IDisposable
 
     public void Init()
     {
-        _socket.On("playersInit_metadata", handleInitNewPlayer);
+        //_socket.On("playersInit_metadata", handleInitNewPlayer);
     }
 
 
@@ -62,7 +63,8 @@ public class PlayersService: IDisposable
 
         _mainThread.Run(() =>
         {
-            LinkCameraToPlayer();
+            if (_playersStorage.HasPlayer(_profileManager.Profile.UserId))
+                LinkCameraToPlayer();
         });
         
 
@@ -72,6 +74,26 @@ public class PlayersService: IDisposable
     public void LinkCameraToPlayer()
     {
         GameObject playerObject = _playersStorage.GetByPlayerGameObjectId(_profileManager.Profile.UserId);
+
+        if (!playerObject)
+        {
+            Debug.LogWarning("Player not found for camera link");
+            return;
+        }
+
+        if (!_cameraController)
+        {
+            Debug.LogWarning("Camera controller is null");
+            return;
+        }
+
         _cameraController.SetTarget(playerObject.transform);
+    }
+
+    public void Initialize()
+    {
+        _socket.On(
+            "playersInit_metadata",
+            handleInitNewPlayer);
     }
 }

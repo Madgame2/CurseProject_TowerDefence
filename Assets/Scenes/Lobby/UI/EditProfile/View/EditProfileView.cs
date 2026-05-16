@@ -29,8 +29,14 @@ public class EditProfileView : ViewBase<EditProfileViewModel>
         ViewModel.onEmailChanged += handleChandegEmail;
         ViewModel.onNicknameChanged += handleChangedNickname;
         ViewModel.aloadednewAvatar += handleNewAvatar;
+        ViewModel.onAvatarChanged += handleAvatar;
 
         ViewModel.Init();
+    }
+
+    private void handleAvatar(string obj)
+    {
+        _avatarImage.LoadFromUrl(obj);
     }
 
     private async void HadnleapploadNeData()
@@ -86,6 +92,7 @@ public class EditProfileView : ViewBase<EditProfileViewModel>
         ViewModel.onEmailChanged -= handleChandegEmail;
         ViewModel.onNicknameChanged -= handleChangedNickname;
         ViewModel.aloadednewAvatar -= handleNewAvatar;
+        ViewModel.onAvatarChanged -= handleAvatar;
 
         ViewModel.CleanUp();
     }

@@ -15,6 +15,9 @@ public class AvatarLoader : MonoBehaviour
     /// </summary>
     public void SetFromBytes(byte[] imageData)
     {
+        if (!this || !gameObject)
+            return;
+
         if (imageData == null || imageData.Length == 0)
         {
             Debug.LogError("Empty image data");
@@ -32,6 +35,9 @@ public class AvatarLoader : MonoBehaviour
     /// </summary>
     public void LoadFromUrl(string url)
     {
+        if (!this || !gameObject)
+            return;
+
         StartCoroutine(LoadFromUrlCoroutine(url));
     }
 

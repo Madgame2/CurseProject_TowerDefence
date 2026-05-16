@@ -18,6 +18,9 @@ namespace Installers
     {
         public override void InstallBindings()
         {
+            Debug.Log($"ProjectInstaller: {GetInstanceID()}");
+
+
             NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
 
             Container.Bind<BaseInputActions>().AsSingle();

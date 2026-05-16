@@ -1,3 +1,4 @@
+using Common.systems.MainThread;
 using Common.systems.ProfileSystem;
 using Common.systems.UI;
 using System;
@@ -8,12 +9,14 @@ public class UserInfoPanelViewModel
 {
     [Inject] private ProfileManager _profileManager;
     [Inject] private UIManager _uIManager;
+    [Inject] private MainThreadDispatcher mainThread;
+
 
     public Action<string> onNickNameChanged;
+    public Action<string> onAvatarChanged;
 
 
-
-
+    private bool _disposed;
     public void Init()
     {
         _profileManager.onProfileUpdated += handlerUpdatedProfile;
@@ -22,12 +25,20 @@ public class UserInfoPanelViewModel
     }
     public void CleanUp()
     {
+        _disposed = true;
+
         _profileManager.onProfileUpdated -= handlerUpdatedProfile;
     }
 
     private void handlerUpdatedProfile()
     {
-        onNickNameChanged?.Invoke(_profileManager.Profile.ProfileName);
+        if (_disposed) return;
+
+        mainThread.Run(() =>
+        {
+            onNickNameChanged?.Invoke(_profileManager.Profile.ProfileName);
+            onAvatarChanged?.Invoke(_profileManager.Profile.avatarSource);
+        });
     }
 
     internal void onAvatarButtonClick()

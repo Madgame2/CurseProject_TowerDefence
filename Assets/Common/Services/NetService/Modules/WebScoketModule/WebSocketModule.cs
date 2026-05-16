@@ -21,6 +21,7 @@ namespace Common.Services.Net.Modules
         private ClientWebSocket _WebSocket;
         private Dictionary<string, List<Action<string>>> _handlers = new();
         private readonly Dictionary<string, List<Func<string, Task>>> _asyncHandlers = new();
+        private readonly Dictionary<string, Action<string>> _systemHandlers = new();
         private Dictionary<string, TaskCompletionSource<string>> _pendingRequests = new();
         [Inject] private LiveConnectionService liveService;
         private readonly SemaphoreSlim _replaceLock = new(1, 1);
@@ -427,6 +428,10 @@ namespace Common.Services.Net.Modules
             list.Add(callback);
         }
 
+        public void OnSystem(string action, Action<string> callback)
+        {
+            _systemHandlers[action] = callback;
+        }
         public void Off(string actionName, Action<string> callback)
         {
             if (!_handlers.TryGetValue(actionName, out var list))
@@ -453,49 +458,58 @@ namespace Common.Services.Net.Modules
         {
             var jObject = JObject.Parse(json);
 
-            // 👇 пробуем вытащить базовые поля
             var action = jObject["action"]?.ToString();
             var requestId = jObject["requestId"]?.ToString();
 
             // =========================
-            // 1. RESPONSE (старый механизм)
+            // 1. RESPONSE (request/response)
             // =========================
-            if (!string.IsNullOrEmpty(requestId) &&
-                _pendingRequests.ContainsKey(requestId))
+            if (!string.IsNullOrEmpty(requestId))
             {
-                _pendingRequests[requestId].SetResult(json);
+                if (_pendingRequests.TryGetValue(requestId, out var tcs))
+                {
+                    tcs.SetResult(json);
+                    return;
+                }
+            }
+
+            // =========================
+            // 2. NO ACTION -> ignore
+            // =========================
+            if (string.IsNullOrEmpty(action))
+            {
+                Console.WriteLine("Unknown message type: " + json);
                 return;
             }
 
             // =========================
-            // 2. EVENT (новый или старый)
+            // 3. SYSTEM EVENTS (НЕ ЧИСТЯТСЯ НИКОГДА)
             // =========================
-            if (!string.IsNullOrEmpty(action))
+            if (_systemHandlers.TryGetValue(action, out var systemHandler))
             {
-                // 👇 пробуем старый формат
-                WSResponse? msg = null;
-
-                try
-                {
-                    msg = jObject.ToObject<WSResponse>();
-                }
-                catch { }
-
-                // 👇 если это новый формат (без code/message и т.д.)
-                if (msg == null || msg.Action == null)
-                {
-                    msg = new WSResponse
-                    {
-                        Action = action,
-                        Data = jObject["data"]
-                    };
-                }
-
-                await HandleEvent(msg);
+                systemHandler.Invoke(jObject["data"]?.ToString());
                 return;
             }
 
-            Console.WriteLine("Unknown message type: " + json);
+            // =========================
+            // 4. USER EVENTS
+            // =========================
+            WSResponse msg;
+
+            try
+            {
+                msg = jObject.ToObject<WSResponse>();
+            }
+            catch
+            {
+                msg = new WSResponse
+                {
+                    Action = action,
+                    Data = jObject["data"]
+                };
+            }
+
+            await HandleEvent(msg);
         }
 
         private async Task HandleEvent(WSResponse msg)

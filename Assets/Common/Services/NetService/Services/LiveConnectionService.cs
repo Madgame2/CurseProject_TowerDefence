@@ -44,7 +44,7 @@ namespace Common.Services.Net.Services
         {
             _socket = net;
 
-            _socket.On("pong", OnPongReceived);
+            _socket.OnSystem("pong", OnPongReceived);
 
             _socket.onConnect += StartHeartBeat;
             _socket.onDisconnect += Stop;

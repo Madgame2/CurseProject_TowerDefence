@@ -16,7 +16,6 @@ public class SessionNetInstaller
     [Inject] private SceneStateMachine<GameSessionScene> _sceneStateMachine;
     [Inject] private ChankSystem _chankSystem;
     [Inject] private PlayersService _playersService;
-    [Inject] private NetDispatcher _netDispatcher;
 
     private string _currentState;
     private float _currentProgress;

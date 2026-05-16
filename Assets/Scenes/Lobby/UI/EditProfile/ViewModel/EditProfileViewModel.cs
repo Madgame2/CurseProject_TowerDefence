@@ -20,6 +20,7 @@ public class EditProfileViewModel
     public Action<string> onEmailChanged;
     public Action<string> onNicknameChanged;
     public Action<byte[]> aloadednewAvatar;
+    public Action<string> onAvatarChanged;
 
     private byte[] newAvatar;
 
@@ -35,12 +36,14 @@ public class EditProfileViewModel
 
         onEmailChanged?.Invoke(_profileManager.Profile.Email);
         onNicknameChanged?.Invoke(_profileManager.Profile.ProfileName);
+        onAvatarChanged?.Invoke(_profileManager.Profile.avatarSource);
     }
 
     private void HandlProfileUpdate()
     {
         onEmailChanged?.Invoke(_profileManager.Profile.Email);
         onNicknameChanged?.Invoke(_profileManager.Profile.ProfileName);
+        onAvatarChanged?.Invoke(_profileManager.Profile.avatarSource);
     }
 
     public void CleanUp()

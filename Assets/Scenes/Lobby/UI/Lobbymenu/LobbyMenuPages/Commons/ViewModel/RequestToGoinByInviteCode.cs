@@ -1,6 +1,6 @@
 ﻿internal class RequestToGoinByInviteCode
 {
-    private string code;
+    public string code;
 
     public RequestToGoinByInviteCode(string code)
     {

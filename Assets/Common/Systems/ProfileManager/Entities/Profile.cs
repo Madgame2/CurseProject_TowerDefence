@@ -13,5 +13,8 @@ namespace Common.systems.ProfileSystem.Entities
 
         [JsonProperty("email")]
         public string Email;
+
+        [JsonProperty("headerImageSource")]
+        public string avatarSource;
     }
 }

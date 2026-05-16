@@ -25,6 +25,9 @@ namespace Common.Services.SceneServices
 
         public void loadScene<T>(params SceneParamBase[] parameters) where T : SceneBase
         {
+            if (_currentScene != null && _currentScene.SceneName == typeof(T).Name)
+                return;
+
             _sceneParams.Clear();
             foreach (var p in parameters)
             {
@@ -46,6 +49,9 @@ namespace Common.Services.SceneServices
         }
         public async Task LoadSceneAsync<T>(params SceneParamBase[] parameters) where T : SceneBase
         {
+            if (_currentScene != null && _currentScene.SceneName == typeof(T).Name)
+                return;
+
             _sceneParams.Clear();
             foreach (var p in parameters)
             {

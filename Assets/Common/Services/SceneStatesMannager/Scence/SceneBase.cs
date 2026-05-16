@@ -10,9 +10,16 @@ namespace Common.Services.SceneServices.Scenes
     public abstract class SceneBase
     {
         public abstract string SceneName { get; }
+        private bool _isLoading;
 
         public void LoadMyScene()
         {
+            if (_isLoading)
+            {
+                Debug.LogWarning("Scene already loading, ignored");
+                return;
+            }
+
             if (SceneName == null|| SceneName.IsEmpty())
             {
                 Debug.LogError($"[BaseScene] Не удалось загрузить сцену: свойство SceneName пустое или null в {this.GetType().Name}");
@@ -22,7 +29,7 @@ namespace Common.Services.SceneServices.Scenes
             {
                 if (SceneManager.GetActiveScene().name == SceneName) return;
 
-                SceneManager.LoadScene(SceneName);
+                SceneManager.LoadScene(SceneName, LoadSceneMode.Single);
             }
             catch (Exception ex)
             {
@@ -32,7 +39,13 @@ namespace Common.Services.SceneServices.Scenes
 
         public virtual async Task LoadMySceneAsync()
         {
-            var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(SceneName);
+            if (_isLoading)
+            {
+                Debug.LogWarning("Scene already loading, ignored");
+                return;
+            }
+
+            var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
 
             while (!operation.isDone)
             {

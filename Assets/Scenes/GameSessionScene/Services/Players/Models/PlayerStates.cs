@@ -7,5 +7,6 @@ namespace Scenes.Session.Players
         public int hp;
         public string playerID;
         public string nickName;
+
     }
 }

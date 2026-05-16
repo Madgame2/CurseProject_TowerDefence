@@ -19,7 +19,7 @@ using Zenject;
 
 namespace Scenes.Lobby
 {
-    public class LobbyManager : IInitializable
+    public class LobbyManager : IInitializable, IDisposable
     {
         private NavController navController;
         private UIManager _uiManager;
@@ -188,7 +188,6 @@ namespace Scenes.Lobby
             {
                 case "IN_SEARCH":
                     _socket.On("sessionReady", HandleSessionReady);
-                    Debug.Log("Subsrubet to: sessionReady");
                     _uiManager.TryOpen("SearchingPanel");
                     break;
                 case "IDLE":
@@ -200,6 +199,7 @@ namespace Scenes.Lobby
 
         private async Task HandleSessionReady(string obj)
         {
+            _socket.Off("sessionReady", HandleSessionReady);
             SessionServerInfo sessionServerInfo = JsonConvert.DeserializeObject<SessionServerInfo>(obj);
 
             _globalStorage.Set<SessionServerInfo>("sessionInfo", sessionServerInfo);
@@ -307,6 +307,12 @@ namespace Scenes.Lobby
         internal void SyncState()
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            _socket.Off("sessionReady", HandleSessionReady);
+            _socket.Off("Lobby_updates", lobbyUpdatesHandle);
         }
     }
 }

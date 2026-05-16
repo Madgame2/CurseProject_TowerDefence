@@ -44,7 +44,7 @@ public class LobbyViewer : MonoBehaviour
             GameObject newObject = Instantiate(_template, root);
             if (newObject.TryGetComponent<LobbyViewerElem>(out LobbyViewerElem elemView))
             {
-                elemView.Init(item.Name,item.PlayerId == lobby.Host);
+                elemView.Init(item.Name,item.avatarSource,item.PlayerId == lobby.Host);
             }
         }
     }

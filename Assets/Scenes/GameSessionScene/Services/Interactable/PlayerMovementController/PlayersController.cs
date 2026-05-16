@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -10,6 +11,11 @@ public class PlayersController : MonoBehaviour
     [SerializeField] private float snapDistance = 5f;
 
     private readonly Dictionary<string, PlayerViewState> _states = new();
+
+    private void Awake()
+    {
+        Debug.Log($"PlayersController ID={GetInstanceID()} scene={gameObject.scene.name}");
+    }
 
     public void handlePlayerNewState(PlayerState state)
     {
