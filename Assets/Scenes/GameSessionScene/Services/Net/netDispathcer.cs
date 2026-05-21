@@ -21,6 +21,7 @@ public class NetDispatcher : IInitializable, IDisposable
     [Inject] private DirectorManager _director;
     [Inject] private SceneStateMachine<GameSessionScene> _sceneStateMachine;
     [Inject] private GlobalStorage _globalStorage;
+    [Inject] private CommonStatesViewer _commonViewver;
 
     private static int _instanceCounter = 0;
     private int _instanceId;
@@ -70,6 +71,16 @@ public class NetDispatcher : IInitializable, IDisposable
             foreach(var director in packet.director)
             {
                 _director.HandleUpdate(director);
+            }
+            foreach(var common in packet.common) {
+                if(common.buidlSystem!=null)
+                    _commonViewver.buildStates(common.buidlSystem);
+
+                if(common.wave != null)
+                {
+                    _commonViewver.SetWave(common.wave);
+
+                }
             }
         });
     }

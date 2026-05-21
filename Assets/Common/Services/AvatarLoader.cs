@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class AvatarLoader : MonoBehaviour
 {
@@ -40,11 +44,29 @@ public class AvatarLoader : MonoBehaviour
 
         StartCoroutine(LoadFromUrlCoroutine(url));
     }
+    private string NormalizeHostToIPv4(string url)
+    {
+        var uri = new Uri(url);
+
+        // Ищем IPv4 адрес для hostname
+        var ipv4 = Dns.GetHostAddresses(uri.Host)
+            .FirstOrDefault(x =>
+                x.AddressFamily == AddressFamily.InterNetwork);
+
+        if (ipv4 == null)
+            return url; // fallback
+
+        return $"{uri.Scheme}://{ipv4}:{uri.Port}{uri.PathAndQuery}";
+    }
 
     private IEnumerator LoadFromUrlCoroutine(string url)
     {
+        url = NormalizeHostToIPv4(url);
+        Debug.Log(url);
         using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
         {
+            request.certificateHandler = new DevCertHandler();
+
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)

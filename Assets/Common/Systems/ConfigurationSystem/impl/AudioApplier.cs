@@ -17,6 +17,8 @@ public class AudioApplier : MonoBehaviour
 
     public void Apply()
     {
+        bool ok = mixer.SetFloat("MasterVolume", ToDb(0.5f));
+        Debug.Log("Master set: " + ok);
         var cfg = configSystem.AudioProvider.config;
 
         mixer.SetFloat("MasterVolume", ToDb(cfg.TottalVolume));

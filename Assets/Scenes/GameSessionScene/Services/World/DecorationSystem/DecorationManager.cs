@@ -81,4 +81,10 @@ public class DecorationManager : MonoBehaviour
 
         Placed_Decorations.Add(_global2dpos, spawnedDecorations);
     }
+
+    private void OnDestroy()
+    {
+        Placed_Decorations.Clear();
+        chunkToDecorations.Clear();
+    }
 }

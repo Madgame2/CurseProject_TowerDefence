@@ -36,7 +36,7 @@ namespace Common.systems.MainThread
 
         void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
     }
 }

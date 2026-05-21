@@ -93,3 +93,13 @@ MonoBehaviour:
     cannotOpenWith: []
     selfCanvas: 0
     withoutCanvas: 0
+  - windowName: SideGameInfo
+    prefab: {fileID: 6580701089324725073, guid: 361de912d47c61c4098a6909971d7c3b, type: 3}
+    viewModelScript: {fileID: 11500000, guid: 07d11dbc48f8519449edf9cd1970395a, type: 3}
+    viewModelTypeName: SideStateViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    ShowInStart: 0
+    canOpenWith: []
+    cannotOpenWith: []
+    selfCanvas: 0
+    withoutCanvas: 0

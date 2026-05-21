@@ -10,7 +10,7 @@ public class PlayerMovementController
 
     private GameObject debugPointer;
 
-    internal void MoveTo(Transform player, Vector3 mousePos)
+    internal void MoveTo(Vector3 mousePos)
     {
         SpawnDebugPointer(mousePos);
 

@@ -22,4 +22,7 @@ public class WorldUpdateData
 
     [JsonProperty("director")]
     public List<DirectorEvent> director { get; set; } = new();
+
+    [JsonProperty("common")]
+    public List<CommnonInfo> common { get; set; } = new();
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class NpcManager : MonoBehaviour
+public class NpcManager : MonoBehaviour 
 {
     [SerializeField] private NpcDataBase _npcDataBase;
     [SerializeField] private GameObject _enemySpawnVFX;

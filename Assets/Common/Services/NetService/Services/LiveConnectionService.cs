@@ -69,6 +69,8 @@ namespace Common.Services.Net.Services
 
         private void StartHeartBeat()
         {
+            Stop();
+
             if (_isActive)
                 return;
 
@@ -77,7 +79,6 @@ namespace Common.Services.Net.Services
 
             _isActive = true;
 
-            Stop();
 
             _cts = new CancellationTokenSource();
             _lastPongTime = DateTime.UtcNow;
@@ -107,11 +108,17 @@ namespace Common.Services.Net.Services
                 }
                 catch
                 {
-                    // если отправка упала — считаем соединение подозрительным
                     SetSuspected();
                 }
 
-                await Task.Delay(_pingInterval, _cts.Token);
+                try
+                {
+                    await Task.Delay(_pingInterval, _cts.Token);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
         }
 

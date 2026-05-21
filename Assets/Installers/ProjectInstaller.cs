@@ -20,8 +20,9 @@ namespace Installers
         {
             Debug.Log($"ProjectInstaller: {GetInstanceID()}");
 
+            Application.runInBackground = true;
 
-            NetworkConfig _networkConfig = new NetworkConfig("http://localhost:3000",0);
+            NetworkConfig _networkConfig = new NetworkConfig("http://DESKTOP-JVVQE2J:3000", 0);
 
             Container.Bind<BaseInputActions>().AsSingle();
             Container.Bind<GlobalStorage>().AsSingle();

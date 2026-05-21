@@ -23,6 +23,10 @@ public class LobbyInstaller : MonoInstaller
         }
 
 
+        Container.Bind<AudioApplier>()
+            .FromComponentInHierarchy()
+            .AsSingle();
+
         Container.Bind<UIManager>().FromInstance(uIManager).AsSingle();
 
         Container.Bind<NavController>().FromComponentInHierarchy().AsSingle();

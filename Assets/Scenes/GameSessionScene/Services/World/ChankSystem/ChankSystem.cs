@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
 using Zenject;
@@ -43,6 +44,8 @@ public class ChankSystem : MonoBehaviour
         _isSubscribed = false;
         _socket.onConnect -= InitSubscrationsToEvents;
 
+
+        _chanks.Clear();
         _socket.Off("chankPreload", handlePreloadedChank);
     }
 
@@ -101,33 +104,6 @@ public class ChankSystem : MonoBehaviour
             _decorationSystem.PlaceDecorationAt(chank, message.chankCell, message.cellData);
         }
     }
-
-    //private async Task handlePreloadedChank(string arg)
-    //{
-    //    var chankData = await Task.Run(() =>
-    //        JsonConvert.DeserializeObject<ChankMetaData>(arg));
-    //    _ = _socket.Send("chankApply", new { });
-
-    //    Debug.Log($"{chankData.x}: {chankData.z}");
-    //    _mainThread.Run(() =>
-    //    {
-    //        GameObject obj = Instantiate(_ChankPrefab, _worldRoot, false);
-    //        obj.transform.position= new Vector3(chankData.x * 160, 0, chankData.z * 160);
-
-    //        //if(obj.TryGetComponent<Chank>(out Chank outChank))
-    //        //{
-    //           // outChank.Position = new Vector2(chankData.x, chankData.z);
-    //            //foreach(var essence in chankData.essence)
-    //            //{
-    //            //    outChank.EntiersRecords[new Vector2(essence.x, essence.z)] = essence.value;
-    //            //}
-
-    //            //outChank.InitChank();
-    //       // }
-
-    //    });
-
-
-    //}
+   
 
 }

@@ -1,8 +1,10 @@
+using Common.Services.Net.Modules;
 using NUnit.Framework;
 using Scenes.Lobby;
 using Scenes.Lobby.Entities;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +15,7 @@ public class LobbyViewer : MonoBehaviour
     [SerializeField] private GameObject _template;
 
     [Inject] private LobbyManager _lobbyManager;
+    [Inject] private WebSocketModule _socket;
 
     private void Start()
     {
@@ -44,7 +47,14 @@ public class LobbyViewer : MonoBehaviour
             GameObject newObject = Instantiate(_template, root);
             if (newObject.TryGetComponent<LobbyViewerElem>(out LobbyViewerElem elemView))
             {
-                elemView.Init(item.Name,item.avatarSource,item.PlayerId == lobby.Host);
+                elemView.Init(item.PlayerId,item.Name,item.avatarSource,item.PlayerId == lobby.Host,
+                        async (userId) =>
+                        {
+                            _ = _socket.Send(
+                                "RemoveUserFromLobby",
+                                new RemoveUserDTO(userId)
+                            );
+                        });
             }
         }
     }

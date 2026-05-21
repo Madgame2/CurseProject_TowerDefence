@@ -27,7 +27,7 @@ namespace Common.Services.Net
         public  WebSocketModule _webSocketModule { get; private set; }
 
         public NetworkConfig _netConfig;
-        public string BaseUrl = "http://DESKTOP-JVVQE2J:3000"; // TEMP
+        public string BaseUrl = "https://DESKTOP-JVVQE2J"; // TEMP
         private readonly GameStateMachine _gameStateMachine;
         private readonly LiveConnectionService _liveConnectionService;
         private readonly MainThreadDispatcher _dispathcer;
@@ -44,7 +44,7 @@ namespace Common.Services.Net
             _gameStateMachine = gameStateMachine;
             _dispathcer = dispathc;
 
-            _webSocketModule.setServerAdress("DESKTOP-JVVQE2J:3000");
+            _webSocketModule.setServerAdress("DESKTOP-JVVQE2J:3000/ws");
 
             _liveConnectionService.OnConnectionLost += HandleConnectionLost;
             _liveConnectionService.OnConnectionRestored += HandleConnectionRestored;

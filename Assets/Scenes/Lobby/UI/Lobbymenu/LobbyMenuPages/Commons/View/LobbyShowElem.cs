@@ -8,7 +8,7 @@ using Zenject;
 
 public class LobbyShowElem : MonoBehaviour
 {
-    [SerializeField] private Image _hostImage;
+    [SerializeField] private AvatarLoader _hostImage;
     [SerializeField] private TMP_Text _hotName;
     [SerializeField] private TMP_Text _playersCount;
     [SerializeField] private Button _joinButton;
@@ -22,6 +22,7 @@ public class LobbyShowElem : MonoBehaviour
         _lobby = lobby;
         _hotName.text = lobby.hostName;
         _playersCount.text = $"{lobby.Users.Count}/{lobby.MaxSize}";
+        _hostImage.LoadFromUrl(lobby.hostHeaderImage);
 
         _joinButton.onClick.AddListener(onPuttonClickhandler);
     }

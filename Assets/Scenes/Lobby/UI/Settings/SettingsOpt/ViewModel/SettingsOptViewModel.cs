@@ -21,6 +21,7 @@ public class SettingsOptViewModel
 
     private SettingOpt _currentOpt;
     private SettingImpViewModel _settingImpViewModel;
+    private readonly AudioApplier _audioApplier;
 
     public event Action<bool> ChangeButtonsAvailable;
     public event Action<bool> HasChanges;
@@ -30,7 +31,8 @@ public class SettingsOptViewModel
     public SettingsOptViewModel(SceneStateMachine<LobbyScene> sceneStateMachine,
         NavController navController,
         UIManager uIManager,
-        ConfigSystem config)
+        ConfigSystem config,
+        AudioApplier audioApplier)
     {
         _sceneStateMachine = sceneStateMachine;
         _navController = navController;
@@ -40,6 +42,7 @@ public class SettingsOptViewModel
         _sceneStateMachine.onStateChanges += StateChangesHandle;
 
         _configs.hasChanges += ConfigChangesHandler;
+        _audioApplier = audioApplier;
     }
 
     public void CleanUp()
@@ -57,6 +60,7 @@ public class SettingsOptViewModel
     public void ConfirmChanges()
     {
         _configs.SaveData();
+        _audioApplier.Apply();
         HasChanges?.Invoke(false);
     }
 

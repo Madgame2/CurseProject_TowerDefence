@@ -81,11 +81,11 @@ public class ConfirmProfileViewModel
             case 200:
                 {
                     _uiManager.Close("ConfirmProfile");
-                    _uiManager.showInformWindow("Profile successfully activated!",
-                        "Please re-enter your details on the authorization page so that we can authorize the connection.");
-
                     _uiManager.Close("CreateAccount");
+
                     _uiManager.TryOpen("LogIn");
+                    _uiManager.showInformWindow("Profile successfully activated!",
+    "Please re-enter your details on the authorization page so that we can authorize the connection.");
 
                     return true;
                 }

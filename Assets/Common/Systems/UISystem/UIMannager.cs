@@ -217,7 +217,7 @@ namespace Common.systems.UI
 
             if (view is MonoBehaviour viewMono && viewMono)
             {
-                viewMono.gameObject.SetActive(false);
+                viewMono.gameObject.SetActive(true);
             }
         }
 
