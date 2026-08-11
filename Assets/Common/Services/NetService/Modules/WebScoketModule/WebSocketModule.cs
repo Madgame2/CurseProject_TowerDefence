@@ -17,12 +17,13 @@ namespace Common.Services.Net.Modules
 {
     public class WebSocketModule
     {
+        [Inject] private LiveConnectionService liveService;
         private ClientWebSocket _WebSocket;
         private Dictionary<string, List<Action<string>>> _handlers = new();
         private readonly Dictionary<string, List<Func<string, Task>>> _asyncHandlers = new();
         private readonly Dictionary<string, Action<string>> _systemHandlers = new();
+        private readonly Dictionary<Delegate, Action<string>> _wrappersMap = new();
         private Dictionary<string, TaskCompletionSource<string>> _pendingRequests = new();
-        [Inject] private LiveConnectionService liveService;
         private readonly SemaphoreSlim _replaceLock = new(1, 1);
         private readonly SemaphoreSlim _disconnectLock = new(1, 1);
 
@@ -38,6 +39,39 @@ namespace Common.Services.Net.Modules
 
         public bool IsConnected => _isConnected;
 
+        public static async Task<ClientWebSocket> tryCreateConnectionTo(string hostAddress,
+            Dictionary<string, string> headers = null,
+            CancellationToken ct = default)
+        {
+            var ws = new ClientWebSocket();
+
+            if (headers != null)
+            {
+                foreach (var kv in headers)
+                {
+                    ws.Options.SetRequestHeader(kv.Key, kv.Value);
+                }
+            }
+
+            var uri = new Uri($"ws://{hostAddress}/ws");
+
+            try
+            {
+                await ws.ConnectAsync(uri, ct);
+                return ws;
+            }
+            catch (OperationCanceledException)
+            {
+                ws.Dispose();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                ws.Dispose();
+                throw new Exception($"Failed to connect to session server: {uri}", ex);
+            }
+        }
+        
         public static async Task<ClientWebSocket> CreateConnectionTo(
             string hostAddress,
             int port,
@@ -127,7 +161,7 @@ namespace Common.Services.Net.Modules
             }
         }
 
-        public async Task ReplaceSessionSocketAsync(ClientWebSocket newSocket)
+        public async Task ReplaceSocketAsync(ClientWebSocket newSocket)
         {
             await _replaceLock.WaitAsync();
 
@@ -140,11 +174,9 @@ namespace Common.Services.Net.Modules
 
                 oldSocket = _WebSocket;
                 oldCts = _receiveCts;
-
-                // 1. stop loop
+                
                 oldCts?.Cancel();
-
-                // 2. wake up ReceiveAsync
+                
                 if (oldSocket != null)
                 {
                     try
@@ -162,24 +194,21 @@ namespace Common.Services.Net.Modules
                     {
                         Debug.LogWarning($"Socket close error: {ex}");
                     }
-
-                    // 🔥 HARD GUARANTEE
+                    
                     try
                     {
                         oldSocket.Abort();
                     }
                     catch { }
                 }
-
-                // 3. cleanup (NO await oldTask anymore)
+                
                 oldCts?.Dispose();
 
                 _receiveCts = new CancellationTokenSource();
                 _WebSocket = newSocket;
 
                 _isConnected = false;
-
-                // 4. restart
+                
                 StartReceiveLoop(_WebSocket);
 
                 _isConnected = true;
@@ -426,6 +455,33 @@ namespace Common.Services.Net.Modules
 
             list.Add(callback);
         }
+        
+        public void On<T>(string actionName, Action<T> callback)
+        {
+            Action<string> wrapper = (rawJsonData) =>
+            {
+                try
+                {
+                    T parsedData = JsonConvert.DeserializeObject<T>(rawJsonData);
+                    callback.Invoke(parsedData);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError(
+                        $"[Router] Failed to parse {typeof(T).Name}. Error: {ex.Message}\nRawData: {rawJsonData}");
+                }
+            };
+            
+            if (!_handlers.TryGetValue(actionName, out var list))
+            {
+                list = new List<Action<string>>();
+                _handlers[actionName] = list;
+            }
+
+            _wrappersMap[callback] = wrapper;
+            
+            On(actionName, wrapper);
+        }
 
         public void OnSystem(string action, Action<string> callback)
         {
@@ -440,6 +496,16 @@ namespace Common.Services.Net.Modules
 
             if (list.Count == 0)
                 _handlers.Remove(actionName);
+        }
+        
+        public void Off<T>(string actionName, Action<T> callback)
+        {
+            if (_wrappersMap.TryGetValue(callback, out var wrapper))
+            {
+                Off(actionName, wrapper);
+                
+                _wrappersMap.Remove(callback);
+            }
         }
 
         public void Off(string actionName, Func<string, Task> callback)
@@ -460,9 +526,6 @@ namespace Common.Services.Net.Modules
             var action = jObject["action"]?.ToString();
             var requestId = jObject["requestId"]?.ToString();
 
-            // =========================
-            // 1. RESPONSE (request/response)
-            // =========================
             if (!string.IsNullOrEmpty(requestId))
             {
                 if (_pendingRequests.TryGetValue(requestId, out var tcs))
@@ -471,30 +534,20 @@ namespace Common.Services.Net.Modules
                     return;
                 }
             }
-
-            // =========================
-            // 2. NO ACTION -> ignore
-            // =========================
+            
             if (string.IsNullOrEmpty(action))
             {
                 Console.WriteLine("Unknown message type: " + json);
                 return;
             }
-
-            // =========================
-            // 3. SYSTEM EVENTS (НЕ ЧИСТЯТСЯ НИКОГДА)
-            // =========================
+            
             if (_systemHandlers.TryGetValue(action, out var systemHandler))
             {
                 systemHandler.Invoke(jObject["data"]?.ToString());
                 return;
             }
-
-            // =========================
-            // 4. USER EVENTS
-            // =========================
+            
             WSResponse msg;
-
             try
             {
                 msg = jObject.ToObject<WSResponse>();
@@ -508,33 +561,30 @@ namespace Common.Services.Net.Modules
                 };
             }
 
-            await HandleEvent(msg);
+            await HandleEvent(msg, json);
         }
 
-        private async Task HandleEvent(WSResponse msg)
+        private async Task HandleEvent(WSResponse msg, string rawJson)
         {
             if (string.IsNullOrEmpty(msg.Action))
                 return;
 
-            var data = msg.Data?.ToString();
-
-            // sync handlers
+            string payload = msg.Data != null ? msg.Data.ToString() : rawJson;
+            
             if (_handlers.TryGetValue(msg.Action, out var list))
             {
-
                 var snapshot = list.ToArray();
                 foreach (var handler in snapshot)
                 {
-                    handler.Invoke(data);
+                    handler.Invoke(payload); 
                 }
             }
-
-            // async handlers
+            
             if (_asyncHandlers.TryGetValue(msg.Action, out var asyncList))
             {
                 var snapshot = asyncList.ToArray();
 
-                var tasks = snapshot.Select(handler => SafeInvoke(handler, data));
+                var tasks = snapshot.Select(handler => SafeInvoke(handler, payload));
                 await Task.WhenAll(tasks);
             }
         }

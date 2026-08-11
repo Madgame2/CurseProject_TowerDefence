@@ -101,7 +101,7 @@ namespace Common.systems.SceneStates
                 Debug.LogError($"{stateType} не является наследником BaseState!");
                 return false;
             }
-            _currentState?.LeavFormState();
+            _currentState?.LeaveFormState();
             
             BaseState stateInstance = (BaseState)_container.Instantiate(stateType);
             Type oldState = _currentState?.GetType();

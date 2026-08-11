@@ -17,7 +17,7 @@ public class SessionManagementLobbyState : BaseState
         _navController.ExecAnim("LobbyPage");
     }
 
-    public override void LeavFormState()
+    public override void LeaveFormState()
     {
         _navController.ExecReverseAnim("LobbyPage");
     }

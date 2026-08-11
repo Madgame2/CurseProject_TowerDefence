@@ -55,7 +55,7 @@ public class SessionNetInstaller
                     };
 
         ClientWebSocket newSocket = await WebSocketModule.CreateConnectionTo(sessionInfo.host, sessionInfo.port, headers);
-        await _socket.ReplaceSessionSocketAsync(newSocket);
+        await _socket.ReplaceSocketAsync(newSocket);
 
 
         Stage = "Waiting other players";

@@ -155,8 +155,8 @@ namespace Common.Services.Net.Services
 
             if (_state == ConnectionState.Connected)
             {
-                _state = ConnectionState.Suspected;
-                OnConnectionLost?.Invoke();
+                _state = ConnectionState.Suspected; 
+                //OnConnectionLost?.Invoke();
             }
         }
     }

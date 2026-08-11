@@ -43,7 +43,7 @@ public class EndGameViewModel
             try
             {
                 ClientWebSocket LobbyServerConnectin = await WebSocketModule.tryCreateConnectionTo("DESKTOP-JVVQE2J", 3000, ct, accessToken);
-                await _socket.ReplaceSessionSocketAsync(LobbyServerConnectin);
+                await _socket.ReplaceSocketAsync(LobbyServerConnectin);
                 gameStateMachine.tryMoveToState(typeof(LobbyState));
             }
             catch (InvalidTokenException)
@@ -132,7 +132,7 @@ public class EndGameViewModel
                 CancellationToken ct = cts.Token;
 
                 ClientWebSocket LobbyServerConnectin = await WebSocketModule.tryCreateConnectionTo("DESKTOP-JVVQE2J", 3000, ct, dto.accessToken);
-                await _socket.ReplaceSessionSocketAsync(LobbyServerConnectin);
+                await _socket.ReplaceSocketAsync(LobbyServerConnectin);
                 gameStateMachine.tryMoveToState(typeof(LobbyState));
             }
 

@@ -3,6 +3,7 @@ using Common.systems.GameStates.States;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LightTransport;
 using Zenject;
 
 namespace Common.systems.GameStates
@@ -23,13 +24,21 @@ namespace Common.systems.GameStates
 
         public void Initialize()
         {
+#if !UNITY_EDITOR
             Type startState = _debugStartState!=null ? _debugStartState : _graphReader.RootState;
             tryMoveToState(startState);
+#endif
         }
 
         public void SetStartState<T>()where T:BaseState
         {
             _debugStartState = typeof(T);
+
+            BaseState stateInstance = (BaseState)_container.Instantiate(typeof(T));
+
+            Type buffer = _currentState?.GetType();
+            _currentState = stateInstance;
+            _currentState.EnterToState(buffer);
         }
 
         public void tryMoveToState(Type stateType) 

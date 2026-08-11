@@ -35,7 +35,7 @@ public class LoadingState : BaseState
         }
     }
 
-    public override void LeavFormState()
+    public override void LeaveFormState()
     {
         _uiManager.Close("LoadingUI");
     }

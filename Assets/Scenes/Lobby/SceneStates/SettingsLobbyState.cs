@@ -17,7 +17,7 @@ public class SettingsLobbyState:BaseState
         _navController.ExecAnim("Settings");
     }
 
-    public override void LeavFormState()
+    public override void LeaveFormState()
     {
         _navController.ExecReverseAnim("Settings");
     }

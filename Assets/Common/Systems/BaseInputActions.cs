@@ -136,6 +136,24 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""83ff6ad5-6c1c-43b7-a78d-5d8703e09147"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Look1"",
+                    ""type"": ""Value"",
+                    ""id"": ""f8e8951a-81a9-41ef-9f39-0a6ce7a3e8b6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -215,6 +233,72 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""AltRotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""d350af32-c1b5-4ca6-8f2e-5da50dffaa9a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""2da90231-514e-403c-b4ce-3d6692775e8d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""57244d38-d1bc-4885-b67c-8482dd5eb54d"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""59c8fbd0-869f-4c05-af7c-b4db02e6125b"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4406291f-4b9c-4b32-b48d-819ffe295024"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d96b7f6-09c6-4fc1-989b-8a14db4a1741"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,6 +312,8 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         m_SessionPlayer_Zoom = m_SessionPlayer.FindAction("Zoom", throwIfNotFound: true);
         m_SessionPlayer_Rotate = m_SessionPlayer.FindAction("Rotate", throwIfNotFound: true);
         m_SessionPlayer_AltRotate = m_SessionPlayer.FindAction("AltRotate", throwIfNotFound: true);
+        m_SessionPlayer_Move = m_SessionPlayer.FindAction("Move", throwIfNotFound: true);
+        m_SessionPlayer_Look1 = m_SessionPlayer.FindAction("Look1", throwIfNotFound: true);
     }
 
     ~@BaseInputActions()
@@ -313,6 +399,8 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_SessionPlayer_Zoom;
     private readonly InputAction m_SessionPlayer_Rotate;
     private readonly InputAction m_SessionPlayer_AltRotate;
+    private readonly InputAction m_SessionPlayer_Move;
+    private readonly InputAction m_SessionPlayer_Look1;
     /// <summary>
     /// Provides access to input actions defined in input action map "SessionPlayer".
     /// </summary>
@@ -344,6 +432,14 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "SessionPlayer/AltRotate".
         /// </summary>
         public InputAction @AltRotate => m_Wrapper.m_SessionPlayer_AltRotate;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_SessionPlayer_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Look1".
+        /// </summary>
+        public InputAction @Look1 => m_Wrapper.m_SessionPlayer_Look1;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -385,6 +481,12 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @AltRotate.started += instance.OnAltRotate;
             @AltRotate.performed += instance.OnAltRotate;
             @AltRotate.canceled += instance.OnAltRotate;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Look1.started += instance.OnLook1;
+            @Look1.performed += instance.OnLook1;
+            @Look1.canceled += instance.OnLook1;
         }
 
         /// <summary>
@@ -411,6 +513,12 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @AltRotate.started -= instance.OnAltRotate;
             @AltRotate.performed -= instance.OnAltRotate;
             @AltRotate.canceled -= instance.OnAltRotate;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Look1.started -= instance.OnLook1;
+            @Look1.performed -= instance.OnLook1;
+            @Look1.canceled -= instance.OnLook1;
         }
 
         /// <summary>
@@ -486,5 +594,19 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAltRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Look1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLook1(InputAction.CallbackContext context);
     }
 }
