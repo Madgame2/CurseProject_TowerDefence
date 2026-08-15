@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Scenes.SessionRework.Scripts.World.Entities;
+using Scenes.SessionRework.Scripts.World.Entities.Chunk;
 using Scenes.SessionRework.Scripts.World.Interfaces;
 using UnityEngine;
 using Zenject;

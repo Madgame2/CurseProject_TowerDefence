@@ -11,5 +11,6 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.interfaces
         void SetChunksMetaData(ChunkMetaDatasMessage chunkMetaDataMessage);
         void ProcessWorldGenerationRules(WorldGenerationRules worldGenerationRules);
         void InitWorldContainer();
+        void ProcessDecorationRules(DecorationRulesMessage decorationRulesMessage);
     }
 }

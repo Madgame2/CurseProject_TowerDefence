@@ -1,6 +1,7 @@
 using Scenes.SessionRework.Scripts.World.Core.Data;
 using Scenes.SessionRework.Scripts.World.Core.Orchestrator;
 using Scenes.SessionRework.Scripts.World.Entities;
+using Scenes.SessionRework.Scripts.World.Entities.Chunk;
 using Scenes.SessionRework.Scripts.World.Factories;
 using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
 using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
@@ -28,6 +29,7 @@ namespace Installers
             Container.BindInstance(_initData.Settings).AsSingle();
             Container.BindInstance(_initData.LandscapeGraph).AsSingle();
             Container.BindInstance(_initData.BiomeGraph).AsSingle();
+            Container.BindInstance(_initData.DecorationsGraph).AsSingle();
             Container.BindInstance(_chunkReaderPrefab).WhenInjectedInto<ChunkReaderPool>();
 
             // 2. Биндим фабрику и генератор (теперь они живут внутри мира)

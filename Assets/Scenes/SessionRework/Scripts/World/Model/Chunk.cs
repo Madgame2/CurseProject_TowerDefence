@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum;
 using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.World.Model
@@ -9,6 +10,7 @@ namespace Scenes.SessionRework.Scripts.World.Model
         private Vector2Int ChunkCoordinates;
         private readonly float[] _heightMap;
         private readonly BiomeType[] _biomesMap;
+        private  readonly DecorationType[] _decorationsMap;
         public int Size { get; }
         public int RawSize => Size+1;
         public Vector2 Pivot { get; }
@@ -21,6 +23,7 @@ namespace Scenes.SessionRework.Scripts.World.Model
             Pivot = pivot;
             _heightMap = new float[(chunkSize+1) * (chunkSize+1)];
             _biomesMap = new BiomeType[chunkSize * chunkSize];
+            _decorationsMap = new  DecorationType[chunkSize * chunkSize];
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,5 +77,21 @@ namespace Scenes.SessionRework.Scripts.World.Model
         {
             return _biomesMap[GetBiomeIndex(x, y)];
         }
+        
+        public void SetDecorationInCell(int x, int y, DecorationType decoration)
+        {
+            _decorationsMap[GetBiomeIndex(x, y)] = decoration;
+        }
+        
+        public void SetDecorationInCell(Vector2Int localCoordinates, DecorationType decoration)
+        {
+            _decorationsMap[GetBiomeIndex(localCoordinates.x, localCoordinates.y)] = decoration;
+        }
+        
+        public DecorationType GetDecorationInCell(int x, int y)
+        {
+            return _decorationsMap[GetBiomeIndex(x, y)];
+        }
+
     }
 }

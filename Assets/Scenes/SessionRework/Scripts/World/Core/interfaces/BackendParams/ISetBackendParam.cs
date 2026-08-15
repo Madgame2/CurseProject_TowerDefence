@@ -1,4 +1,5 @@
 using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
 using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
 using Scenes.SessionRework.Scripts.World.Interfaces;
 
@@ -9,5 +10,6 @@ namespace Scenes.SessionRework.Scripts.World.Core.interfaces.BackendParams
         IChunksSettings  ChunksSettings { set; }
         ILandscapeGraphNode LandscapeGraphRoot { set; }
         IBiomeGraphNode BiomeGraphRoot { set; }
+        IDecorationsGraphNode DecorationsGraphRoot { get; set; }
     }
 }

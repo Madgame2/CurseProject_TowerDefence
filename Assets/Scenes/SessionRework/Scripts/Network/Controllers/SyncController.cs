@@ -20,6 +20,7 @@ namespace Scenes.SessionRework.Scripts.Network.Controllers
             _webSocket.Off("PREPARE_FOR_SYNC", goToSyncState);
             _webSocket.Off<ChunkMetaDatasMessage>("METADATA_CHUNK_SETTINGS", handleChunkMetaData);
             _webSocket.Off<WorldGenerationRules>("METADATA_WORLD_GENERATION_SETTINGS", handleWorldGenerationMetaData);
+            _webSocket.Off<DecorationRulesMessage>("METADATA_DECORATION_RULES", handleDecorationRulesMessage);
         }
 
         public void SubscribeToServerEvents()
@@ -27,6 +28,14 @@ namespace Scenes.SessionRework.Scripts.Network.Controllers
             _webSocket.On("PREPARE_FOR_SYNC", goToSyncState);
             _webSocket.On<ChunkMetaDatasMessage>("METADATA_CHUNK_SETTINGS", handleChunkMetaData);
             _webSocket.On<WorldGenerationRules>("METADATA_WORLD_GENERATION_SETTINGS", handleWorldGenerationMetaData);
+            _webSocket.On<DecorationRulesMessage>("METADATA_DECORATION_RULES", handleDecorationRulesMessage);
+        }
+
+        private void handleDecorationRulesMessage(DecorationRulesMessage obj)
+        {
+            _syncService.ProcessDecorationRules(obj);
+            
+            _ = _webSocket.Send("Applied", null);
         }
 
         private void handleWorldGenerationMetaData(WorldGenerationRules obj)

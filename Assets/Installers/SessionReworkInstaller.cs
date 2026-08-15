@@ -4,21 +4,15 @@ using Common.systems.SceneStates.Graph;
 using Scenes.SessionRework;
 using Scenes.SessionRework.Scripts.Cameras;
 using Scenes.SessionRework.Scripts.Network.Controllers;
-using Scenes.SessionRework.Scripts.Network.Ineterfaces;
 using Scenes.SessionRework.Scripts.Player;
 using Scenes.SessionRework.Scripts.Services.Sync;
-using Scenes.SessionRework.Scripts.Services.Sync.interfaces;
 using Scenes.SessionRework.Scripts.World.Core;
-using Scenes.SessionRework.Scripts.World.Core.interfaces.BackendParams;
 using Scenes.SessionRework.Scripts.World.Core.Meta;
-using Scenes.SessionRework.Scripts.World.Core.Orchestrator;
 using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Factories;
+using Scenes.SessionRework.Scripts.World.Entities.Chunk;
 using Scenes.SessionRework.Scripts.World.Graph.Builder;
 using Scenes.SessionRework.Scripts.World.Graph.Nodes.Factory;
-using Scenes.SessionRework.Scripts.World.Interfaces;
 using Scenes.SessionRework.Scripts.World.Pool;
-using Scenes.SessionRework.Scripts.World.Providers;
 using UnityEngine;
 using Zenject;
 
@@ -63,6 +57,8 @@ namespace Installers
             Container.BindInterfacesTo<BackendParamStorage>().AsSingle();
             
             Container.Bind<WorldHolder>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<DecorationGraphBuilder>().AsTransient();
         }
     }
 }

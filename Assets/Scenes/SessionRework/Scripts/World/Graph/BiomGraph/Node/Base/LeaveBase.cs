@@ -17,6 +17,5 @@ namespace Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Node.Base
         
         public abstract BiomeType Evaluate(float x, float y);
         public abstract void Initialize(NodeParam[] parameters);
-
     }
 }
