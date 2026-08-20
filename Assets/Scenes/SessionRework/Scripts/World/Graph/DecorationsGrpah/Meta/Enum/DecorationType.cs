@@ -1,6 +1,6 @@
 using System;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Meta.Enum
 {
     [Flags]
     public enum DecorationType: byte

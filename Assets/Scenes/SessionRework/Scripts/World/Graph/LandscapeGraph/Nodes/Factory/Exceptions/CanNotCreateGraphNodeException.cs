@@ -1,7 +1,7 @@
 using System;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Nodes.Factory.Exceptions
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Factory.Exceptions
 {
     public class CanNotCreateGraphNodeException : Exception
     {

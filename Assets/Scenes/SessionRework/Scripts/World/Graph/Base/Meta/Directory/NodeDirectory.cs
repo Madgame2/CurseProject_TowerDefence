@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.Nodes.Attributes;
-using Scenes.SessionRework.Scripts.World.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Attributes;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 using Zenject;
 
 

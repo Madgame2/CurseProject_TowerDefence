@@ -1,10 +1,10 @@
 using System;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Base;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Attributes;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.Base;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.Nodes.Attributes;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Nodes.Leaves
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Leaves
 {
     [NodeType(NodeType.PerlinNoiseNode)]
     public class PerlinNoiseLeaf : GraphLeaveBase

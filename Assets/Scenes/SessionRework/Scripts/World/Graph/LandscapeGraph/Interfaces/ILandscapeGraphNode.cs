@@ -1,6 +1,6 @@
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces
 {
     public interface ILandscapeGraphNode: IGraphNode
     {

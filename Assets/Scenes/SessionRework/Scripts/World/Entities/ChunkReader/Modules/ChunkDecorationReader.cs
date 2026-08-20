@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk.Modules.Base;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum;
+using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules.Base;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Meta.Enum;
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Entities.Chunk.Modules
+namespace Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules
 {
     public class ChunkDecorationReader: RenderModuleBase
     {

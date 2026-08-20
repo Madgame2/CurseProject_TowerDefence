@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.DecorationRulesModels
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.DecorationRulesModels
 {
     [XmlRoot("DecorationRules")]
     public class DecorationRules

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Interfaces
 {
     public interface IChunkReaderPool
     {

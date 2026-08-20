@@ -3,16 +3,22 @@ using Common.systems.SceneStates;
 using Common.systems.SceneStates.Graph;
 using Scenes.SessionRework;
 using Scenes.SessionRework.Scripts.Cameras;
+using Scenes.SessionRework.Scripts.Common.Installers;
+using Scenes.SessionRework.Scripts.ECS_World.Factories.Interfaces;
+using Scenes.SessionRework.Scripts.ECS_World.Factories.Player;
 using Scenes.SessionRework.Scripts.Network.Controllers;
+using Scenes.SessionRework.Scripts.Network.Parsers;
+using Scenes.SessionRework.Scripts.Network.Parsers.Interfaces;
 using Scenes.SessionRework.Scripts.Player;
 using Scenes.SessionRework.Scripts.Services.Sync;
-using Scenes.SessionRework.Scripts.World.Core;
-using Scenes.SessionRework.Scripts.World.Core.Meta;
-using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk;
-using Scenes.SessionRework.Scripts.World.Graph.Builder;
-using Scenes.SessionRework.Scripts.World.Graph.Nodes.Factory;
-using Scenes.SessionRework.Scripts.World.Pool;
+using Scenes.SessionRework.Scripts.GameWorld.Core;
+using Scenes.SessionRework.Scripts.GameWorld.Core.Meta;
+using Scenes.SessionRework.Scripts.GameWorld.Entities;
+using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Builder;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Factory;
+using Scenes.SessionRework.Scripts.GameWorld.Pool;
+using Scenes.SessionRework.Scripts.Player.View;
 using UnityEngine;
 using Zenject;
 
@@ -21,10 +27,13 @@ namespace Installers
     public class SessionReworkInstaller : MonoInstaller
     {
         [SerializeField] private ChunkReader ChunkReaderPrefab;
+        [SerializeField] private PlayerView _playerView;
+
         
         public override void InstallBindings()
         {
             Container.BindInstance(ChunkReaderPrefab);
+            Container.BindInstance(_playerView);
             
             Container.Bind<GraphReader>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneStateMachine<SessionReworkScene>>().AsSingle().NonLazy();
@@ -59,6 +68,9 @@ namespace Installers
             Container.Bind<WorldHolder>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<DecorationGraphBuilder>().AsTransient();
+
+            Container.Bind<IDecorationRulesParser>().To<DecorationRulesParser>().AsTransient();
+            Container.Bind<IWorldInitializer>().To<WorldInitializer>().AsTransient();
         }
     }
 }

@@ -1,9 +1,9 @@
 using System.Runtime.CompilerServices;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Meta.Enum;
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Model
+namespace Scenes.SessionRework.Scripts.GameWorld.Model
 {
     public struct Chunk
     {

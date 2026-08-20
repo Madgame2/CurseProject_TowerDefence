@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.DecorationRulesModels
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.DecorationRulesModels
 {
     public class GlobalSettings
     {

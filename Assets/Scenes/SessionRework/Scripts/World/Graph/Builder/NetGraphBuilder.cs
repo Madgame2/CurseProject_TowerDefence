@@ -1,9 +1,9 @@
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
 using Zenject;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Builder
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Builder
 {
     public class NetGraphBuilder: INetGraphsBuilder
     {

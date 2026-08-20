@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Entities;
+using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor;

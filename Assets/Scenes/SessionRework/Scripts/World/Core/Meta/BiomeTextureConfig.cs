@@ -1,8 +1,8 @@
 using Editor.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Core.Meta
+namespace Scenes.SessionRework.Scripts.GameWorld.Core.Meta
 {
     [CreateAssetMenu(fileName = "NewBiomeConfig", menuName = "Terrain/Biome Texture Config")]
     public class BiomeTextureConfig:ScriptableObject, ITextureProvider

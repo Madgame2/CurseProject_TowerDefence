@@ -1,8 +1,8 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.DecorationRulesModels;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.DecorationRulesModels;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Interfaces
 {
     public interface IDecorationGraphBuilder
     {

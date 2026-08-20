@@ -1,9 +1,10 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
+using Scellecs.Morpeh;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Core.Data
+namespace Scenes.SessionRework.Scripts.GameWorld.Core.Data
 {
     public class WorldInitializationData
     {
@@ -11,17 +12,20 @@ namespace Scenes.SessionRework.Scripts.World.Core.Data
         public ILandscapeGraphNode LandscapeGraph { get; }
         public IBiomeGraphNode BiomeGraph { get; }
         public IDecorationsGraphNode DecorationsGraph { get; }
+        public World EcsWorld { get; }
 
         public WorldInitializationData(
             IChunksSettings settings, 
             ILandscapeGraphNode landscapeGraph, 
             IBiomeGraphNode biomeGraph,
-            IDecorationsGraphNode decorationsGraph)
+            IDecorationsGraphNode decorationsGraph,
+            World world)
         {
             Settings = settings;
             LandscapeGraph = landscapeGraph;
             BiomeGraph = biomeGraph;
             DecorationsGraph = decorationsGraph;
+            EcsWorld = world;
         }
     }
 }

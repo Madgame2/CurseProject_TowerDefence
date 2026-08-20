@@ -1,14 +1,14 @@
 using System;
-using Scenes.SessionRework.Scripts.World.Core.Meta;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk.Modules.Base;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
-using Scenes.SessionRework.Scripts.World.Interfaces;
-using Scenes.SessionRework.Scripts.World.Model;
+using Scenes.SessionRework.Scripts.GameWorld.Core.Meta;
+using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules.Base;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 using Zenject;
 using Color = UnityEngine.Color;
 
-namespace Scenes.SessionRework.Scripts.World.Entities.Chunk
+namespace Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk
 {
     public class ChunkReader : MonoBehaviour, IChunkReader
     {

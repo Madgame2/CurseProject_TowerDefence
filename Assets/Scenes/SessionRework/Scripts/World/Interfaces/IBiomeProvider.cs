@@ -1,6 +1,6 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
 
-namespace Scenes.SessionRework.Scripts.World.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Interfaces
 {
     public interface IBiomeProvider
     {

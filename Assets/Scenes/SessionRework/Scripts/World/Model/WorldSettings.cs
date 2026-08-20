@@ -1,7 +1,7 @@
 using System.Numerics;
-using Scenes.SessionRework.Scripts.World.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Model
+namespace Scenes.SessionRework.Scripts.GameWorld.Model
 {
     public class WorldSettings : IChunksSettings
     {

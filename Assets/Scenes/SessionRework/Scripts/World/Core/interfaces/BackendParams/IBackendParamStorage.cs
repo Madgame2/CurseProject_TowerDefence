@@ -1,4 +1,4 @@
-namespace Scenes.SessionRework.Scripts.World.Core.interfaces.BackendParams
+namespace Scenes.SessionRework.Scripts.GameWorld.Core.interfaces.BackendParams
 {
     public interface IBackendParamStorage: IGetBackendParam, ISetBackendParam
     {

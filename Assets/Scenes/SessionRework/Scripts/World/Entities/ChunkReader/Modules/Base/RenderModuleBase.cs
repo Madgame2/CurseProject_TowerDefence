@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Entities.Chunk.Modules.Base
+namespace Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules.Base
 {
     public abstract class RenderModuleBase: MonoBehaviour
     {

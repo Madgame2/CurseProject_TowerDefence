@@ -1,11 +1,11 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
 using Zenject;
 
-namespace Scenes.SessionRework.Scripts.World.Factories
+namespace Scenes.SessionRework.Scripts.GameWorld.Factories
 {
     public class ChunkGeneratorFactory: IChunkGeneratorFactory
     {

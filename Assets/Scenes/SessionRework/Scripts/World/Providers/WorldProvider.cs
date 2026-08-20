@@ -1,12 +1,12 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
-using Scenes.SessionRework.Scripts.World.Model;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 using Zenject;
 
-namespace Scenes.SessionRework.Scripts.World.Providers
+namespace Scenes.SessionRework.Scripts.GameWorld.Providers
 {
     public class WorldProvider: IWorldProvider
     {

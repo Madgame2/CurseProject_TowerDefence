@@ -1,4 +1,4 @@
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Meta.Enum
 {
     public enum SpawnRuleType
     {

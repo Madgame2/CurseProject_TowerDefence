@@ -1,7 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Scenes.SessionRework.Scripts.World.Core;
-using Scenes.SessionRework.Scripts.World.Core.interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Core;
+using Scenes.SessionRework.Scripts.GameWorld.Core.interfaces;
 using UnityEditor;
 using UnityEngine;
 using Zenject;
@@ -51,7 +51,7 @@ public class WorldRenderPipleneTest : EditorWindow
             return;
         }
 
-        DiContainer worldContainer = container.TryResolve<WorldHolder>().WorldContainer;
+        DiContainer worldContainer = container.TryResolve<WorldHolder>().WorldContainer.DiContainer;
         if (worldContainer == null)
         {
             Debug.LogError("[DebugWindow] IChunkOrchestrator не найден в контейнере");

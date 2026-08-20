@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Scenes.SessionRework.Scripts.World.Core.interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
-using Scenes.SessionRework.Scripts.World.Model;
+using Scenes.SessionRework.Scripts.GameWorld.Core.interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Core.Orchestrator
+namespace Scenes.SessionRework.Scripts.GameWorld.Core.Orchestrator
 {
     public class ChunkOrchestrator:IChunkOrchestrator
     {

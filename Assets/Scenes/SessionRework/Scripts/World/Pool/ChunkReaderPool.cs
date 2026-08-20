@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk;
-using Scenes.SessionRework.Scripts.World.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Entities;
 using UnityEngine;
 using Zenject;
 
-namespace Scenes.SessionRework.Scripts.World.Pool
+namespace Scenes.SessionRework.Scripts.GameWorld.Pool
 {
     public class ChunkReaderPool: IChunkReaderPool, IInitializable
     {

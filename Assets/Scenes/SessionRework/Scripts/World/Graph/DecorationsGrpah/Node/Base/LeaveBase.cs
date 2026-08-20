@@ -1,12 +1,12 @@
 using System;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Meta.Enum;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Meta.Enum;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Node.Base
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Node.Base
 {
     public abstract class LeaveBase: IDecorationsGraphNode
     {

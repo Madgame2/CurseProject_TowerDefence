@@ -1,4 +1,4 @@
-namespace Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums
 {
     public enum BiomeType: byte
     {

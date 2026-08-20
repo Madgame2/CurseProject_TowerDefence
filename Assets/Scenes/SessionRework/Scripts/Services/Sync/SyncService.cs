@@ -1,43 +1,26 @@
 using System;
-using System.IO;
-using System.Xml;
-using Installers;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph;
 using Scenes.SessionRework.Scripts.Services.Sync.interfaces;
-using Scenes.SessionRework.Scripts.World.Core;
-using Scenes.SessionRework.Scripts.World.Core.Data;
-using Scenes.SessionRework.Scripts.World.Core.interfaces.BackendParams;
-using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Interfaces;
-using Scenes.SessionRework.Scripts.World.Model;
+using Scenes.SessionRework.Scripts.GameWorld.Core.interfaces.BackendParams;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 using Zenject;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using JetBrains.Annotations;
-using Scenes.SessionRework.Scripts.World.Entities.Chunk;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.DecorationRulesModels;
+using Scenes.SessionRework.Scripts.Common.Installers;
+using Scenes.SessionRework.Scripts.Network.Parsers.Interfaces;
 
 namespace Scenes.SessionRework.Scripts.Services.Sync
 {
     public class SyncService: ISyncService
     {
-        [Inject] private readonly DiContainer _container;
         [Inject] private readonly INetGraphsBuilder _netGraphsBuilder;
         [Inject] private readonly IDecorationGraphBuilder _decorationGraphBuilder;
         [Inject] private readonly ISetBackendParam _setBackendParam;
-        [Inject] private readonly IGetBackendParam _getBackendParam;
-        [Inject] private readonly ChunkReader _chunkReaderPrefab;
-        
-        [Inject] private readonly WorldHolder _worldContainer;
-        
-        public void OnPacketReceived()
-        {
-
-        }
+        [Inject] private readonly IDecorationRulesParser _decorationRulesParser;
+        [Inject] private readonly IWorldInitializer _worldInitializer;
         
         public void SetChunksMetaData(ChunkMetaDatasMessage chunkMetaDataMessage)
         {
@@ -48,8 +31,6 @@ namespace Scenes.SessionRework.Scripts.Services.Sync
             };
             
             _setBackendParam.ChunksSettings = settings;
-            
-            _container.Rebind<IChunksSettings>().FromInstance(settings).AsSingle();
             
             Debug.Log("IChunksSettings динамически зарегистрирован!");
         }
@@ -69,58 +50,30 @@ namespace Scenes.SessionRework.Scripts.Services.Sync
             _setBackendParam.BiomeGraphRoot = biomeGraph;
         }
 
-        public void InitWorldContainer()
+        public void InitWorld()
         {
-            if (_getBackendParam.ChunksSettings == null ||
-                _getBackendParam.LandscapeGraphRoot == null ||
-                _getBackendParam.BiomeGraphRoot == null)
-            {
-                Debug.LogError("Попытка инициализировать мир до получения всех данных!");
-                return;
-            }
-            
-            var worldContainer = _container.CreateSubContainer();
-            var pendingData = new WorldInitializationData(
-                _getBackendParam.ChunksSettings,
-                _getBackendParam.LandscapeGraphRoot,
-                _getBackendParam.BiomeGraphRoot,
-                _getBackendParam.DecorationsGraphRoot);
-            
-            WorldInstaller.Install(worldContainer,pendingData , _chunkReaderPrefab);
-            
-            _worldContainer.SetWorldContainer(worldContainer);
-            
-            Debug.Log("Контекст мира успешно создан и проинициализирован!");
+            _worldInitializer.Initialize();
         }
 
-        public void ProcessDecorationRules(DecorationRulesMessage decorationRulesMessage)
+        public void ProcessDecorationRules(
+            DecorationRulesMessage decorationRulesMessage)
         {
-            var rulesObject = ParseDecorationRules(decorationRulesMessage);
+            var rulesObject = _decorationRulesParser.Parse(decorationRulesMessage.XmlPayload);
 
             if (rulesObject == null)
             {
-                Debug.LogError("Decoration rules parse error: rulesObject == null");
+                Debug.LogError("Decoration rules parse error.");
                 return;
             }
-            
+
             var decorationsGraphRoot = _decorationGraphBuilder.CreateGraph(rulesObject);
-            
+
             _setBackendParam.DecorationsGraphRoot = decorationsGraphRoot;
-            
-            Debug.Log("Правила декораций получены!");
-            
-            InitWorldContainer();
         }
 
-        private DecorationRules? ParseDecorationRules(DecorationRulesMessage decorationRulesMessage)
+        public void ProcessPlayersData(PlayerInitMessage playerInitMessage)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(DecorationRules));
-            using (var stream = new MemoryStream(decorationRulesMessage.XmlPayload))
-            {
-                DecorationRules? rules = serializer.Deserialize(stream) as DecorationRules;
-                    
-                return rules;
-            }
+            _setBackendParam.PlayersArray = playerInitMessage.Players;
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Scenes.SessionRework.Scripts.World.Core.interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Core.interfaces
 {
     public interface IChunkOrchestrator
     {

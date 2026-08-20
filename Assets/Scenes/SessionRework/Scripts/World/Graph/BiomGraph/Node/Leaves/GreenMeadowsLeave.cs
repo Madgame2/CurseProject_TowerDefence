@@ -1,9 +1,9 @@
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Node.Base;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Attributes;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Node.Base;
-using Scenes.SessionRework.Scripts.World.Graph.Nodes.Attributes;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Node.Leaves
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Node.Leaves
 {
     [NodeType(NodeType.GreenMeadowsNode)]
     public class GreenMeadowsLeave: LeaveBase

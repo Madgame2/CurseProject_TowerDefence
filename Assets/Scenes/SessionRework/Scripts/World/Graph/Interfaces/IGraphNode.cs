@@ -1,6 +1,6 @@
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces
 {
     public interface IGraphNode
     {

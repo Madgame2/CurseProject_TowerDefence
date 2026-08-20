@@ -1,9 +1,9 @@
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Interfaces
+namespace Scenes.SessionRework.Scripts.GameWorld.Interfaces
 {
     public interface IChunkGeneratorFactory
     {

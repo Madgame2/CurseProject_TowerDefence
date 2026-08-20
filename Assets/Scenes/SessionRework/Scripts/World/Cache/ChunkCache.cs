@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Scenes.SessionRework.Scripts.World.Entities;
-using Scenes.SessionRework.Scripts.World.Interfaces;
-using Scenes.SessionRework.Scripts.World.Model;
+using Scenes.SessionRework.Scripts.GameWorld.Entities;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 
 

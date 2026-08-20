@@ -1,11 +1,11 @@
 using System;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Factory.Exceptions;
+using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.Nodes.Factory.Exceptions;
-using Scenes.SessionRework.Scripts.World.Interfaces;
 using Zenject;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Nodes.Factory
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Factory
 {
     public class NodeFactory : INodeFactory
     {

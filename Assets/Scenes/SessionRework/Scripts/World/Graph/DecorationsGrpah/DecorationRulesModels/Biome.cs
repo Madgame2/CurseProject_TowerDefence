@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using Scenes.SessionRework.Scripts.World.Graph.BiomGraph.Meta.Enums;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.BiomGraph.Meta.Enums;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.DecorationsGrpah.DecorationRulesModels
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.DecorationsGrpah.DecorationRulesModels
 {
     public class Biome
     {

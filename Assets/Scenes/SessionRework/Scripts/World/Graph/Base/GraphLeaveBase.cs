@@ -1,8 +1,8 @@
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
-using Scenes.SessionRework.Scripts.World.Graph.Interfaces;
-using Scenes.SessionRework.Scripts.World.Graph.LandscapeGraph.Interfaces;
 
-namespace Scenes.SessionRework.Scripts.World.Graph.Base
+namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Base
 {
     public abstract class GraphLeaveBase : ILandscapeGraphNode
     {
