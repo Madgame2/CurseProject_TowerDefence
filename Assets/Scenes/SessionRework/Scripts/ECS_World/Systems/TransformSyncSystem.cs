@@ -44,7 +44,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
         
         public void Dispose()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
