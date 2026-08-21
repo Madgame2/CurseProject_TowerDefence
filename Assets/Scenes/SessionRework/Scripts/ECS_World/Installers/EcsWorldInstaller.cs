@@ -11,10 +11,13 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             DiContainer container)
         {
             var updateGroup = world.CreateSystemsGroup();
+            var fixedUpdateGroup = world.CreateSystemsGroup();
             
-            MovementFeature.AddFeature(updateGroup,container);
+            SimulationFeature.AddFeature(world, fixedUpdateGroup, container);
+            MovementFeature.AddFeature(world, updateGroup,container);
             
-            world.AddSystemsGroup(0,updateGroup);
+            world.AddSystemsGroup(0, fixedUpdateGroup);
+            world.AddSystemsGroup(1,updateGroup);
         }
     }
 }

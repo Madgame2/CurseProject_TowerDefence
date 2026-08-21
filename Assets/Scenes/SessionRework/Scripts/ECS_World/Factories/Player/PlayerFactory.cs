@@ -1,6 +1,7 @@
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Movement;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Interfaces;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Player.Model;
@@ -20,6 +21,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
         private readonly Stash<PositionComponent> _positionStash;
         private readonly Stash<PlayerComponent> _playerStash;
         private readonly Stash<UnityViewComponent> _viewStash;
+        private readonly Stash<InputComponent> _inputStash;
         //private readonly Stash<HealthComponent> _healthStash;
 
         public PlayerFactory(World world)
@@ -30,6 +32,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             _positionStash = _world.GetStash<PositionComponent>();
             _playerStash = _world.GetStash<PlayerComponent>();
             _viewStash = _world.GetStash<UnityViewComponent>(); 
+            _inputStash = _world.GetStash<InputComponent>();
             //_healthStash = _world.GetStash<HealthComponent>();
         }
         
@@ -53,6 +56,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
                 GameObject = viewObject.gameObject, 
                 Transform = viewObject.transform 
             });
+            
+            _inputStash.Set(entity);
             
             _world.Commit(); 
         
