@@ -1,6 +1,8 @@
 using Scellecs.Morpeh;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Addition;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Simulation;
 using Scenes.SessionRework.Scripts.ECS_World.Systems;
+using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
 using Zenject;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Features
@@ -13,7 +15,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
 
             var simulationStash = world.GetStash<ClientSimulationComponent>();
             simulationStash.Set(simulationEntity);
-
+            
             group.AddSystem(container.Instantiate<SimulationTickSystem>());
         }
     }

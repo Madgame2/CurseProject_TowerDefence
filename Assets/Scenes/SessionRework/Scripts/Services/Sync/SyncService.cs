@@ -75,5 +75,10 @@ namespace Scenes.SessionRework.Scripts.Services.Sync
         {
             _setBackendParam.PlayersArray = playerInitMessage.Players;
         }
+
+        public void UpdateUdpToken(uint objUpdToken)
+        {
+            _setBackendParam.UdpToken = objUpdToken;
+        }
     }
 }

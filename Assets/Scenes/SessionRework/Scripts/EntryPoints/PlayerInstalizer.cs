@@ -34,7 +34,7 @@ namespace Scenes.SessionRework.Scripts.EntryPoints
             foreach (var player in players)
             {
                 _playerFactory.CreatePlayer(new PlayerData{
-                    Id = player.Id,
+                    PlayerId = player.PlayerId,
                     Position = new Vector3(player.Position.X, player.Position.Y, player.Position.Z),
                     IsPlaying = player.IsPlaying,
                 });

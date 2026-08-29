@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Services.Net.Interfaces;
 using Common.Services.Net.Modules;
 using Common.systems.SceneStates;
 using Common.systems.SceneStates.States;
@@ -16,8 +17,8 @@ namespace Scenes.SessionRework.SceneStates.States
     [LinkToScene(typeof(SessionReworkScene))]
     public class ConnectionToServerState: BaseState
     {
-        [Inject] private readonly WebSocketModule _socket;
-        [Inject]private readonly ISessionSyncController _sessionSyncController;
+        [Inject] private readonly INetworkClient  _networkClient;
+        [Inject] private readonly ISessionSyncController _sessionSyncController;
         
         public override async void EnterToState()
         {
@@ -42,9 +43,7 @@ namespace Scenes.SessionRework.SceneStates.States
         private async Task TryConnectToServer()
         {
             var headers = new Dictionary<string, string>() { { "EnterMode", "Development" }, };
-            var socket = await WebSocketModule.tryCreateConnectionTo("localhost:5041", headers);
-            
-            await _socket.ReplaceSocketAsync(socket); 
+            await _networkClient.TryCreateConnectionTo("127.0.0.1", 5041, headers);
         }
     }
 }

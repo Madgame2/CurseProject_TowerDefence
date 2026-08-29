@@ -15,6 +15,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             
             SimulationFeature.AddFeature(world, fixedUpdateGroup, container);
             MovementFeature.AddFeature(world, updateGroup,container);
+            NetworkFeature.AddFeature(world, fixedUpdateGroup,container);
             
             world.AddSystemsGroup(0, fixedUpdateGroup);
             world.AddSystemsGroup(1,updateGroup);

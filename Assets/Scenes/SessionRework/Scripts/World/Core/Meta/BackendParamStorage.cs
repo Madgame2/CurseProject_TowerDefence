@@ -16,6 +16,7 @@ namespace Scenes.SessionRework.Scripts.GameWorld.Core.Meta
         public ILandscapeGraphNode LandscapeGraphRoot { get; set; }
         public IBiomeGraphNode BiomeGraphRoot { get; set; }
         public IDecorationsGraphNode DecorationsGraphRoot { get; set; }
+        public uint UdpToken { get; set; }
 
         ICollection<PlayaerMetaDataDTO> ISetBackendParam.PlayersArray
         {

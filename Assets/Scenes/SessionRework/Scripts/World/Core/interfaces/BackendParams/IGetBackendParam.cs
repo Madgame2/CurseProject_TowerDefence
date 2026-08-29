@@ -14,5 +14,6 @@ namespace Scenes.SessionRework.Scripts.GameWorld.Core.interfaces.BackendParams
         IBiomeGraphNode BiomeGraphRoot { get; }
         IDecorationsGraphNode DecorationsGraphRoot { get; }
         IReadOnlyCollection<PlayaerMetaDataDTO> PlayersArray { get; }
+        uint UdpToken { get; }
     }
 }

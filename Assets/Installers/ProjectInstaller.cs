@@ -1,5 +1,6 @@
 using Common.Services.Global;
 using Common.Services.Net;
+using Common.Services.Net.Interfaces;
 using Common.Services.Net.Modules;
 using Common.Services.Net.Services;
 using Common.Services.SceneServices;
@@ -9,6 +10,7 @@ using Common.systems.GameStates.Grpah;
 using Common.systems.MainThread;
 using Common.systems.ProfileSystem;
 using Common.systems.ScriptDirectorSystem;
+using Editor.Interfaces.Services;
 using UnityEngine;
 using Zenject;
 
@@ -47,6 +49,9 @@ namespace Installers
 
             Container.Bind<ProfileManager>().AsSingle();
 
+            Container.Bind<UDPModule>().AsSingle();
+            Container.Bind<INetworkClient>().To<NetworkClient>().AsSingle();
+            
             Container
                 .Bind<MainThreadDispatcher>()
                 .FromNewComponentOnNewGameObject()

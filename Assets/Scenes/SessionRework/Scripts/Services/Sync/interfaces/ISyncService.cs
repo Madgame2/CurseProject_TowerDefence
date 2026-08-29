@@ -13,5 +13,6 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.interfaces
         void InitWorld();
         void ProcessDecorationRules(DecorationRulesMessage decorationRulesMessage);
         void ProcessPlayersData(PlayerInitMessage playerInitMessage);
+        void UpdateUdpToken(uint objUpdToken);
     }
 }

@@ -29,11 +29,19 @@ namespace Scenes.SessionRework.Scripts.Network.Controllers
         public void SubscribeToServerEvents()
         {
             _webSocket.On("PREPARE_FOR_SYNC", goToSyncState);
+            _webSocket.On<UdpTokenMessage>("UPD_TOKEN", handleUdpToken);
             _webSocket.On<ChunkMetaDatasMessage>("METADATA_CHUNK_SETTINGS", handleChunkMetaData);
             _webSocket.On<WorldGenerationRules>("METADATA_WORLD_GENERATION_SETTINGS", handleWorldGenerationMetaData);
             _webSocket.On<DecorationRulesMessage>("METADATA_DECORATION_RULES", handleDecorationRulesMessage);
             _webSocket.On<PlayerInitMessage>("METADATA_PLAYER_INIT", handlePlayerInitMessage);
             _webSocket.On("METADATA_SYNC_DONE", handleSyncDoneMessage);
+        }
+
+        private void handleUdpToken(UdpTokenMessage obj)
+        {
+            _syncService.UpdateUdpToken(obj.UpdToken);
+            
+            _ = _webSocket.Send("Applied", null);
         }
 
 
