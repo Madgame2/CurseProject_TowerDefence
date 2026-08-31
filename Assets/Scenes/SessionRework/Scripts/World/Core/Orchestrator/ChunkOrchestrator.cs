@@ -42,7 +42,7 @@ namespace Scenes.SessionRework.Scripts.GameWorld.Core.Orchestrator
 
         public void UnloadChunk(Vector2Int chunkCoordinates)
         {
-            
+            _chunkReaderPool.Release(chunkCoordinates);
         }
 
         public void ForceRebuildChunk(Vector2Int chunkCoordinates)

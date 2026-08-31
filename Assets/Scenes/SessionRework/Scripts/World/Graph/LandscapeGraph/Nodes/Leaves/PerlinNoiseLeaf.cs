@@ -3,6 +3,7 @@ using Scenes.SessionRework.Scripts.GameWorld.Graph.Base;
 using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
 using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Attributes;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta;
+using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Leaves
 {
@@ -25,8 +26,12 @@ namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Leaves
         public override float Evaluate(float x, float y)
         {
             float rawNoise = _noise.GetPerlin(x, y);
+            float result = (rawNoise + 1.0f) / 2.0f;
 
-            return (rawNoise + 1.0f) / 2.0f;
+            Debug.Log(
+                $"Perlin: x={x}, y={y}, freq={Frequency}, raw={rawNoise}, result={result}");
+
+            return result;
         }
 
         public override IGraphNode[] GetChildren()

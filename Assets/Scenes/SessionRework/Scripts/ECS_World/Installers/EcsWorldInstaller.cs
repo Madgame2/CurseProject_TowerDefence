@@ -13,6 +13,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             var updateGroup = world.CreateSystemsGroup();
             var fixedUpdateGroup = world.CreateSystemsGroup();
             
+            ChunkLoadingFeature.AddFeature(world, updateGroup, container);
             SimulationFeature.AddFeature(world, fixedUpdateGroup, container);
             MovementFeature.AddFeature(world, updateGroup,container);
             NetworkFeature.AddFeature(world, fixedUpdateGroup,container);
