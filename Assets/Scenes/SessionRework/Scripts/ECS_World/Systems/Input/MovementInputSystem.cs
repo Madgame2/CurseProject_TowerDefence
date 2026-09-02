@@ -43,7 +43,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         }
         public void Dispose()
         {
-            
+            _inputs?.Disable();
+            if (Application.isPlaying) 
+            {
+                _inputs?.Dispose();
+            }
         }
     }
 }

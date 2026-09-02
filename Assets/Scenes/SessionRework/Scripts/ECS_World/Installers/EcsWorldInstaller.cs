@@ -12,14 +12,17 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
         {
             var updateGroup = world.CreateSystemsGroup();
             var fixedUpdateGroup = world.CreateSystemsGroup();
+            var lateUpdateGroup = world.CreateSystemsGroup();
             
             ChunkLoadingFeature.AddFeature(world, updateGroup, container);
             SimulationFeature.AddFeature(world, fixedUpdateGroup, container);
             MovementFeature.AddFeature(world, updateGroup,container);
             NetworkFeature.AddFeature(world, fixedUpdateGroup,container);
+            CameraFeature.AddFeature(world, lateUpdateGroup, container);
             
             world.AddSystemsGroup(0, fixedUpdateGroup);
             world.AddSystemsGroup(1,updateGroup);
+            world.AddSystemsGroup(2, lateUpdateGroup);
         }
     }
 }

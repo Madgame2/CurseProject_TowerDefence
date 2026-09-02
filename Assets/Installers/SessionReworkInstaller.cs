@@ -28,12 +28,14 @@ namespace Installers
     {
         [SerializeField] private ChunkReader ChunkReaderPrefab;
         [SerializeField] private PlayerView _playerView;
-
+        [SerializeField] private CameraView _cameraView;
         
         public override void InstallBindings()
         {
             Container.BindInstance(ChunkReaderPrefab);
             Container.BindInstance(_playerView);
+            Container.BindInstance(_cameraView);
+
             
             Container.Bind<GraphReader>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneStateMachine<SessionReworkScene>>().AsSingle().NonLazy();
@@ -43,16 +45,16 @@ namespace Installers
             gameStatemachine.SetStartState<SessionReworkState>();
 
 #endif
-            Container.Bind<IPlayerInputHandler>().To<Scenes.SessionRework.Scripts.Player.PlayerInputHandler>().FromComponentInHierarchy().AsSingle();
+            //Container.Bind<IPlayerInputHandler>().To<Scenes.SessionRework.Scripts.Player.PlayerInputHandler>().FromComponentInHierarchy().AsSingle();
+            
+            //Container.Bind<MouseLookSettings>().AsSingle().WithArguments(15f, -90f, 90f);
 
-            Container.Bind<MouseLookSettings>().AsSingle().WithArguments(15f, -90f, 90f);
+            //Container.BindInterfacesAndSelfTo<PlayerInputController>().FromNewComponentOnNewGameObject()
+            //    .WithGameObjectName("PlayerInputController")
+            //    .AsSingle()
+            //    .NonLazy();
 
-            Container.BindInterfacesAndSelfTo<PlayerInputController>().FromNewComponentOnNewGameObject()
-                .WithGameObjectName("PlayerInputController")
-                .AsSingle()
-                .NonLazy();
-
-            Container.Bind<CameraController>().FromComponentInHierarchy().AsSingle();
+            //Container.Bind<CameraController>().FromComponentInHierarchy().AsSingle();
             
             Container.BindInterfacesAndSelfTo<SyncController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SyncService>().AsSingle();

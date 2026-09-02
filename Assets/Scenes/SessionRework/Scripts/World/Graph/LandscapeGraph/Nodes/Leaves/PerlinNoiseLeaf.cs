@@ -28,9 +28,6 @@ namespace Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Leaves
             float rawNoise = _noise.GetPerlin(x, y);
             float result = (rawNoise + 1.0f) / 2.0f;
 
-            Debug.Log(
-                $"Perlin: x={x}, y={y}, freq={Frequency}, raw={rawNoise}, result={result}");
-
             return result;
         }
 
