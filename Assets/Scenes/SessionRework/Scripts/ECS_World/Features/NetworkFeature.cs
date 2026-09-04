@@ -9,7 +9,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
         public static void AddFeature(World world, SystemsGroup updateGroup, DiContainer container)
         {
             updateGroup.AddSystem(container.Instantiate<NetworkInputSendSystem>());
-            updateGroup.AddSystem(container.Instantiate<NetworkPlayerPositionApplySystem>());
+            updateGroup.AddSystem(container.Instantiate<NetworkPlayersStateApplySystem>());
         }
     }
 }

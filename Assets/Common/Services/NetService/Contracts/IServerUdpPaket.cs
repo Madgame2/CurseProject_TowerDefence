@@ -9,5 +9,7 @@ namespace Common.Services.Net.Contracts
         int Serialize(Span<byte> buffer);
         
         void Deserialize(ReadOnlySpan<byte> data);
+        
+        void Release();
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
 {
-    public class NetworkPlayerPositionApplySystem: IFixedSystem
+    public class NetworkPlayersStateApplySystem: IFixedSystem
     {
         public World World { get; set; }
         
@@ -23,7 +23,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
 
         private uint _lastProcesedTick = 0;
 
-        public NetworkPlayerPositionApplySystem(World world, INetworkClient networkClient)
+        public NetworkPlayersStateApplySystem(World world, INetworkClient networkClient)
         {
             World = world;
             _networkClient = networkClient;
@@ -53,21 +53,24 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
 
         private void EnqueueNewPlayerPosition(PlayerStateSnapshot message)
         {
-            foreach (var player in _filter)
+            foreach (var playerState in message.PlayersState)
             {
-                ref var playerId = ref _playerComponentStash.Get(player).PlayerId;
+                if (_lastProcesedTick > message.ServerTick)
+                    break;
                 
-                if(message.UserId != playerId)
-                    continue;
-                
-                if(_lastProcesedTick>message.ServerTick)
-                    continue;
-                
-                _lastProcesedTick =  message.ServerTick;
-                _setPositionRequestStash.Set(player, new SetPositionRequest
+                _lastProcesedTick = message.ServerTick;
+                foreach (var player in _filter)
                 {
-                    NewPosition = new Vector3(message.Position.x, message.Position.y, message.Position.z),
-                });
+                    ref var objectId = ref _idComponentStash.Get(player).NetId;
+
+                    if (playerState.ObjectId != objectId)
+                        continue;
+                    
+                    _setPositionRequestStash.Set(player, new SetPositionRequest
+                    {
+                        NewPosition = new Vector3(playerState.Position.x, playerState.Position.y, playerState.Position.z),
+                    });
+                }
             }
         }
     }

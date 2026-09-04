@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Common.Services.Net.Contracts;
 using Common.Services.Net.Interfaces;
 using Common.Services.Net.Modules;
+using Common.Services.Net.Services.PacketProcessor;
 using Scenes.SessionRework.Scripts.Network.DTO;
 using UnityEngine;
 using Zenject;
@@ -16,11 +17,12 @@ namespace Editor.Interfaces.Services
         [Inject] private readonly UDPModule _udpModule;
         
         
-        private readonly Dictionary<PacketType, List<(Delegate Original, Action<IServerUdpPaket> Invoke)>> _packetHandlers = new();
-        
+        private readonly Dictionary<PacketType, IPacketProcessor> _processors = new();        
         [Inject]
         public void Init()
         {
+            RegisterProcessor<PlayerStateSnapshot>(PacketType.PlayerWorldState);
+            
             _udpModule.OnDataReceived += HandleRawUdpData;
         }
         
@@ -99,31 +101,27 @@ namespace Editor.Interfaces.Services
 
         public void OnUdp<T>(PacketType paketType, Action<T> callback) where T : struct, IServerUdpPaket
         {
-            if (!_packetHandlers.TryGetValue(paketType, out var handlers))
+            if (_processors.TryGetValue(paketType, out var processor) && processor is PacketProcessor<T> typedProcessor)
             {
-                handlers = new List<(Delegate, Action<IServerUdpPaket>)>();
-                _packetHandlers.Add(paketType, handlers);
+                typedProcessor.AddHandler(callback);
             }
-            
-            handlers.Add((callback, packet => callback((T)packet)));
+            else
+            {
+                Debug.LogError($"[NetworkClient] Процессор для пакета {paketType} не зарегистрирован или тип не совпадает!");
+            }
         }
 
         public void OffUdp<T>(PacketType paketType, Action<T> callback) where T : struct, IServerUdpPaket
         {
-            if (_packetHandlers.TryGetValue(paketType, out var handlers))
+            if (_processors.TryGetValue(paketType, out var processor) && processor is PacketProcessor<T> typedProcessor)
             {
-                handlers.RemoveAll(handler => handler.Original == (Delegate)callback);
-                
-                if (handlers.Count == 0) 
-                {
-                    _packetHandlers.Remove(paketType);
-                }
+                typedProcessor.RemoveHandler(callback);
             }
         }
         
         public void Dispose()
         {
-            _packetHandlers.Clear();
+            _processors.Clear();
             _udpModule.OnDataReceived -= HandleRawUdpData;
         }
         
@@ -131,27 +129,20 @@ namespace Editor.Interfaces.Services
         {
             var span = memoryData.Span;
             
-            if (span.Length < 1 ) return;
+            if (span.Length < 1) return;
             
             PacketType packetType = (PacketType)span[0]; 
-            
             var payloadSpan = span.Slice(1);
 
-            if(!_packetHandlers.TryGetValue(packetType, out var handlers))
-                return;
-            
-            switch (packetType)
+            if (_processors.TryGetValue(packetType, out var processor))
             {
-                case PacketType.PlayerWorldState:
-                    var packet = new PlayerStateSnapshot();
-                    packet.Deserialize(payloadSpan);
-                    
-                    foreach (var handler in handlers)
-                    {
-                        handler.Invoke(packet);
-                    }
-                    break;
+                processor.Process(payloadSpan);
             }
+        }
+        
+        private void RegisterProcessor<T>(PacketType type) where T : IServerUdpPaket
+        {
+            _processors[type] = new PacketProcessor<T>();
         }
     }
 }
