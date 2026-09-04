@@ -57,8 +57,10 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                     ref var characterViewComponent = ref _characterViewStash.Get(playerEntity);
                     
                     Quaternion cameraRotation = Quaternion.Euler(rotationStateComponent.Pitch, rotationStateComponent.Yaw, 0f);
+
+                    var target = targetComponent.Target;
                     
-                    Vector3 pivotPosition = characterViewComponent.CharacterRoot.position + (characterViewComponent.CharacterRoot.rotation * targetComponent.PivotOffset);
+                    Vector3 pivotPosition = target.position + (target.rotation * targetComponent.PivotOffset);
                     Vector3 finalCameraPosition = pivotPosition - (cameraRotation * Vector3.forward * targetComponent.TargetDistance);
                         
                     cameraTransform.rotation = cameraRotation;
@@ -69,7 +71,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                         characterViewComponent.SpineBone.localRotation *= Quaternion.Euler(rotationStateComponent.Pitch, 0f, 0f);
                     }
                 }
-                
                 break;
             }
         }
