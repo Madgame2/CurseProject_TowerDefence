@@ -63,7 +63,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
         {
             _playerStash.Set(entity, new PlayerComponent{PlayerId = data.PlayerId});
             
-            _idStash.Set(entity, new IDComponent());
+            _idStash.Set(entity, new IDComponent{NetId = data.ObjectId});
 
             _positionStash.Set(entity, new PositionComponent
             {
