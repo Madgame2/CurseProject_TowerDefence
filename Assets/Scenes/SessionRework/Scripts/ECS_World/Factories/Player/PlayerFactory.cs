@@ -26,6 +26,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
         private readonly Stash<InputComponent> _inputStash;
         private readonly Stash<MoveInputHistoryComponent> _inputHistoryStash;
         private readonly Stash<MyPlayerComponent> _myPlayerStash;
+        private readonly Stash<RotationComponent>  _rotationStash;
         //private readonly Stash<HealthComponent> _healthStash;
 
         public PlayerFactory(World world)
@@ -39,6 +40,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             _inputStash = _world.GetStash<InputComponent>();
             _inputHistoryStash = _world.GetStash<MoveInputHistoryComponent>();
             _myPlayerStash = world.GetStash<MyPlayerComponent>();
+            _rotationStash = world.GetStash<RotationComponent>();
             //_healthStash = _world.GetStash<HealthComponent>();
         }
 
@@ -69,6 +71,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             {
                 Position = data.Position
             });
+            
+            _rotationStash.Set(entity);
         }
 
         private void InitializePlayerComponents(Scellecs.Morpeh.Entity entity)

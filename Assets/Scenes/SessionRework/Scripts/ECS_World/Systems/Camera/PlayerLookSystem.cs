@@ -1,5 +1,6 @@
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Camera;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
         private Stash<RotationStateComponent> _rotationStateComponent;
         private Stash<CharacterViewComponent> _characterViewStash;
         private Stash<CameraRestrictionsComponent> _cameraRestrictionsStash;
+        private Stash<RotationComponent> _rotationStash;
 
         public PlayerLookSystem(World world)
         {
@@ -28,6 +30,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
             _rotationStateComponent = World.GetStash<RotationStateComponent>();
             _characterViewStash = World.GetStash<CharacterViewComponent>();
             _cameraRestrictionsStash = World.GetStash<CameraRestrictionsComponent>();
+            _rotationStash = World.GetStash<RotationComponent>();
 
             _cameraFilter = World.Filter
                 .With<LookInputComponent>()
@@ -37,6 +40,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
 
             _characterFilter = World.Filter
                 .With<MyPlayerComponent>()
+                .With<RotationComponent>()
                 .With<CharacterViewComponent>()
                 .Build();
         }
@@ -63,11 +67,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
 
                 foreach (var characterEntity in _characterFilter)
                 {
-                    ref var characterView = ref _characterViewStash.Get(characterEntity);
-                    if (characterView.CharacterRoot != null)
-                    {
-                        characterView.CharacterRoot.rotation = Quaternion.Euler(0f, rotationStateComponent.Yaw, 0f);
-                    }
+                    ref var characterRotation = ref _rotationStash.Get(characterEntity);
+                    characterRotation.Rotation = Quaternion.Euler(0f, rotationStateComponent.Yaw, 0f);
                 }
             }
         }

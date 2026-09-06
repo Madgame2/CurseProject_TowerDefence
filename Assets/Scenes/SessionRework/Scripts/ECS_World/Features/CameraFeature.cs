@@ -4,6 +4,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Camera;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
+using Scenes.SessionRework.Scripts.ECS_World.Systems.Movement;
 using UnityEngine;
 using Zenject;
 
@@ -79,7 +80,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
                 cameraTargetStash.Set(playerEntity, new CameraTargetComponent
                 {
                     Target = playerView.CharacterRoot,
-                    TargetDistance = 10
+                    TargetDistance = 4
                 });
                 break;
             }
