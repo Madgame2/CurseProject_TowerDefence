@@ -61,7 +61,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                     var target = targetComponent.Target;
                     
                     Vector3 pivotPosition = target.position + (target.rotation * targetComponent.PivotOffset);
-                    Vector3 finalCameraPosition = pivotPosition - (cameraRotation * Vector3.forward * targetComponent.TargetDistance);
+                    Vector3 finalCameraPosition = pivotPosition - (cameraRotation * targetComponent.TargetDistances);
                         
                     cameraTransform.rotation = cameraRotation;
                     cameraTransform.position = finalCameraPosition;

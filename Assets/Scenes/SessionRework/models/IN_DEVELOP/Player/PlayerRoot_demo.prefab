@@ -819,6 +819,7 @@ Transform:
   m_Children:
   - {fileID: 711225424135322829}
   - {fileID: 6316589822101524930}
+  - {fileID: 1282145702319017031}
   - {fileID: 7717308804066185091}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -834,6 +835,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d06d21ea474b43dabc65a40119561676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scenes.SessionRework.Scripts.Player.View.PlayerView
+  _cameraSettingsDefinition: {fileID: 11400000, guid: 55829060e1796e74f95ccaec37ea01ce, type: 2}
+  _cameraStartPosition: {fileID: 1282145702319017031}
+  _cameraTargetLook: {fileID: 6316589822101524930}
 --- !u!1 &1536983918744858712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2164,6 +2168,37 @@ Transform:
   - {fileID: 7980354442688395594}
   m_Father: {fileID: 6343417248992052272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6234169582900455067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1282145702319017031}
+  m_Layer: 0
+  m_Name: CameraStartPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1282145702319017031
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6234169582900455067}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.36, y: 1.572, z: -1.053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8328618446120714940}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6299752067525936579
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,7 +3399,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6316589822101524930}
   m_Layer: 0
-  m_Name: CameraPivot
+  m_Name: CameraTargeLook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3379,7 +3414,7 @@ Transform:
   m_GameObject: {fileID: 8958217126481100317}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.315, z: 0}
+  m_LocalPosition: {x: 0, y: 1.553, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

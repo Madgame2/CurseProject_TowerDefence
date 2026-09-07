@@ -29,7 +29,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Camera
         public Transform Target;
         
         public Vector3 PivotOffset;
-        public float TargetDistance;
+        public Vector3 TargetDistances;
     }
 
     public struct CameraViewComponent : IComponent
