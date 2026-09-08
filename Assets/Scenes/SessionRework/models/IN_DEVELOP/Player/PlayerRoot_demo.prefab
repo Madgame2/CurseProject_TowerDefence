@@ -818,6 +818,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 711225424135322829}
+  - {fileID: 4362850036691279766}
   - {fileID: 6316589822101524930}
   - {fileID: 1282145702319017031}
   - {fileID: 7717308804066185091}
@@ -838,6 +839,9 @@ MonoBehaviour:
   _cameraSettingsDefinition: {fileID: 11400000, guid: 55829060e1796e74f95ccaec37ea01ce, type: 2}
   _cameraStartPosition: {fileID: 1282145702319017031}
   _cameraTargetLook: {fileID: 6316589822101524930}
+  _playerLooTarget: {fileID: 4362850036691279766}
+  _animator: {fileID: 1162874277707303382}
+  _spineBone: {fileID: 4961266382034035990}
 --- !u!1 &1536983918744858712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2340,6 +2344,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7717308804066185091}
   - component: {fileID: 1162874277707303382}
+  - component: {fileID: 7073566055954912103}
   m_Layer: 0
   m_Name: Erika Archer With Bow Arrow
   m_TagString: Untagged
@@ -2381,7 +2386,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: f4d5ae0ae5dcc7d4588efb18f226c3d3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 2
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 1
@@ -2390,6 +2395,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7073566055954912103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6634493861163605922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7579dad74d4e608a9957996f377d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scenes.SessionRework.Scripts.Player.View.Animations.CharacterAnimatorIKView
+  animator: {fileID: 1162874277707303382}
+  viewObject: {fileID: 2105472431119565405}
 --- !u!1 &6666388248083479647
 GameObject:
   m_ObjectHideFlags: 0
@@ -2420,6 +2439,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9209213752986129935}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6778617674976430929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4362850036691279766}
+  m_Layer: 0
+  m_Name: PlayerLooktarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4362850036691279766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6778617674976430929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.376, y: 1.553, z: 0.77}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8328618446120714940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6914859241913135205
 GameObject:
@@ -3414,7 +3464,7 @@ Transform:
   m_GameObject: {fileID: 8958217126481100317}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.553, z: 0}
+  m_LocalPosition: {x: 0.376, y: 1.553, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

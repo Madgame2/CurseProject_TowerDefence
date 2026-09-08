@@ -1,77 +1,53 @@
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Camera;
-using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
-using UnityEngine;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
 {
-    public class CameraSyncSystem: ILateSystem
+    public class CameraSyncSystem: ISystem
     {
         public World World { get; set; }
 
-        private Filter _targetFilter;
-        private Filter _cameraFilter;
-
+        private Filter _filter;
+        
         private Stash<CameraViewComponent> _cameraViewStash;
-        private Stash<RotationStateComponent>  _rotationStateStash;
-        private Stash<CameraTargetComponent> _cameraTargetStash;
-        private Stash<CharacterViewComponent> _characterViewStash;
+        private Stash<PositionComponent> _positionStash;
+        private Stash<RotationComponent> _rotationStash;
+        
         
         public CameraSyncSystem(World world)
         {
             World = world;
         }
-        
+
         public void OnAwake()
         {
-            _cameraViewStash = World.GetStash<CameraViewComponent>();
-            _rotationStateStash = World.GetStash<RotationStateComponent>();
-            _cameraTargetStash = World.GetStash<CameraTargetComponent>();
-            _characterViewStash = World.GetStash<CharacterViewComponent>();
-            
-            _cameraFilter = World.Filter
-                .With<RotationStateComponent>()
+            _filter = World.Filter
                 .With<CameraViewComponent>()
+                .With<PositionComponent>()
+                .With<RotationComponent>()
                 .Build();
             
-            _targetFilter = World.Filter
-                .With<CameraTargetComponent>()
-                .With<CharacterViewComponent>()
-                .Build();
+            _cameraViewStash = World.GetStash<CameraViewComponent>();
+            _positionStash = World.GetStash<PositionComponent>();
+            _rotationStash = World.GetStash<RotationComponent>();
         }
-        
+
+
         public void OnUpdate(float deltaTime)
         {
-            Transform cameraTransform = null;
-            foreach (var camEntity in _cameraFilter)
+            foreach (var cameraEntity in _filter)
             {
-                ref readonly var camView = ref _cameraViewStash.Get(camEntity);
-                cameraTransform = camView.CameraTransform;
+                ref var positionComponent = ref _positionStash.Get(cameraEntity);
+                ref var rotationComponent = ref _rotationStash.Get(cameraEntity);
+                ref var cameraViewComponent = ref _cameraViewStash.Get(cameraEntity);
                 
-                if (cameraTransform == null) return;
-
-                foreach (var playerEntity in _targetFilter)
-                {
-                    ref var rotationStateComponent = ref _rotationStateStash.Get(camEntity);
-                    ref var targetComponent = ref _cameraTargetStash.Get(playerEntity);
-                    ref var characterViewComponent = ref _characterViewStash.Get(playerEntity);
-                    
-                    Quaternion cameraRotation = Quaternion.Euler(rotationStateComponent.Pitch, rotationStateComponent.Yaw, 0f);
-
-                    var target = targetComponent.Target;
-                    
-                    Vector3 pivotPosition = target.position + (target.rotation * targetComponent.PivotOffset);
-                    Vector3 finalCameraPosition = pivotPosition - (cameraRotation * targetComponent.TargetDistances);
-                        
-                    cameraTransform.rotation = cameraRotation;
-                    cameraTransform.position = finalCameraPosition;
-                    
-                    if (characterViewComponent.SpineBone != null) 
-                    {
-                        characterViewComponent.SpineBone.localRotation *= Quaternion.Euler(rotationStateComponent.Pitch, 0f, 0f);
-                    }
-                }
-                break;
+                var cameraTransform = cameraViewComponent.CameraTransform;
+                if(cameraTransform == null)
+                    continue;
+                
+                cameraTransform.position = positionComponent.Position;
+                cameraTransform.rotation = rotationComponent.Rotation;
             }
         }
         

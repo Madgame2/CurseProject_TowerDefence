@@ -9,7 +9,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
         public static void AddFeature(World world, SystemsGroup group, DiContainer container)
         {
             group.AddSystem(container.Instantiate<PositionSyncSystem>());
-            group.AddSystem(container.Instantiate<RotationSyncSystem>());
+            //group.AddSystem(container.Instantiate<RotationSyncSystem>());
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             NetworkFeature.AddFeature(world, fixedUpdateGroup,container);
             CameraFeature.AddFeature(world, lateUpdateGroup, container);
             SyncEcsWithUnityFeature.AddFeature(world, updateGroup, container);
+            PlayersAnimationsFeature.AddFeature(world, updateGroup, container);
             
             world.AddSystemsGroup(0, fixedUpdateGroup);
             world.AddSystemsGroup(1,updateGroup);

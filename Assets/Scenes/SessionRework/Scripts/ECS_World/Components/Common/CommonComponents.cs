@@ -10,5 +10,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Common
     {
         public GameObject GameObject;
         public Transform Transform;
+        public Animator Animator;
     }
 }

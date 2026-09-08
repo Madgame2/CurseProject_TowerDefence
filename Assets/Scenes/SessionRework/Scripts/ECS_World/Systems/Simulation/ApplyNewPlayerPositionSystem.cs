@@ -5,7 +5,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Components.Simulation.Requests;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems
 {
-    public class ApplyNewPlayerPosition: ISystem
+    public class ApplyNewPlayerPositionSystem: ISystem
     {
         public World World { get; set; }
 
@@ -15,7 +15,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
         
         private Filter _filter;
         
-        public ApplyNewPlayerPosition(World world)
+        public ApplyNewPlayerPositionSystem(World world)
         {
             World = world;
         }

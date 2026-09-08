@@ -7,4 +7,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Simulation.Requests
     {
         public Vector3 NewPosition;
     }
+    
+    public struct SetVelocityRequest: IComponent
+    {
+        public Vector3 NewVelocity;
+    }
 }

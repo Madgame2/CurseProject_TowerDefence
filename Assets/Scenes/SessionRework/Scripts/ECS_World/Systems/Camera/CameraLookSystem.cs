@@ -6,12 +6,11 @@ using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
 {
-    public class PlayerLookSystem : ISystem
+    public class CameraLookSystem : ISystem
     {
         public World World { get; set; }
 
         private Filter _cameraFilter;
-        private Filter _characterFilter;
 
         private Stash<LookInputComponent> _lookInputStash;
         private Stash<RotationStateComponent> _rotationStateComponent;
@@ -19,7 +18,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
         private Stash<CameraRestrictionsComponent> _cameraRestrictionsStash;
         private Stash<RotationComponent> _rotationStash;
 
-        public PlayerLookSystem(World world)
+        public CameraLookSystem(World world)
         {
             World = world;
         }
@@ -37,12 +36,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                 .With<RotationStateComponent>()
                 .With<CameraRestrictionsComponent>()
                 .Build();
-
-            _characterFilter = World.Filter
-                .With<MyPlayerComponent>()
-                .With<RotationComponent>()
-                .With<CharacterViewComponent>()
-                .Build();
+            
         }
 
         public void OnUpdate(float deltaTime)
@@ -64,12 +58,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                 var minPitch = cameraRestrictionsComponent.MinPitch;
 
                 rotationStateComponent.Pitch = Mathf.Clamp(rotationStateComponent.Pitch, minPitch, maxPitch);
-
-                foreach (var characterEntity in _characterFilter)
-                {
-                    ref var characterRotation = ref _rotationStash.Get(characterEntity);
-                    characterRotation.Rotation = Quaternion.Euler(0f, rotationStateComponent.Yaw, 0f);
-                }
             }
         }
 

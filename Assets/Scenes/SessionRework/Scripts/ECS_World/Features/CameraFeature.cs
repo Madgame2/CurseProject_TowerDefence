@@ -2,6 +2,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Camera;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Camera;
 using Scenes.SessionRework.Scripts.Player.View;
@@ -64,6 +65,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
                 {
                     CameraTransform = cameraView.transform
                 });
+            
+            world.GetStash<PositionComponent>().Set(cameraEntity);
+            world.GetStash<RotationComponent>().Set(cameraEntity);
         }
 
         private static void AddCharacterViewToPlayer(World world)
@@ -79,9 +83,13 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
                 if (unityView.GameObject == null)
                     continue;
 
+                if(!unityView.GameObject.TryGetComponent<PlayerView>(out var playerView))
+                    continue;
+                
                 characterViewStash.Set(playerEntity, new CharacterViewComponent
                 {
-                    CharacterRoot = unityView.Transform
+                    CharacterRoot = unityView.Transform,
+                    SpineBone = playerView.SpineBone,
                 });
             }
         }
@@ -90,17 +98,24 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             SystemsGroup systemsGroup,
             DiContainer container)
         {
+            
+            systemsGroup.AddSystem(
+                container.Instantiate<SetTargetSystem>());
+            
             systemsGroup.AddSystem(
                 container.Instantiate<CameraInputSystem>());
 
             systemsGroup.AddSystem(
-                container.Instantiate<PlayerLookSystem>());
+                container.Instantiate<CameraLookSystem>());
+
+            systemsGroup.AddSystem(
+                container.Instantiate<ChangeCameraTransformSystem>());
 
             systemsGroup.AddSystem(
                 container.Instantiate<CameraSyncSystem>());
-            
-            systemsGroup.AddSystem(
-                container.Instantiate<SetTargetSystem>());
+
+            //systemsGroup.AddSystem(
+            //    container.Instantiate<PlayerCharacterSyncLookSystem>());
         }
     }
 }
