@@ -2,7 +2,7 @@ using Scellecs.Morpeh;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Animation
 {
-    public class SpineLookAtTargetInverseKinematicsSystem : ILateSystem
+    public class  SpineLookAtTargetInverseKinematicsSystem : ILateSystem
     {
         public World World { get; set; }
         

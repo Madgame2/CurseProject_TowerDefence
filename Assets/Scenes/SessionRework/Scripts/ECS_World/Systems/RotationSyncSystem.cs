@@ -37,7 +37,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
             
                 if (view.Transform != null)
                 {
-                    //view.Transform.rotation = rotationComponent.Rotation;
+                    view.Transform.rotation = rotationComponent.Rotation;
                 }
             }
         }

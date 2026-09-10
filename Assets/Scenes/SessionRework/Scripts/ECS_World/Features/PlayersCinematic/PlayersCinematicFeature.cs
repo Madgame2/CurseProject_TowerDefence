@@ -3,6 +3,8 @@ using Scenes.SessionRework.Scripts.ECS_World.Components.Animations;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
+using Scenes.SessionRework.Scripts.ECS_World.Features.PlayersCinematic.Systems;
+using Scenes.SessionRework.Scripts.ECS_World.Features.Systems;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Animation;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Camera;
 using Scenes.SessionRework.Scripts.Player.View;
@@ -11,15 +13,20 @@ using Zenject;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Features
 {
-    public static class PlayersAnimationsFeature
+    public static class PlayersCinematicFeature
     {
         public static void AddFeature(World world, SystemsGroup updateGroup, DiContainer container)
         {
             AddComponentsToPlayers(world);
             
-            updateGroup.AddSystem(container.Instantiate<PlayerAnimationSystem>());
-            updateGroup.AddSystem(container.Instantiate<PlayerTurnInPlaceSystem>());
-            updateGroup.AddSystem(container.Instantiate<SpineLookAtTargetInverseKinematicsSystem>());
+            updateGroup.AddSystem(container.Instantiate<PlayerMoveAnimationSystem>());
+            updateGroup.AddSystem(container.Instantiate<LookAtCameraTargetSystem>());
+            updateGroup.AddSystem(container.Instantiate<SyncUnityCharacterLookSystem>());
+            updateGroup.AddSystem(container.Instantiate<RotateWhenMovingSystem>());
+            updateGroup.AddSystem(container.Instantiate<GazeRotationAngleSystem>());
+            updateGroup.AddSystem(container.Instantiate<PlayRotationInPlaceAnimations>());
+            //updateGroup.AddSystem(container.Instantiate<PlayerTurnInPlaceSystem>());
+            //updateGroup.AddSystem(container.Instantiate<SpineLookAtTargetInverseKinematicsSystem>());
         }
 
         private static void AddComponentsToPlayers(World world)
@@ -34,6 +41,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             Stash<AnimatorReferenceComponent>  animatorReferenceStash = world.GetStash<AnimatorReferenceComponent>();
             Stash<HumanoidBonesComponent> humanoidBonesStash = world.GetStash<HumanoidBonesComponent>();
             Stash<TurnInPlaceComponent>  turnInPlaceStash = world.GetStash<TurnInPlaceComponent>();
+            Stash<LookAtComponent>  lookAtStash = world.GetStash<LookAtComponent>();
             foreach (var playerEntity in filter)
             {
                 ref var unityViewComponent = ref unityViewStash.Get(playerEntity);
@@ -50,6 +58,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
                 {
                     SpineBone = playerView.SpineBone
                 });
+                
+                lookAtStash.Set(playerEntity);
                 
                 turnInPlaceStash.Set(playerEntity, new TurnInPlaceComponent
                 {

@@ -3,6 +3,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Movement;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
+using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Movement
 {
@@ -12,7 +13,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Movement
         
         private Filter _filter;
         private Stash<InputComponent> _inputStash;
-        private Stash<RotationComponent> _rotationStash;
+        private Stash<LookAtComponent> _lookAtStash;
+        private Stash<PositionComponent> _positionStash;
         
         public MovementConvertCordsSystem(World world)
         {
@@ -23,13 +25,15 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Movement
         {
             _filter = World.Filter
                 .With<IDComponent>()
-                .With<RotationComponent>()
+                .With<LookAtComponent>()
                 .With<PlayerComponent>()
+                .With<PositionComponent>()
                 .With<InputComponent>()
                 .Build();
             
-            _rotationStash = World.GetStash<RotationComponent>();
+            _lookAtStash = World.GetStash<LookAtComponent>();
             _inputStash = World.GetStash<InputComponent>();
+            _positionStash = World.GetStash<PositionComponent>();
         }
         
         public void OnUpdate(float deltaTime)
@@ -37,10 +41,15 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Movement
             foreach (var entity in _filter)
             {
                 ref var input = ref _inputStash.Get(entity);
-                ref var rotation = ref _rotationStash.Get(entity);
+                ref var lookAtComponent = ref _lookAtStash.Get(entity);
+                ref var positionComponent = ref _positionStash.Get(entity);
                 
-                input.MoveDirection = rotation.Rotation * input.MoveDirection;
+                var forwardDirection = lookAtComponent.Position - positionComponent.Position;
+                forwardDirection.y = 0;
                 
+                var rotation = Quaternion.LookRotation(forwardDirection);
+                
+                input.MoveDirection = rotation * input.MoveDirection;
             }
         }
         

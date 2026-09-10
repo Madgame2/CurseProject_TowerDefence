@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Animation
 {
-    public class PlayerAnimationSystem: ISystem
+    public class PlayerMoveAnimationSystem: ISystem
     {
         public World World { get; set; }
 
@@ -19,7 +19,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Animation
         private Stash<VelocityComponent> _velocityStash;
 
 
-        public PlayerAnimationSystem(World world)
+        public PlayerMoveAnimationSystem(World world)
         {
             World = world;
         }
