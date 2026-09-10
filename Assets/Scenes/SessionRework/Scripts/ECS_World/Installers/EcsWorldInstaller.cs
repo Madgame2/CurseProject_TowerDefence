@@ -17,7 +17,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             PlayersCinematicFeature.AddFeature(world, updateGroup, container);
             ChunkLoadingFeature.AddFeature(world, updateGroup, container);
             SimulationFeature.AddFeature(world, fixedUpdateGroup, container);
-            MovementFeature.AddFeature(world, updateGroup,container);
+            PlayerMovementFeature.AddFeature(world, updateGroup,container);
             NetworkFeature.AddFeature(world, fixedUpdateGroup,container);
             CameraFeature.AddFeature(world, lateUpdateGroup, container);
             SyncEcsWithUnityFeature.AddFeature(world, updateGroup, container);

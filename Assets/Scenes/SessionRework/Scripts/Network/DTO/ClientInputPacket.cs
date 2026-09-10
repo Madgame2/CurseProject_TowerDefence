@@ -43,6 +43,7 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
                     float x = input.MoveDirection.x;
                     float y = input.MoveDirection.y;
                     float z = input.MoveDirection.z;
+                    bool jumpRequested = input.JumpRequested;
 
                     BinaryPrimitives.WriteUInt32LittleEndian(buffer.Slice(offset), input.Tick);
                     offset += 4;
@@ -55,6 +56,9 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
 
                     MemoryMarshal.Write(buffer.Slice(offset), ref z);
                     offset += 4;
+                    
+                    buffer[offset] = (byte)(jumpRequested ? 1 : 0);
+                    offset += 1;
                 }
             }
 

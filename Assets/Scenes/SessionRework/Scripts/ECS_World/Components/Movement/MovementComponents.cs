@@ -14,4 +14,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Movement
         public MoveInputCommand[] Buffer;
         public int CurrentIndex;
     }
+    
+    public struct JumpRequestComponent : IComponent{}
 }

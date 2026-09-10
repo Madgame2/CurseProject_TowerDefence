@@ -6,5 +6,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Addition
     {
         public uint Tick;
         public Vector3 MoveDirection;
+        public bool JumpRequested;
     }
 }
