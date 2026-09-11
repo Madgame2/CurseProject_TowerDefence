@@ -44,7 +44,6 @@ public class SessionSceneInstaller : MonoInstaller
                 .AsSingle()
                 .NonLazy();
 
-        Container.BindInterfacesAndSelfTo<CommonStatesViewer>().AsSingle();
 
         Container.BindInterfacesTo<InputInitializer>().AsSingle();
 

@@ -41,8 +41,6 @@ public class EditProfileView : ViewBase<EditProfileViewModel>
 
     private async void HadnleapploadNeData()
     {
-        if (string.IsNullOrEmpty(_nickName.text)) return;
-
         _sendCts?.Cancel();
         _sendCts?.Dispose();
 

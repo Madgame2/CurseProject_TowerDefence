@@ -12,8 +12,6 @@ namespace Common.systems.Configs
         public AudioConfigProvider AudioProvider { get; private set; }
         public event Action hasChanges;
 
-        public event Action OnAudioChanged;
-
         private string _path;
 
         public ConfigSystem()

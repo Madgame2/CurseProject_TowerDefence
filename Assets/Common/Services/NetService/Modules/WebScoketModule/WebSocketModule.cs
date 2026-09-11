@@ -10,6 +10,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -306,7 +307,7 @@ namespace Common.Services.Net.Modules
             }
             catch (Exception ex)
             {
-                Debug.LogError("Connection failed: " + ex.Message);
+                Console.WriteLine("Connection failed: " + ex.Message);
             }
 
             return false;

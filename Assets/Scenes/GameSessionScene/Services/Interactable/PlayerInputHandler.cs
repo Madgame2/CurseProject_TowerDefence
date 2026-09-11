@@ -38,7 +38,7 @@ public class PlayerInputHandler : MonoBehaviour
         {
             Vector3 worldPoint = hit.point;
 
-            _MovementController.MoveTo(worldPoint);
+            _MovementController.MoveTo(playerDebug.transform, worldPoint);
         }
     }
 }

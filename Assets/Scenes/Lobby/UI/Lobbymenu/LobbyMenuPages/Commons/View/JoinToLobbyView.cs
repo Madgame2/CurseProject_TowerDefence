@@ -24,7 +24,7 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
     protected override void OnViewModelAssigned()
     {
         _closeButton.onClick.AddListener(ViewModel.onClose);
-        //_inputCode.onValueChanged.AddListener(FormatInput);
+        _inputCode.onValueChanged.AddListener(FormatInput);
 
         _JoinButton.onClick.AddListener(hadnleJounRquest);
 
@@ -41,18 +41,11 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
 
     private void LobbyUpdateHandler(string lobbyId, Scenes.Lobby.Entities.Lobby lobby)
     {
-        if (!lobbyes.TryGetValue(lobbyId, out var lobbyObject))
-            return;
-
-        if (lobbyObject == null)
-            return;
-
+        GameObject lobbyObject = lobbyes.GetValueOrDefault(lobbyId);
+        if (lobbyObject == null) return;
 
         _threadDispatcher.Run(() =>
         {
-            if (!lobbyObject)
-                return;
-
             if (lobbyObject.TryGetComponent<LobbyShowElem>(out LobbyShowElem lse))
             {
                 lse.Init(lobby);
@@ -67,11 +60,12 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
 
         _threadDispatcher.Run(() =>
         {
-            if (lobbyObject && lobbyObject.TryGetComponent(out LobbyShowElem lse))
+            if (lobbyObject.TryGetComponent<LobbyShowElem>(out LobbyShowElem lse))
+            {
                 lse.clearUp();
+            }
 
-            if (lobbyObject)
-                Destroy(lobbyObject);
+            Destroy(lobbyObject);
         });
     }
 
@@ -128,7 +122,7 @@ public class JoinToLobbyView : ViewBase<JoinToLobbyViewModel>
         ViewModel.LobbyCreated -= LobbyAdeddHandle;
         ViewModel.LobbyUpdated -= LobbyUpdateHandler;
 
-        lobbyes.Clear();
+
         await ViewModel.ClearAll();
     }
 

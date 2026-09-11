@@ -15,13 +15,6 @@ public class ConnectingToServerViewModel
     private readonly NetService netService;
     private readonly GameStateMachine gameStates;
     private readonly UIManager uIManager;
-
-
-    public Action onWrongEmail;
-    public Action onWrongPassword;
-
-    private bool procesing = false;
-
     public ConnectingToServerViewModel(GameStateMachine statesmachine, UIManager ui, NetService netService)
     {
         this.gameStates = statesmachine;
@@ -42,22 +35,9 @@ public class ConnectingToServerViewModel
 
     public async Task Submit(string email, string password)
     {
-        if (procesing) return;
-        
+        if (!Validator.ValidateEmail(email, null)) return;
+        if(!Validator.ValidatePassword(password, null)) return;
 
-        if (!Validator.ValidateEmail(email, null)) {
-            onWrongEmail?.Invoke();
-            return;
-        }
-        
-        if(!Validator.ValidatePassword(password, null))
-        {
-            onWrongPassword?.Invoke();
-            return;
-        }
-
-
-        procesing = true;
 
         ShowLoading();
 
@@ -74,7 +54,6 @@ public class ConnectingToServerViewModel
         finally
         {
             HideLoading();
-            procesing = false;
         }
     }
 
@@ -134,17 +113,17 @@ public class ConnectingToServerViewModel
 
     private void Handle400(HttpResponse response)
     {
-        onWrongEmail?.Invoke();
+        Debug.LogError("400 Bad Request - handler not implemented");
     }
 
     private void Handle403(HttpResponse response)
     {
-        onWrongPassword?.Invoke();
+        Debug.LogError("403 Forbidden - handler not implemented");
     }
 
     private void Handle404(HttpResponse response)
     {
-        onWrongEmail?.Invoke();
+        Debug.LogError("404 Not Found - handler not implemented");
     }
 
     private void Handle500(HttpResponse response)

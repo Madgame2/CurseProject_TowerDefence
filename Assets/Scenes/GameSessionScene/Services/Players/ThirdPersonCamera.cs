@@ -1,5 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 public class ThirdPersonCamera : MonoBehaviour

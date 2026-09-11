@@ -36,7 +36,6 @@ namespace Common.Services.Net.Modules
         {
             using (UnityWebRequest request = UnityWebRequest.Get(url))
             {
-                request.certificateHandler = new DevCertHandler();
 
                 request.timeout = 10;
 
@@ -71,7 +70,6 @@ namespace Common.Services.Net.Modules
 
             using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
             {
-                request.certificateHandler = new DevCertHandler();
                 request.timeout = 10;
 
                 request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -113,7 +111,6 @@ namespace Common.Services.Net.Modules
         {
             using (UnityWebRequest request = new UnityWebRequest(url, "DELETE"))
             {
-                request.certificateHandler = new DevCertHandler();
                 request.timeout = 10;
                 request.downloadHandler = new DownloadHandlerBuffer();
 
