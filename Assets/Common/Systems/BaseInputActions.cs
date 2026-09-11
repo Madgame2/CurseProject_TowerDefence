@@ -154,6 +154,15 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""828d89f6-c744-4722-b850-0a0976e9e9ac"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -299,6 +308,17 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Look1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9442ff3c-9d3c-4d29-8e42-5cc56cfaf7e1"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -314,6 +334,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         m_SessionPlayer_AltRotate = m_SessionPlayer.FindAction("AltRotate", throwIfNotFound: true);
         m_SessionPlayer_Move = m_SessionPlayer.FindAction("Move", throwIfNotFound: true);
         m_SessionPlayer_Look1 = m_SessionPlayer.FindAction("Look1", throwIfNotFound: true);
+        m_SessionPlayer_Jump = m_SessionPlayer.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~@BaseInputActions()
@@ -401,6 +422,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_SessionPlayer_AltRotate;
     private readonly InputAction m_SessionPlayer_Move;
     private readonly InputAction m_SessionPlayer_Look1;
+    private readonly InputAction m_SessionPlayer_Jump;
     /// <summary>
     /// Provides access to input actions defined in input action map "SessionPlayer".
     /// </summary>
@@ -440,6 +462,10 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "SessionPlayer/Look1".
         /// </summary>
         public InputAction @Look1 => m_Wrapper.m_SessionPlayer_Look1;
+        /// <summary>
+        /// Provides access to the underlying input action "SessionPlayer/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_SessionPlayer_Jump;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -487,6 +513,9 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @Look1.started += instance.OnLook1;
             @Look1.performed += instance.OnLook1;
             @Look1.canceled += instance.OnLook1;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         /// <summary>
@@ -519,6 +548,9 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @Look1.started -= instance.OnLook1;
             @Look1.performed -= instance.OnLook1;
             @Look1.canceled -= instance.OnLook1;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         /// <summary>
@@ -608,5 +640,12 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
     }
 }

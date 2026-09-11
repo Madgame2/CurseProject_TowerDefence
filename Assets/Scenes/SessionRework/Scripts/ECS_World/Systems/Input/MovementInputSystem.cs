@@ -24,7 +24,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         
         public void OnAwake()
         {
-            _filter = World.Filter.With<IDComponent>().With<PlayerComponent>().With<InputComponent>().Build();
+            _filter = World.Filter.With<IDComponent>().With<MyPlayerComponent>().With<InputComponent>().Build();
             _inputStash = World.GetStash<InputComponent>();
         }
         public void OnUpdate(float deltaTime)

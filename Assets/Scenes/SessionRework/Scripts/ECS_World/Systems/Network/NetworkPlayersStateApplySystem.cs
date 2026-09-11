@@ -18,6 +18,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         private Stash<IDComponent> _idComponentStash;
         private Stash<PlayerComponent> _playerComponentStash;
         private Stash<SetPositionRequest> _setPositionRequestStash;
+        private Stash<SetVelocityRequest> _setVelocityRequestStash;
+        private Stash<SetMovementStateRequest> _setMovementStateRequestStash;
         
         private Filter _filter;
 
@@ -34,10 +36,12 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
             _idComponentStash = World.GetStash<IDComponent>();
             _playerComponentStash = World.GetStash<PlayerComponent>();
             _setPositionRequestStash = World.GetStash<SetPositionRequest>();
-
+            _setVelocityRequestStash =  World.GetStash<SetVelocityRequest>();
+            _setMovementStateRequestStash = World.GetStash<SetMovementStateRequest>();
+            
             _filter = World.Filter.With<IDComponent>().With<PlayerComponent>().Build();
             
-            _networkClient.OnUdp<PlayerStateSnapshot>(PacketType.PlayerWorldState, EnqueueNewPlayerPosition);
+            _networkClient.OnUdp<PlayerStateSnapshot>(PacketType.PlayerWorldState, EnqueueNewPlayerState);
         }
         
         public void OnUpdate(float deltaTime)
@@ -47,11 +51,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         
         public void Dispose()
         {
-            _networkClient.OffUdp<PlayerStateSnapshot>(PacketType.PlayerWorldState, EnqueueNewPlayerPosition);
+            _networkClient.OffUdp<PlayerStateSnapshot>(PacketType.PlayerWorldState, EnqueueNewPlayerState);
 
         }
 
-        private void EnqueueNewPlayerPosition(PlayerStateSnapshot message)
+        private void EnqueueNewPlayerState(PlayerStateSnapshot message)
         {
             foreach (var playerState in message.PlayersState)
             {
@@ -69,6 +73,16 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                     _setPositionRequestStash.Set(player, new SetPositionRequest
                     {
                         NewPosition = new Vector3(playerState.Position.x, playerState.Position.y, playerState.Position.z),
+                    });
+                    
+                    _setVelocityRequestStash.Set(player, new SetVelocityRequest
+                    {
+                        NewVelocity =  new Vector3(playerState.Velocity.x, playerState.Velocity.y, playerState.Velocity.z),
+                    });
+                    
+                    _setMovementStateRequestStash.Set(player, new SetMovementStateRequest
+                    {
+                        NewMovementState = playerState.MovementState,
                     });
                 }
             }

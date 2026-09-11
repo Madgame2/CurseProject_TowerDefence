@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Scenes.SessionRework.Scripts.Player.Enums;
 using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.Network.DTO
@@ -9,42 +10,44 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
     {
         public uint ObjectId;
         public Vector3 Position;
+        public Vector3 Velocity;
+        public MovementState MovementState;
         
-        public PlayerState(uint objectId, Vector3 position)
+        public const int SerializedSize = 29;
+
+        
+        public PlayerState(uint objectId, Vector3 position, Vector3 velocity,  MovementState movementState)
         {
             ObjectId = objectId;
             Position = position;
+            Velocity = velocity;
+            MovementState = movementState;
         }
         
         public int Serialize(Span<byte> buffer)
         {
-            MemoryMarshal.Write(buffer.Slice(0), ref Unsafe.AsRef(in ObjectId));
+            if (buffer.Length < SerializedSize)
+                return 0;
 
-            ref byte posBuffer = ref buffer[4];
-            MemoryMarshal.Write(MemoryMarshal.CreateSpan(ref posBuffer, 12), ref Unsafe.AsRef(in Position));
+            MemoryMarshal.Write(buffer.Slice(0), ref ObjectId);
+            MemoryMarshal.Write(buffer.Slice(4), ref Position);
+            MemoryMarshal.Write(buffer.Slice(16), ref Velocity);
+            buffer[28] = (byte)MovementState;
 
-            return 16;
+            return SerializedSize;
         }
         
         public int Deserialize(ReadOnlySpan<byte> data)
         {
-            int offset = 0;
-            
-            ObjectId = MemoryMarshal.Read<uint>(data.Slice(offset));
-            offset += 4;
-            
-            float x = MemoryMarshal.Read<float>(data.Slice(offset));
-            offset += 4;
+            if (data.Length < SerializedSize) 
+                return 0;
 
-            float y = MemoryMarshal.Read<float>(data.Slice(offset));
-            offset += 4;
+            ObjectId = MemoryMarshal.Read<uint>(data.Slice(0));
+            Position = MemoryMarshal.Read<Vector3>(data.Slice(4));
+            Velocity = MemoryMarshal.Read<Vector3>(data.Slice(16));
+            MovementState = (MovementState)data[28];
 
-            float z = MemoryMarshal.Read<float>(data.Slice(offset));
-            offset += 4;
-
-            Position = new Vector3(x, y, z); 
-
-            return offset;
+            return SerializedSize;
         }
     }
 }

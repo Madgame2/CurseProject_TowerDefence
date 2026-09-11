@@ -1,10 +1,11 @@
+using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Camera;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Systems.Camera;
-using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
-using Scenes.SessionRework.Scripts.ECS_World.Systems.Movement;
+using Scenes.SessionRework.Scripts.Player.View;
 using UnityEngine;
 using Zenject;
 
@@ -13,94 +14,108 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
     public static class CameraFeature
     {
         private static Filter _playerFilter;
-        private static Filter _cameraFilter;
+        
 
-        public static void AddFeature(World world, SystemsGroup group, DiContainer container)
+        public static void AddFeature(
+            World world,
+            SystemsGroup systemsGroup,
+            DiContainer container)
+        {
+            CreateFilters(world);
+
+            InitializeCameraEntity(world, container);
+            AddCharacterViewToPlayer(world);
+
+            AddCameraSystems(systemsGroup, container);
+        }
+
+        private static void CreateFilters(World world)
         {
             _playerFilter = world.Filter
                 .With<UnityViewComponent>()
                 .With<PlayerComponent>()
                 .With<MyPlayerComponent>()
                 .Build();
-
-            _cameraFilter = world.Filter.With<LookInputComponent>()
-                .With<RotationStateComponent>()
-                .With<CameraRestrictionsComponent>()
-                .Build();
-
-            InitCameraEntity(world, container);
-            AddComponentsToPlayer(world);
-            SetCameraTarget(world);
-
-            group.AddSystem(container.Instantiate<CameraInputSystem>());
-            group.AddSystem(container.Instantiate<PlayerLookSystem>());
-            group.AddSystem(container.Instantiate<CameraSyncSystem>());
         }
 
-        private static void InitCameraEntity(World world, DiContainer container)
+        private static void InitializeCameraEntity(
+            World world,
+            DiContainer container)
         {
             var cameraEntity = world.CreateEntity();
 
-            var lookUnputStash = world.GetStash<LookInputComponent>();
-            lookUnputStash.Set(cameraEntity);
+            world.GetStash<LookInputComponent>()
+                .Set(cameraEntity);
 
-            var rotationStateStash = world.GetStash<RotationStateComponent>();
-            rotationStateStash.Set(cameraEntity);
-
-            var cameraRestrictionsStash = world.GetStash<CameraRestrictionsComponent>();
-            cameraRestrictionsStash.Set(cameraEntity, new CameraRestrictionsComponent
-            {
-                Sensitivity = 1,
-                MaxPitch = 60,
-                MinPitch = -10
-            });
+            world.GetStash<RotationStateComponent>()
+                .Set(cameraEntity);
 
             var cameraView = container.TryResolve<CameraView>();
+
             if (cameraView == null)
             {
-                Debug.LogError("Not found cameraView");
-                throw new System.Exception("Not found cameraView");
+                const string errorMessage = "CameraView was not found.";
+
+                Debug.LogError(errorMessage);
+                throw new System.Exception(errorMessage);
             }
 
-            var cameraViewStash = world.GetStash<CameraViewComponent>();
-            cameraViewStash.Set(cameraEntity, new CameraViewComponent
-            {
-                CameraTransform = cameraView.transform
-            });
+            world.GetStash<CameraViewComponent>()
+                .Set(cameraEntity, new CameraViewComponent
+                {
+                    CameraTransform = cameraView.transform
+                });
+            
+            world.GetStash<PositionComponent>().Set(cameraEntity);
+            world.GetStash<RotationComponent>().Set(cameraEntity);
         }
 
-        private static void SetCameraTarget(World world)
+        private static void AddCharacterViewToPlayer(World world)
         {
-            var characterViewStash = world.GetStash<CharacterViewComponent>();
+            var characterViewStash =
+                world.GetStash<CharacterViewComponent>();
+
             foreach (var playerEntity in _playerFilter)
             {
-                ref var playerView = ref characterViewStash.Get(playerEntity);
+                ref readonly var unityView =
+                    ref playerEntity.GetComponent<UnityViewComponent>();
 
-                var cameraTargetStash = world.GetStash<CameraTargetComponent>();
-                cameraTargetStash.Set(playerEntity, new CameraTargetComponent
+                if (unityView.GameObject == null)
+                    continue;
+
+                if(!unityView.GameObject.TryGetComponent<PlayerView>(out var playerView))
+                    continue;
+                
+                characterViewStash.Set(playerEntity, new CharacterViewComponent
                 {
-                    Target = playerView.CharacterRoot,
-                    TargetDistance = 4
+                    CharacterRoot = unityView.Transform,
+                    SpineBone = playerView.SpineBone,
                 });
-                break;
             }
         }
 
-
-        private static void AddComponentsToPlayer(World world)
+        private static void AddCameraSystems(
+            SystemsGroup systemsGroup,
+            DiContainer container)
         {
-            foreach (var entity in _playerFilter)
-            {
-                ref readonly var unityView = ref entity.GetComponent<UnityViewComponent>();
+            
+            systemsGroup.AddSystem(
+                container.Instantiate<SetTargetSystem>());
+            
+            systemsGroup.AddSystem(
+                container.Instantiate<CameraInputSystem>());
 
-                if (unityView.GameObject == null) continue;
+            systemsGroup.AddSystem(
+                container.Instantiate<CameraLookSystem>());
 
-                var characterViewStash = world.GetStash<CharacterViewComponent>();
-                characterViewStash.Set(entity, new CharacterViewComponent
-                {
-                    CharacterRoot = unityView.Transform
-                });
-            }
+            systemsGroup.AddSystem(
+                container.Instantiate<ChangeCameraTransformSystem>());
+
+            systemsGroup.AddSystem(
+                container.Instantiate<CameraSyncSystem>());
+
+            //systemsGroup.AddSystem(
+            //   container.Instantiate<PlayerCharacterSyncLookSystem>());
         }
     }
 }

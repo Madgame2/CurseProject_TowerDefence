@@ -15,6 +15,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         private Stash<InputComponent> _inputStash;
         private Stash<MoveInputHistoryComponent> _moveHistoryStash;
         private Stash<ClientSimulationComponent> _clientSimulationStash;
+        private Stash<JumpRequestComponent> _jumpRequestStash;
         
         public MoveBufferWriteSystem(World world)
         {
@@ -26,6 +27,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
             _inputStash = World.GetStash<InputComponent>();
             _moveHistoryStash = World.GetStash<MoveInputHistoryComponent>();
             _clientSimulationStash = World.GetStash<ClientSimulationComponent>();
+            _jumpRequestStash = World.GetStash<JumpRequestComponent>();
             
             _tickFilter = World.Filter.With<ClientSimulationComponent>().Build();
             _playersFilter = World.Filter.With<InputComponent>()
@@ -44,10 +46,18 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
                     ref var playerInput = ref _inputStash.Get(player);
                     ref var playerBuffer = ref _moveHistoryStash.Get(player);
 
+                    var jumpRequested = false;
+                    if (_jumpRequestStash.Has(player))
+                    {
+                        jumpRequested = true;
+                        _jumpRequestStash.Remove(player);
+                    }
+                    
                     playerBuffer.Buffer[playerBuffer.CurrentIndex] = new MoveInputCommand
                     {
                         MoveDirection = playerInput.MoveDirection,
-                        Tick = tick.Tick
+                        Tick = tick.Tick,
+                        JumpRequested = jumpRequested,
                     };
 
                     playerBuffer.CurrentIndex =
