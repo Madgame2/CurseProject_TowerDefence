@@ -13,6 +13,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
         {
             group.AddSystem(container.Instantiate<ApplyNewPlayerPositionSystem>());
             group.AddSystem(container.Instantiate<ApplyNewVelocitySystem>());
+            group.AddSystem(container.Instantiate<ApplyNewMovementStateSystem>());
             group.AddSystem(container.Instantiate<MovementInputSystem>());
             group.AddSystem(container.Instantiate<JumpInputSystem>());
             group.AddSystem(container.Instantiate<MovementConvertCordsSystem>());

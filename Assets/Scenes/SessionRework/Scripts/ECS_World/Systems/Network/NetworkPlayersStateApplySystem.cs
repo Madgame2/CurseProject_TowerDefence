@@ -19,6 +19,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         private Stash<PlayerComponent> _playerComponentStash;
         private Stash<SetPositionRequest> _setPositionRequestStash;
         private Stash<SetVelocityRequest> _setVelocityRequestStash;
+        private Stash<SetMovementStateRequest> _setMovementStateRequestStash;
         
         private Filter _filter;
 
@@ -36,6 +37,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
             _playerComponentStash = World.GetStash<PlayerComponent>();
             _setPositionRequestStash = World.GetStash<SetPositionRequest>();
             _setVelocityRequestStash =  World.GetStash<SetVelocityRequest>();
+            _setMovementStateRequestStash = World.GetStash<SetMovementStateRequest>();
             
             _filter = World.Filter.With<IDComponent>().With<PlayerComponent>().Build();
             
@@ -76,6 +78,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                     _setVelocityRequestStash.Set(player, new SetVelocityRequest
                     {
                         NewVelocity =  new Vector3(playerState.Velocity.x, playerState.Velocity.y, playerState.Velocity.z),
+                    });
+                    
+                    _setMovementStateRequestStash.Set(player, new SetMovementStateRequest
+                    {
+                        NewMovementState = playerState.MovementState,
                     });
                 }
             }

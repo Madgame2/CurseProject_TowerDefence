@@ -24,5 +24,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Animations
         public Animator Animator;
         public static readonly int MoveXHash = Animator.StringToHash("MoveX");
         public static readonly int MoveYHash = Animator.StringToHash("MoveY");
+        
+        public static readonly int VerticalVelocity = Animator.StringToHash("VerticalVelocity");
+        public static readonly int JumpTrigger = Animator.StringToHash("Jump");
+        public static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
     }
 }

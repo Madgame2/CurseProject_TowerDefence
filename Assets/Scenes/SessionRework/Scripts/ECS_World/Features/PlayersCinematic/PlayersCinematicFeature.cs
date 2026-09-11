@@ -25,6 +25,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             updateGroup.AddSystem(container.Instantiate<RotateWhenMovingSystem>());
             updateGroup.AddSystem(container.Instantiate<GazeRotationAngleSystem>());
             updateGroup.AddSystem(container.Instantiate<PlayRotationInPlaceAnimations>());
+            updateGroup.AddSystem(container.Instantiate<PlayerJumpAnimationSystem>());
             //updateGroup.AddSystem(container.Instantiate<PlayerTurnInPlaceSystem>());
             //updateGroup.AddSystem(container.Instantiate<SpineLookAtTargetInverseKinematicsSystem>());
         }

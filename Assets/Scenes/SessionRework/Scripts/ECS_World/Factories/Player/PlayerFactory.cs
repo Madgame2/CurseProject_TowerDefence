@@ -8,6 +8,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Components.Simulation;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Interfaces;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Player.Model;
 using Scenes.SessionRework.Scripts.GameWorld.Core;
+using Scenes.SessionRework.Scripts.Player.Enums;
 using Scenes.SessionRework.Scripts.Player.View;
 using UnityEngine;
 using Zenject;
@@ -28,6 +29,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
         private readonly Stash<MyPlayerComponent> _myPlayerStash;
         private readonly Stash<RotationComponent>  _rotationStash;
         private readonly Stash<VelocityComponent> _velocityStash;
+        private readonly Stash<MovementStateComponent> _stateStash;
         //private readonly Stash<HealthComponent> _healthStash;
 
         public PlayerFactory(World world)
@@ -43,6 +45,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             _myPlayerStash = world.GetStash<MyPlayerComponent>();
             _rotationStash = world.GetStash<RotationComponent>();
             _velocityStash = world.GetStash<VelocityComponent>();
+            _stateStash =  world.GetStash<MovementStateComponent>();
             //_healthStash = _world.GetStash<HealthComponent>();
         }
 
@@ -78,6 +81,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             });
             
             _velocityStash.Set(entity);
+            
+            _stateStash.Set(entity, new MovementStateComponent
+            {
+                MovementState = MovementState.Grounded
+            });
         }
 
         private void InitializePlayerComponents(Scellecs.Morpeh.Entity entity)
