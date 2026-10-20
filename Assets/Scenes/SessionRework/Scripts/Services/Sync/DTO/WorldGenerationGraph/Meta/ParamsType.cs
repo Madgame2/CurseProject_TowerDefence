@@ -2,6 +2,9 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Me
 {
     public enum ParamsType
     {
-        Frequency
+        Frequency,
+        
+        Condition,
+        ConstValue
     }
 }

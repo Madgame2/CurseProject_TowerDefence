@@ -6,6 +6,7 @@ using Scenes.SessionRework.Scripts.Services.Sync.DTO;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.PlayersInitDTOs;
 using Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph;
 using Scenes.SessionRework.Scripts.Services.Sync.interfaces;
+using UnityEngine;
 using Zenject;
 
 namespace Scenes.SessionRework.Scripts.Network.Controllers
@@ -66,9 +67,16 @@ namespace Scenes.SessionRework.Scripts.Network.Controllers
 
         private void handleWorldGenerationMetaData(WorldGenerationRules obj)
         {
-           _syncService.ProcessWorldGenerationRules(obj);
+            try
+            {
+                _syncService.ProcessWorldGenerationRules(obj);
 
-            _ = _webSocket.Send("Applied", null);
+                _ = _webSocket.Send("Applied", null);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void handleChunkMetaData(ChunkMetaDatasMessage obj)

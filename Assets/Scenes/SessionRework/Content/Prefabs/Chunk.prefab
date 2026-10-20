@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 411643048526037945}
   - component: {fileID: 5054775509602154985}
   - component: {fileID: 4511806202978824350}
+  - component: {fileID: 5667587253451091826}
   m_Layer: 0
   m_Name: Chunk
   m_TagString: Untagged
@@ -32,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 1.65606, y: 0, z: 3.32299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8510627980948202081}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7449156379912227789
@@ -52,6 +54,7 @@ MonoBehaviour:
   _biomeTextureConfig: {fileID: 11400000, guid: 9d16c1dbc2838fd4bb8669569579c2c4, type: 2}
   _renderModules:
   - {fileID: 4511806202978824350}
+  - {fileID: 5339900080878878904}
 --- !u!33 &411643048526037945
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -122,3 +125,61 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scenes.SessionRework.Scripts.World.Entities.Chunk.Modules.ChunkDecorationReader
   grassPrefab: {fileID: 197090114374522626, guid: 9202da1170b361347a36c326a8d5af67, type: 3}
+--- !u!114 &5667587253451091826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014409281425032470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1d124faa734e4c9843b00c0b29168c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules.TreeRenderModule
+  _treePrefab: {fileID: 0}
+--- !u!1 &8004054714821549274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8510627980948202081}
+  - component: {fileID: 5339900080878878904}
+  m_Layer: 0
+  m_Name: TreeModule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8510627980948202081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8004054714821549274}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5781267853493441611}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5339900080878878904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8004054714821549274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1d124faa734e4c9843b00c0b29168c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk.Modules.TreeRenderModule
+  _treePrefab: {fileID: 8697256790350965955, guid: ff88ee151f5cc1a4b8e50c9a56311e27, type: 3}

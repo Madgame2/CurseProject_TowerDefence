@@ -70,6 +70,7 @@ namespace Scenes.SessionRework.Scripts.Common.Installers
                 _getBackendParam.LandscapeGraphRoot,
                 _getBackendParam.BiomeGraphRoot,
                 _getBackendParam.DecorationsGraphRoot,
+                _getBackendParam.TreeGraphRoot,
                 ecsWorld
             );
 

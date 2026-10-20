@@ -125,10 +125,10 @@ public class DebugClentMathTools : EditorWindow
         float startY = Mathf.Floor(inputCoordinate.y / gridSize) * gridSize;
 
         // 3. Получаем высоты графа для всех 4-х углов текущего квадрата (ячейки)
-        float h00 = landscapeGraphRoot.Evaluate(startX, startY);                       // Нижний левый
-        float h10 = landscapeGraphRoot.Evaluate(startX + gridSize, startY);            // Нижний правый
-        float h01 = landscapeGraphRoot.Evaluate(startX, startY + gridSize);            // Верхний левый
-        float h11 = landscapeGraphRoot.Evaluate(startX + gridSize, startY + gridSize); // Верхний правый
+        landscapeGraphRoot.TryEvaluate(startX, startY, out var h00 );                       // Нижний левый
+        landscapeGraphRoot.TryEvaluate(startX + gridSize, startY, out var h10);            // Нижний правый
+        landscapeGraphRoot.TryEvaluate(startX, startY + gridSize, out var h01);            // Верхний левый
+        landscapeGraphRoot.TryEvaluate(startX + gridSize, startY + gridSize, out var h11); // Верхний правый
 
         // 4. Узнаем дробное смещение внутри квадрата (от 0.0 до 1.0)
         float percentX = (inputCoordinate.x - startX) / gridSize;

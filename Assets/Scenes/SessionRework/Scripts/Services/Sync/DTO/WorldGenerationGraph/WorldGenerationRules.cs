@@ -4,5 +4,6 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph
     {
         public GraphNodeDTO[] LandscapeGraphDTOs { get; set; }
         public GraphNodeDTO[] BiomsGraphDTOs { get; set; }
+        public GraphNodeDTO[] TreeGraphDTOs { get; set; }
     }
 }

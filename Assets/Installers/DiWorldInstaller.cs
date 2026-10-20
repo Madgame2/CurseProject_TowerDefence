@@ -35,6 +35,7 @@ namespace Installers
             Container.BindInstance(_initData.LandscapeGraph).AsSingle();
             Container.BindInstance(_initData.BiomeGraph).AsSingle();
             Container.BindInstance(_initData.DecorationsGraph).AsSingle();
+            Container.BindInstance(_initData.TreeGraph).AsSingle();
             Container.BindInstance(_chunkReaderPrefab).WhenInjectedInto<ChunkReaderPool>();
 
             // 2. Биндим фабрику и генератор (теперь они живут внутри мира)

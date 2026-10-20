@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NetObject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ObjectType>Obstacle</ObjectType>
+    <ObjectName>Tree_1</ObjectName>
+    <Hitboxes>
+        <HitboxShapeData xsi:type="CapsuleHitboxData">
+            <Center>
+                <x>-0.16</x>
+                <y>1.4</y>
+                <z>0</z>
+            </Center>
+            <Rotation>
+                <x>0</x>
+                <y>0</y>
+                <z>0.0784591</z>
+                <w>0.9969173</w>
+                <eulerAngles>
+                    <x>-0</x>
+                    <y>0</y>
+                    <z>9.000001</z>
+                </eulerAngles>
+            </Rotation>
+            <Radius>0.5</Radius>
+            <Height>3.542887</Height>
+        </HitboxShapeData>
+    </Hitboxes>
+</NetObject>

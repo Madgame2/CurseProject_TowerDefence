@@ -8,7 +8,13 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Me
     {
         NONE,
         PerlinNoiseNode,
-        
-        GreenMeadowsNode
+
+        GreenMeadowsNode,
+        StoneAreaNode,
+
+        CreateTreeNode,
+
+        IfNode,
+        ConstNode
     }
 }

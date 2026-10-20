@@ -1,3 +1,6 @@
+using GameServer.Domain.SessionWorld.Graphs.Base.Meta;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Common.Meta;
+
 namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Meta
 {
     public struct NodeParam
@@ -10,5 +13,8 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Me
         public string StringValue;
 
         public ParamValueType ValueType;
+        
+        public ConditionData? ConditionValue;
+        public GenericTypes GenericType;
     }
 }

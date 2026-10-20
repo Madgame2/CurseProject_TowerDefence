@@ -10,6 +10,8 @@ using Scenes.SessionRework.Scripts.GameWorld.Model;
 using UnityEngine;
 using Zenject;
 using Scenes.SessionRework.Scripts.Common.Installers;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.Interfaces;
+using Scenes.SessionRework.Scripts.GameWorld.Graph.TreesGraph.Models;
 using Scenes.SessionRework.Scripts.Network.Parsers.Interfaces;
 
 namespace Scenes.SessionRework.Scripts.Services.Sync
@@ -39,15 +41,18 @@ namespace Scenes.SessionRework.Scripts.Services.Sync
         {
             var landscape_graphRoot = _netGraphsBuilder.CreateGrpah(worldGenerationRules.LandscapeGraphDTOs);
             var biome_GraphRoot = _netGraphsBuilder.CreateGrpah(worldGenerationRules.BiomsGraphDTOs);
+            var tree_GraphRoot = _netGraphsBuilder.CreateGrpah(worldGenerationRules.TreeGraphDTOs);
 
             if (landscape_graphRoot is not ILandscapeGraphNode landscapeGraph ||
-                biome_GraphRoot is not IBiomeGraphNode biomeGraph)
+                biome_GraphRoot is not IBiomeGraphNode biomeGraph ||
+                tree_GraphRoot is not IGraphNode<StaticTreeData> treeGraphRoot)
             {
                 throw new ArgumentException("Один из графов имеет неверный тип.");
             }
             
             _setBackendParam.LandscapeGraphRoot = landscapeGraph;
             _setBackendParam.BiomeGraphRoot = biomeGraph;
+            _setBackendParam.TreeGraphRoot = treeGraphRoot;
         }
 
         public void InitWorld()

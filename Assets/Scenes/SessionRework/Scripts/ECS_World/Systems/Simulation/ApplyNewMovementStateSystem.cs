@@ -13,6 +13,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
         
         private Stash<MovementStateComponent>  _stateStash;
         private Stash<SetMovementStateRequest> _setMovementStateRequestStash;
+
+        public ApplyNewMovementStateSystem(World world)
+        {
+            World = world;
+        }
         
         public void OnAwake()
         {

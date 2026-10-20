@@ -10,5 +10,8 @@ namespace Scenes.SessionRework.Scripts.Services.Sync.DTO.WorldGenerationGraph.Me
         String,
         Int,
         Bool,
+        
+        
+        Condition
     }
 }

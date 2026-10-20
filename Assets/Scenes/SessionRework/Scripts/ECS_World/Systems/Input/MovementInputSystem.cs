@@ -24,13 +24,16 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         
         public void OnAwake()
         {
+            _inputs.Enable();
+            
             _filter = World.Filter.With<IDComponent>().With<MyPlayerComponent>().With<InputComponent>().Build();
             _inputStash = World.GetStash<InputComponent>();
         }
         public void OnUpdate(float deltaTime)
         {
             Vector2 lookInput = _inputs.SessionPlayer.Move.ReadValue<Vector2>();
-
+            Debug.Log(lookInput);
+            
             foreach (var entity in _filter)
             {
                 ref var input = ref _inputStash.Get(entity);

@@ -18,6 +18,7 @@ using Scenes.SessionRework.Scripts.GameWorld.Entities.Chunk;
 using Scenes.SessionRework.Scripts.GameWorld.Graph.Builder;
 using Scenes.SessionRework.Scripts.GameWorld.Graph.Nodes.Factory;
 using Scenes.SessionRework.Scripts.GameWorld.Pool;
+using Scenes.SessionRework.Scripts.GameWorld.View;
 using Scenes.SessionRework.Scripts.Player.View;
 using UnityEngine;
 using Zenject;
