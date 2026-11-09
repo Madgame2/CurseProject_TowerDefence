@@ -35,9 +35,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
                 ref var pos = ref _positionStash.Get(entity);
                 ref var view = ref _unityViewStash.Get(entity);
             
-                if (view.Transform != null)
+                if (view.PositionTransform != null)
                 {
-                    view.Transform.position = Vector3.Lerp(view.Transform.position, pos.Position, deltaTime * 10f);
+                    view.PositionTransform.position = Vector3.Lerp(view.PositionTransform.position, pos.Position, deltaTime * 10f);
                 }
             }
         }

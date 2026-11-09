@@ -1,4 +1,5 @@
 using Scellecs.Morpeh;
+using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Meta;
 using Scenes.SessionRework.Scripts.Player.View;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Players
 {
     public struct PlayerComponent : IComponent
     {
-        public string PlayerId;
+        public uint PlayerId;
         public PlayerView PlayerView;
     }
     
@@ -16,5 +17,10 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Players
     {
         public Transform CharacterRoot;
         public Transform SpineBone;
+    }
+
+    public struct CharacterState : IComponent
+    {
+        
     }
 }

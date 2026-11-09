@@ -84,21 +84,12 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
             ref readonly var characterView =
                 ref playerEntity.GetComponent<CharacterViewComponent>();
 
-            Vector3 targetPosition =
-                playerView.CameraTargetLook.position;
+            //Vector3 targetPosition = playerView.CameraTargetLook.position;
 
             Vector3 characterPosition =
                 characterView.CharacterRoot.position;
 
-            world.GetStash<CameraTargetComponent>()
-                .Set(playerEntity, new CameraTargetComponent
-                {
-                    PivotOffset = targetPosition - characterPosition,
-                    Target = characterView.CharacterRoot,
-                    TargetDistances =
-                        playerView.CameraTargetLook.position -
-                        playerView.CameraStartPosition.position
-                });
+            world.GetStash<CameraTargetComponent>();
         }
         
         private void ConfigureCameraRestrictions(

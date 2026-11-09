@@ -148,16 +148,11 @@ namespace Common.systems.UI
             Transform root = winInfo.selfCanvas ? null : canvas?.transform;
             var go = container.InstantiatePrefab(winInfo.prefab, root);
 
-
-            var vm = container.Instantiate(winInfo.ViewModelType);
-
-
             var view = go.GetComponent<IViewFor>();
-            view.SetContext(vm);
-
+            view.Initialize();
 
             openedWindows[winInfo] = view;
-            ViewModel = vm;
+            ViewModel = view.GetViewModel();
 
             
             return options;
@@ -177,8 +172,7 @@ namespace Common.systems.UI
             view.Cleanup();
 
             Destroy((view as MonoBehaviour).gameObject);
-
-
+            
             openedWindows.Remove(winInfo);
 
             return true;
@@ -200,7 +194,7 @@ namespace Common.systems.UI
             var winInfo = windowsDatabase.GetWindow(uri);
 
             if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
-                return; // окно не открыто
+                return; 
 
             if(view is MonoBehaviour viewMono)
             {
@@ -213,7 +207,7 @@ namespace Common.systems.UI
             var winInfo = windowsDatabase.GetWindow(uri);
 
             if (!openedWindows.TryGetValue(winInfo, out var view) || view == null)
-                return; // окно не открыто
+                return; 
 
             if (view is MonoBehaviour viewMono && viewMono)
             {

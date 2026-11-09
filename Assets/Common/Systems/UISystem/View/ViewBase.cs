@@ -1,5 +1,6 @@
 using Common.systems.UI.View;
 using UnityEngine;
+using Zenject;
 
 namespace Common.systems.UI.View
 {
@@ -7,6 +8,7 @@ namespace Common.systems.UI.View
     {
         protected TViewModel ViewModel { get; private set; }
 
+        [Inject] private DiContainer _container;
 
         protected virtual void OnViewModelAssigned()
         {
@@ -16,6 +18,17 @@ namespace Common.systems.UI.View
         public virtual void Cleanup()
         {
             // Отписка от событий
+        }
+
+        public object GetViewModel()
+        {
+            return ViewModel;
+        }
+
+        public void Initialize()
+        {
+            var vm = _container.Instantiate<TViewModel>();
+            SetContext(vm);
         }
 
         public void SetContext(object viewModel)

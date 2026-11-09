@@ -41,7 +41,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.PlayersCinematic.Syste
                 if(playerView == null)
                     continue;
 
-                playerView.PlayerLooTarget.position = loocAtComponent.Position;
+                playerView.PlayerLookTarget.position = loocAtComponent.Position;
             }
         }
         

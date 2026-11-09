@@ -12,7 +12,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Movement
     
     public struct MoveInputHistoryComponent : IComponent
     {
-        public MoveInputCommand[] Buffer;
+        public PlayerStateSnapShoot[] Buffer;
         public int CurrentIndex;
     }
     

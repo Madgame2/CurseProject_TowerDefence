@@ -1,4 +1,5 @@
 using Installers;
+using Installers.Lifecycles;
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
@@ -22,35 +23,43 @@ namespace Scenes.SessionRework.Scripts.Common.Installers
         [Inject] private readonly ChunkReader _chunkReaderPrefab;
         [Inject] private readonly DiContainer _container;
         [Inject] private readonly WorldHolder _worldContainer;
+        [Inject] private WorldContainerLifecycle _worldLifecycle;
         
         public void Initialize()
         {
             if (!ValidateWorldData())
             {
-                Debug.LogError("Попытка инициализировать мир до получения всех данных!");
+                Debug.LogError(
+                    "Попытка инициализировать мир до получения всех данных!");
                 return;
             }
-            
+
             var ecsWorld = CreateEcsWorld();
             var diWorldContainer = CreateWorldContainer(ecsWorld);
-            
+
             InstallWorlds(diWorldContainer, ecsWorld);
-            
+
+            // Запускаем жизненный цикл сервисов дочернего контейнера.
+            _worldLifecycle.Attach(diWorldContainer);
+
+            // Инициализируем игроков после запуска сервисов мира.
+            //diWorldContainer.Resolve<PlayersInitializer>().Initialize();
+
             Debug.Log("Контекст мира успешно создан и проинициализирован!");
         }
         
-        private void InstallWorlds(DiContainer diWorldContainer, Scellecs.Morpeh.World ecsWorld)
+        private void InstallWorlds(
+            DiContainer diWorldContainer,
+            Scellecs.Morpeh.World ecsWorld)
         {
-            EcsWorldInstaller.Install(
-                ecsWorld,
-                diWorldContainer);
+            EcsWorldInstaller.Install(ecsWorld, diWorldContainer);
             
+            //diWorldContainer.Resolve<InitializableManager>().Initialize();
+            //diWorldContainer.Resolve<TickableManager>().Initialize();
+
             _worldContainer.SetWorldContainer(
-                new WorldContext(
-                    diWorldContainer,
-                    ecsWorld));
+                new WorldContext(diWorldContainer, ecsWorld));
         }
-        
         private Scellecs.Morpeh.World CreateEcsWorld()
         {
             var ecsWorld = Scellecs.Morpeh.World.Create();
@@ -62,8 +71,6 @@ namespace Scenes.SessionRework.Scripts.Common.Installers
         private DiContainer CreateWorldContainer(World ecsWorld)
         {
             var worldContainer = _container.CreateSubContainer();
-
-            //ZenjectManagersInstaller.Install(worldContainer);
 
             var pendingData = new WorldInitializationData(
                 _getBackendParam.ChunksSettings,
@@ -84,6 +91,8 @@ namespace Scenes.SessionRework.Scripts.Common.Installers
 
             return worldContainer;
         }
+        
+        
         
         private bool ValidateWorldData()
         {

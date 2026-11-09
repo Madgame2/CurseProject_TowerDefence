@@ -20,6 +20,7 @@ namespace Scenes.SessionRework.Scripts.Network.Controllers
         public void Dispose()
         {
             _webSocket.Off("PREPARE_FOR_SYNC", goToSyncState);
+            _webSocket.Off<UdpTokenMessage>("UPD_TOKEN", handleUdpToken);
             _webSocket.Off<ChunkMetaDatasMessage>("METADATA_CHUNK_SETTINGS", handleChunkMetaData);
             _webSocket.Off<WorldGenerationRules>("METADATA_WORLD_GENERATION_SETTINGS", handleWorldGenerationMetaData);
             _webSocket.Off<DecorationRulesMessage>("METADATA_DECORATION_RULES", handleDecorationRulesMessage);

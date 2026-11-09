@@ -1,0 +1,60 @@
+using Scellecs.Morpeh;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Movement;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
+using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Input.Compoennts;
+using UnityEngine;
+
+namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
+{
+    public class AlternativeFireActionSystem:ISystem
+    {
+        public World World { get; set; }
+        
+        private Filter _filter;
+        private Stash<AlternativeActionComponent> _inputStash;
+        
+        private readonly BaseInputActions _inputs;
+
+        public AlternativeFireActionSystem(World world, BaseInputActions inputs)
+        {
+            World = world;
+            _inputs = inputs;
+        }
+        
+        public void OnAwake()
+        {
+            _inputs.Enable();
+            
+            _filter = World.Filter.With<IDComponent>().With<MyPlayerComponent>().With<InputComponent>().Build();
+            _inputStash = World.GetStash<AlternativeActionComponent>();
+        }
+        public void OnUpdate(float deltaTime)
+        {
+            var isPressedThisFrame = _inputs.SessionPlayer.RightClick.WasPressedThisFrame();
+            var isReleasedThisFrame = _inputs.SessionPlayer.RightClick.WasReleasedThisFrame();
+            
+            
+            foreach (var entity in _filter)
+            {
+                ref var input = ref _inputStash.Get(entity);
+
+                if (isPressedThisFrame)
+                    input.IsPressed = true;
+                else if (isReleasedThisFrame)
+                    input.IsPressed = false;
+                
+                input.WasPressed = isPressedThisFrame;
+                input.WasReleased = isReleasedThisFrame;
+            }
+        }
+        public void Dispose()
+        {
+            _inputs?.Disable();
+            if (Application.isPlaying) 
+            {
+                _inputs?.Dispose();
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ using Common.Services.Net.Modules;
 using Common.systems.SceneStates;
 using Common.systems.SceneStates.States;
 using Common.systems.SceneStates.States.Attributes;
+using Common.systems.UI;
 using Scenes.SessionRework.Scripts.Network.Ineterfaces;
 using UnityEngine;
 using Zenject;
@@ -17,6 +18,7 @@ namespace Scenes.SessionRework.SceneStates.States
     [LinkToScene(typeof(SessionReworkScene))]
     public class ConnectionToServerState: BaseState
     {
+        [Inject] private readonly UIManager _uiManager;
         [Inject] private readonly INetworkClient  _networkClient;
         [Inject] private readonly ISessionSyncController _sessionSyncController;
         
@@ -24,7 +26,15 @@ namespace Scenes.SessionRework.SceneStates.States
         {
             try
             {
-                await TryConnectToServer();
+                _uiManager.TryOpen("ConnectToServer", out var vm);
+                
+                var connectToServerViewModel = (vm as ConnectToServerViewModel);
+
+                await connectToServerViewModel.ConnectionTask;
+
+                _uiManager.Close("ConnectToServer");
+                
+                //await TryConnectToServer();
                 
                 _sessionSyncController.SubscribeToServerEvents();
                 _sessionSyncController.SendClientReady();
@@ -42,7 +52,11 @@ namespace Scenes.SessionRework.SceneStates.States
 
         private async Task TryConnectToServer()
         {
-            var headers = new Dictionary<string, string>() { { "EnterMode", "Development" }, };
+            var headers = new Dictionary<string, string>()
+            {
+                { "EnterMode", "Development" },
+                {"SessionId", "Development"}
+            };
             await _networkClient.TryCreateConnectionTo("127.0.0.1", 5041, headers);
         }
     }

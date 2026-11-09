@@ -2,6 +2,7 @@ using Common.Services.Net.Contracts;
 using Common.Services.Net.Interfaces;
 using Scellecs.Morpeh;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
+using Scenes.SessionRework.Scripts.ECS_World.Components.Geometry;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Simulation.Requests;
 using Scenes.SessionRework.Scripts.Network.DTO;
@@ -20,6 +21,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         private Stash<SetPositionRequest> _setPositionRequestStash;
         private Stash<SetVelocityRequest> _setVelocityRequestStash;
         private Stash<SetMovementStateRequest> _setMovementStateRequestStash;
+        private Stash<LookAtComponent> _lookAtComponentStash;
+        private Stash<RotationComponent> _rotationComponentStash;
+        private Stash<MyPlayerComponent> _myPlayerComponentStash;
         
         private Filter _filter;
 
@@ -38,6 +42,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
             _setPositionRequestStash = World.GetStash<SetPositionRequest>();
             _setVelocityRequestStash =  World.GetStash<SetVelocityRequest>();
             _setMovementStateRequestStash = World.GetStash<SetMovementStateRequest>();
+            _lookAtComponentStash  = World.GetStash<LookAtComponent>();
+            _myPlayerComponentStash =  World.GetStash<MyPlayerComponent>();
+            _rotationComponentStash =  World.GetStash<RotationComponent>();
             
             _filter = World.Filter.With<IDComponent>().With<PlayerComponent>().Build();
             
@@ -84,6 +91,19 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                     {
                         NewMovementState = playerState.MovementState,
                     });
+
+                    if (!_myPlayerComponentStash.Has(player))
+                    {
+                        _lookAtComponentStash.Set(player, new LookAtComponent
+                        {
+                            Position =  new Vector3(playerState.LookAt.x, playerState.LookAt.y, playerState.LookAt.z),
+                        });
+                        
+                        _rotationComponentStash.Set(player, new RotationComponent
+                        {
+                            Rotation = playerState.Rotation,
+                        });
+                    }
                 }
             }
         }

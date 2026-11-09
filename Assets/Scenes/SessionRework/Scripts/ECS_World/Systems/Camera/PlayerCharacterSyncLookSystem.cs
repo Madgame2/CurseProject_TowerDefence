@@ -63,13 +63,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Camera
                 ref var playerComponent = ref _playerStash.Get(playerEntity);
                 var playerView = playerComponent.PlayerView;
 
-                if (playerView == null || playerView.PlayerLooTarget == null) continue;
+                //if (playerView == null || playerView.PlayerLooTarget == null) continue;
                 
-                playerView.PlayerLooTarget.position = Vector3.Lerp(
-                    playerView.PlayerLooTarget.position, 
-                    targetAimPosition, 
-                    deltaTime * 20f
-                );
+
             }
         }
         

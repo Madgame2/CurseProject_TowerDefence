@@ -6,5 +6,7 @@ namespace Common.systems.UI.View
     {
         void SetContext(object viewModel);
         void Cleanup();
+        object GetViewModel();
+        void Initialize();
     }
 }

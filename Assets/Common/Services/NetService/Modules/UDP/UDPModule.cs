@@ -49,6 +49,7 @@ namespace Common.Services.Net.Modules
             _ = ReceiveLoopAsync(_cancellationTokenSource.Token);
         }
         
+        
         private async Task ReceiveLoopAsync(CancellationToken token)
         {
             Memory<byte> bufferMemory = _receiveBuffer.AsMemory();

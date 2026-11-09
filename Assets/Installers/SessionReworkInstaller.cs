@@ -1,6 +1,8 @@
 using Common.systems.GameStates;
 using Common.systems.SceneStates;
 using Common.systems.SceneStates.Graph;
+using Common.systems.UI;
+using Installers.Lifecycles;
 using Scenes.SessionRework;
 using Scenes.SessionRework.Scripts.Cameras;
 using Scenes.SessionRework.Scripts.Common.Installers;
@@ -27,16 +29,19 @@ namespace Installers
 {
     public class SessionReworkInstaller : MonoInstaller
     {
+        [SerializeField] private UIManager _uiManager;
         [SerializeField] private ChunkReader ChunkReaderPrefab;
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private CameraView _cameraView;
+        [SerializeField] private StateMachineConfig _cameraStateMachineConfig;
         
         public override void InstallBindings()
         {
+            Container.BindInstance(_uiManager);
             Container.BindInstance(ChunkReaderPrefab);
             Container.BindInstance(_playerView);
             Container.BindInstance(_cameraView);
-
+            Container.BindInstance(_cameraStateMachineConfig);
             
             Container.Bind<GraphReader>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneStateMachine<SessionReworkScene>>().AsSingle().NonLazy();
@@ -74,6 +79,10 @@ namespace Installers
 
             Container.Bind<IDecorationRulesParser>().To<DecorationRulesParser>().AsTransient();
             Container.Bind<IWorldInitializer>().To<WorldInitializer>().AsTransient();
+            
+            Container.BindInterfacesAndSelfTo<WorldContainerLifecycle>()
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

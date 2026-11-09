@@ -11,6 +11,8 @@ using Scenes.SessionRework.Scripts.GameWorld.Graph.LandscapeGraph.Interfaces;
 using Scenes.SessionRework.Scripts.GameWorld.Interfaces;
 using Scenes.SessionRework.Scripts.GameWorld.Pool;
 using Scenes.SessionRework.Scripts.GameWorld.Providers;
+using Scenes.SessionRework.Scripts.Player;
+using Scenes.SessionRework.Scripts.Player.Interfaces;
 using Scenes.SessionRework.Scripts.Player.View;
 using Zenject;
 
@@ -29,6 +31,8 @@ namespace Installers
         
         public override void InstallBindings()
         {
+            Container.Bind<Kernel>().AsSingle();
+            
             // 1. Биндим настройки и графы как инстансы
             Container.BindInstance(_initData.EcsWorld);
             Container.BindInstance(_initData.Settings).AsSingle();
@@ -48,6 +52,8 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<ChunkCache>().AsSingle();
             Container.BindInterfacesAndSelfTo<WorldProvider>().AsSingle();
             
+            
+            Container.Bind<IPlayableCharacterView>().To<PlayableCharacterView>().AsSingle();
             Container.Bind<IPlayerFactory>().To<PlayerFactory>().AsSingle();
 
 

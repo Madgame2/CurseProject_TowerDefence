@@ -35,9 +35,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems
                 ref var rotationComponent = ref _rotationStash.Get(entity);
                 ref var view = ref _unityViewStash.Get(entity);
             
-                if (view.Transform != null)
+                if (view.PositionTransform != null)
                 {
-                    view.Transform.rotation = rotationComponent.Rotation;
+                    view.RotationTransform.rotation = rotationComponent.Rotation;
                 }
             }
         }

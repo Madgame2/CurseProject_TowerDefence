@@ -9,7 +9,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Common
     public struct UnityViewComponent : IComponent
     {
         public GameObject GameObject;
-        public Transform Transform;
+        public Transform PositionTransform;
+        public Transform RotationTransform;
         public Animator Animator;
     }
 

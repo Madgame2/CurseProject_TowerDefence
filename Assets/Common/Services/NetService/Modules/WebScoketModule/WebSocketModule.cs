@@ -39,6 +39,39 @@ namespace Common.Services.Net.Modules
 
         public bool IsConnected => _isConnected;
 
+        public static async Task<ClientWebSocket> tryCreateConnectionTo(Uri baseUri,
+            Dictionary<string, string> headers = null,
+            CancellationToken ct = default)
+        {
+            var ws = new ClientWebSocket();
+
+            if (headers != null)
+            {
+                foreach (var kv in headers)
+                {
+                    ws.Options.SetRequestHeader(kv.Key, kv.Value);
+                }
+            }
+
+            var uri = new Uri(baseUri, "ws");
+            
+            try
+            {
+                await ws.ConnectAsync(uri, ct);
+                return ws;
+            }
+            catch (OperationCanceledException)
+            {
+                ws.Dispose();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                ws.Dispose();
+                throw new Exception($"Failed to connect to session server: {uri}", ex);
+            }
+        }
+        
         public static async Task<ClientWebSocket> tryCreateConnectionTo(string hostAddress,
             Dictionary<string, string> headers = null,
             CancellationToken ct = default)
