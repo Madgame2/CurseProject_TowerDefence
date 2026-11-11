@@ -18,7 +18,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             group.AddSystem(container.Instantiate<JumpInputSystem>());
             
             group.AddSystem(container.Instantiate<MovementConvertCordsSystem>());
-            group.AddSystem(container.Instantiate<StateBufferWriteSystem>());
+
+            group.AddSystem(container.Instantiate<MoveSnapshotSystem>());
+            //group.AddSystem(container.Instantiate<StateBufferWriteSystem>());
         }
     }
 }
