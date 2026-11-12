@@ -99,9 +99,10 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                             Position =  new Vector3(playerState.LookAt.x, playerState.LookAt.y, playerState.LookAt.z),
                         });
                         
+                        
                         _rotationComponentStash.Set(player, new RotationComponent
                         {
-                            Rotation = playerState.Rotation,
+                            Rotation = new Quaternion(playerState.Rotation.x, playerState.Rotation.y, playerState.Rotation.z, playerState.Rotation.w),
                         });
                     }
                 }

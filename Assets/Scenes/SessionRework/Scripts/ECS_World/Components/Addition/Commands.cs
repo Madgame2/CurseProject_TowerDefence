@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Components.Addition
 {
-    public struct PlayerStateSnapShoot
+    public struct PlayerStateSnapshot
     {
         public uint Tick;
         public Vector3 MoveDirection;

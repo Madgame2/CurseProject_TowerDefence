@@ -184,7 +184,6 @@ namespace Editor.Interfaces.Services
 
                 case TransportFlags.Reliable:
 
-                    Debug.Log("Пришел Reliable");
                     // Подтверждаем получение даже повторного пакета.
                     SendAck(sequenceId);
 

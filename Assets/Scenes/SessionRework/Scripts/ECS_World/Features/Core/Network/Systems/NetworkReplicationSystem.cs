@@ -8,6 +8,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Factories.Interfaces;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Player.Model;
 using Scenes.SessionRework.Scripts.Network.DTO;
 using Scenes.SessionRework.Scripts.Services.Replication.Models;
+using Scenes.SessionRework.Scripts.Services.Replication.Router.Interfaces;
 using UnityEngine;
 using EventType = Scenes.SessionRework.Scripts.Services.Replication.Events.EventType;
 
@@ -19,14 +20,16 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.Systems
         
         private readonly INetworkClient _networkClient;
         private readonly IPlayerFactory _playerFactory;
+        private readonly IReplicationRouter _replicationRouter;
         
         private Stash<PlayerComponent>  _stash;
 
         private uint _lastProcesedTick = 0;
 
-        public NetworkReplicationSystem(World world,  INetworkClient networkClient, IPlayerFactory playerFactory)
+        public NetworkReplicationSystem(World world, IReplicationRouter replicationRouter,  INetworkClient networkClient, IPlayerFactory playerFactory)
         {
             World = world;
+            _replicationRouter = replicationRouter;
             _networkClient = networkClient;
             _playerFactory = playerFactory;
         }
@@ -67,49 +70,25 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.Systems
             if (_lastProcesedTick >= obj.ServerTick)
                 return;
 
-            for (int i = 0; i < obj.ValidEntriesCount; i++)
+            try
             {
-                ref readonly var entry = ref obj.Entries[i];
-
-                if (_lastProcesedTick >= entry.Tick)
-                    continue;
-
-                _lastProcesedTick = entry.Tick;
-
-                var serverEvent = entry.Event;
-
-                if (serverEvent.eventType == EventType.SpawnEvent)
+                for (int i = 0; i < obj.ValidEntriesCount; i++)
                 {
-                    var spawnEvent = serverEvent.spawnEvent;
+                    ref readonly var entry = ref obj.Entries[i];
 
-                    if (spawnEvent.objectType == ObjectType.Player)
-                    {
-                        // Проверяем, существует ли объект с таким ObjectId
-                        uint objectId = spawnEvent.objectId;
-                        
-                        if (ExistsObject(objectId))
-                            continue;
+                    if (_lastProcesedTick >= entry.Tick)
+                        continue;
+                    
+                    _lastProcesedTick = entry.Tick;
 
-                        var payload = spawnEvent.payload.playerPayload;
+                    var serverEvent = entry.Event;
 
-                        try
-                        {
-                            Debug.Log("СОЗДАЮ");
-
-                            _playerFactory.CreatePlayer(new PlayerData
-                            {
-                                PlayerId = payload.playerID,
-                                ObjectId = objectId,
-                                Position = payload.Transforms.Position,
-                                IsPlaying = false,
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogError(ex);
-                        }
-                    }
+                    _replicationRouter.Route(serverEvent);
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
             }
         }
     }

@@ -10,6 +10,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Systems.Input;
 using Scenes.SessionRework.Scripts.GameWorld.Core.interfaces.BackendParams;
 using Scenes.SessionRework.Scripts.Network.DTO;
 using UnityEngine;
+using PlayerStateSnapshot = Scenes.SessionRework.Scripts.ECS_World.Components.Addition.PlayerStateSnapshot;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
 {
@@ -17,10 +18,10 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
     {
         public World World { get; set; }
         
-        private Filter _playerFilter;
+        private Filter _historyFilter;
         private Filter _simulationFilter;
         
-        private Stash<MoveInputHistoryComponent> _historyStash;
+        private Stash<PlayerStateHistoryComponent> _historyStash;
         private Stash<ClientSimulationComponent> _simStash;
         
         private INetworkClient _networkClient;
@@ -39,9 +40,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         
         public void OnAwake()
         {
-            _playerFilter = World.Filter
-                .With<PlayerComponent>()
-                .With<MoveInputHistoryComponent>()
+            _historyFilter = World.Filter
+                .With<PlayerStateHistoryComponent>()
                 .Build();
 
 
@@ -49,7 +49,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                 .With<ClientSimulationComponent>()
                 .Build();
 
-            _historyStash = World.GetStash<MoveInputHistoryComponent>();
+            _historyStash = World.GetStash<PlayerStateHistoryComponent>();
             _simStash = World.GetStash<ClientSimulationComponent>();
         }
         
@@ -65,11 +65,11 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
             var simEntity = _simulationFilter.First();
             var currentTick = _simStash.Get(simEntity).Tick;
 
-            foreach (var entity in _playerFilter)
+            foreach (var entity in _historyFilter)
             {
                 ref var history = ref _historyStash.Get(entity);
 
-                var inputs = ArrayPool<PlayerStateSnapShoot>.Shared.Rent(
+                var inputs = ArrayPool<PlayerStateSnapshot>.Shared.Rent(
                     history.Buffer.Length);
 
                 try
@@ -86,11 +86,13 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
                         Inputs = inputs
                     };
 
+                    //Debug.Log(packet);
+                    
                     _networkClient.SendByUDP(packet);
                 }
                 finally
                 {
-                    ArrayPool<PlayerStateSnapShoot>.Shared.Return(inputs);
+                    ArrayPool<PlayerStateSnapshot>.Shared.Return(inputs);
                 }
             }
         }
@@ -100,9 +102,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Network
         }
         
         private static void FlattenRingBuffer(
-            PlayerStateSnapShoot[] buffer,
+            PlayerStateSnapshot[] buffer,
             int headIndex,
-            PlayerStateSnapShoot[] result)
+            PlayerStateSnapshot[] result)
         {
             for (int i = 0; i < buffer.Length; i++)
             {

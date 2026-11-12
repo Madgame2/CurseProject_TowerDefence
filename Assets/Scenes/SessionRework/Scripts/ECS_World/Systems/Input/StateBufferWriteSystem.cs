@@ -16,7 +16,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         private Filter _playersFilter;
         
         private Stash<InputComponent> _inputStash;
-        private Stash<MoveInputHistoryComponent> _moveHistoryStash;
+        private Stash<PlayerStateHistoryComponent> _moveHistoryStash;
         private Stash<ClientSimulationComponent> _clientSimulationStash;
         private Stash<JumpRequestComponent> _jumpRequestStash;
         private Stash<RotationComponent> _rotationStash;
@@ -30,7 +30,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
         public void OnAwake()
         {
             _inputStash = World.GetStash<InputComponent>();
-            _moveHistoryStash = World.GetStash<MoveInputHistoryComponent>();
+            _moveHistoryStash = World.GetStash<PlayerStateHistoryComponent>();
             _clientSimulationStash = World.GetStash<ClientSimulationComponent>();
             _jumpRequestStash = World.GetStash<JumpRequestComponent>();
             _lookAtStash = World.GetStash<LookAtComponent>();
@@ -38,7 +38,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
             
             _tickFilter = World.Filter.With<ClientSimulationComponent>().Build();
             _playersFilter = World.Filter.With<InputComponent>()
-                .With<MoveInputHistoryComponent>()
+                .With<PlayerStateHistoryComponent>()
                 .With<LookAtComponent>()
                 .Build();
         }
@@ -63,7 +63,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Input
                         _jumpRequestStash.Remove(player);
                     }
                     
-                    var playerSnapShoot = new PlayerStateSnapShoot
+                    var playerSnapShoot = new PlayerStateSnapshot
                     {
                         MoveDirection = playerInput.MoveDirection,
                         Rotation = rotationComponent.Rotation,

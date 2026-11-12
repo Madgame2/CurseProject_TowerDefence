@@ -8,7 +8,7 @@ using Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.Alternati
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.AlternativeAction.Systems
 {
-    public class AlternativeFireActionSystem : ISystem
+    public class AlternativeActionSystem : ISystem
     {
         public World World { get; set; }
         
@@ -16,7 +16,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.Alter
         private Stash<AlternativeActionComponent> _alternativeActionStash;
         private Stash<CharacterController.PlayerControllerComponent> _playerControllerStash;
         
-        public AlternativeFireActionSystem(World world)
+        public AlternativeActionSystem(World world)
         {
             World = world;
         }

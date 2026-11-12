@@ -2,6 +2,7 @@ using System;
 using System.Buffers.Binary;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using Common.Services.Net.Contracts;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Addition;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Simulation;
@@ -23,7 +24,36 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
         public PacketType Type => PacketType.MoveInput;
 
         public uint LastTick;
-        public PlayerStateSnapShoot[] Inputs;
+        public ECS_World.Components.Addition.PlayerStateSnapshot[] Inputs;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"[MoveInput Packet]");
+            sb.AppendLine($"UdpToken: {UdpToken}");
+            sb.AppendLine($"Type: {Type}");
+            sb.AppendLine($"LastTick: {LastTick}");
+            sb.AppendLine($"Inputs Count: {Inputs?.Length ?? 0}");
+
+            if (Inputs != null)
+            {
+                for (int i = 0; i < Inputs.Length; i++)
+                {
+                    var input = Inputs[i];
+
+                    sb.AppendLine(
+                        $"  [{i}] Tick: {input.Tick}, " +
+                        $"MoveDirection: {input.MoveDirection}, " +
+                        $"Rotation: {input.Rotation}, " +
+                        $"LookAtPoint: {input.LookAtPoint}, " +
+                        $"Actions: {input.Actions}"
+                    );
+                }
+            }
+
+            return sb.ToString();
+        }
 
         public int Serialize(Span<byte> buffer)
         {
@@ -68,7 +98,7 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
         private static void WriteInput(
             Span<byte> buffer,
             ref int offset,
-            in PlayerStateSnapShoot input)
+            in ECS_World.Components.Addition.PlayerStateSnapshot input)
         {
             BinaryPrimitives.WriteUInt32LittleEndian(
                 buffer.Slice(offset), input.Tick);

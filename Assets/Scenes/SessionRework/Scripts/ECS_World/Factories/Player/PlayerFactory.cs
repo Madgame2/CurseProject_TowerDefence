@@ -29,7 +29,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
         private readonly Stash<PlayerComponent> _playerStash;
         private readonly Stash<UnityViewComponent> _viewStash;
         private readonly Stash<InputComponent> _inputStash;
-        private readonly Stash<MoveInputHistoryComponent> _inputHistoryStash;
+        //private readonly Stash<PlayerStateHistoryComponent> _inputHistoryStash;
         private readonly Stash<MyPlayerComponent> _myPlayerStash;
         private readonly Stash<RotationComponent>  _rotationStash;
         private readonly Stash<VelocityComponent> _velocityStash;
@@ -46,7 +46,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             _playerStash = _world.GetStash<PlayerComponent>();
             _viewStash = _world.GetStash<UnityViewComponent>();
             _inputStash = _world.GetStash<InputComponent>();
-            _inputHistoryStash = _world.GetStash<MoveInputHistoryComponent>();
+            //_inputHistoryStash = _world.GetStash<PlayerStateHistoryComponent>();
             _myPlayerStash = world.GetStash<MyPlayerComponent>();
             _rotationStash = world.GetStash<RotationComponent>();
             _velocityStash = world.GetStash<VelocityComponent>();
@@ -84,7 +84,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             
             _rotationStash.Set(entity, new RotationComponent
             {
-                Rotation = Quaternion.identity
+                Rotation = data.Rotation
             });
             
             _velocityStash.Set(entity);
@@ -102,13 +102,6 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player
             _myPlayerStash.Set(entity, new MyPlayerComponent());
 
             _inputStash.Set(entity);
-
-            _inputHistoryStash.Set(entity,
-                new MoveInputHistoryComponent
-                {
-                    CurrentIndex = 0,
-                    Buffer = new PlayerStateSnapShoot[15]
-                });
         }
 
         private PlayerView InitializeView(Scellecs.Morpeh.Entity entity, PlayerData data)

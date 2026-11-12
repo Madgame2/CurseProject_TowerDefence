@@ -14,6 +14,9 @@ using Scenes.SessionRework.Scripts.GameWorld.Providers;
 using Scenes.SessionRework.Scripts.Player;
 using Scenes.SessionRework.Scripts.Player.Interfaces;
 using Scenes.SessionRework.Scripts.Player.View;
+using Scenes.SessionRework.Scripts.Services.Replication.Router.ExtentionsMethod;
+using Scenes.SessionRework.Scripts.Services.Replication.Router.Implementation;
+using Scenes.SessionRework.Scripts.Services.Replication.Router.Interfaces;
 using Zenject;
 
 namespace Installers
@@ -52,12 +55,12 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<ChunkCache>().AsSingle();
             Container.BindInterfacesAndSelfTo<WorldProvider>().AsSingle();
             
-            
             Container.Bind<IPlayableCharacterView>().To<PlayableCharacterView>().AsSingle();
             Container.Bind<IPlayerFactory>().To<PlayerFactory>().AsSingle();
-
-
+            
             Container.Bind<PlayersInitializer>().AsSingle();
+            
+            Container.AddReplicationRouterService();
         }
     }
 }

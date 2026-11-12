@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Services.Net.Contracts;
+using UnityEngine;
 
 namespace Common.Services.Net.Services.PacketProcessor
 {
@@ -11,16 +12,24 @@ namespace Common.Services.Net.Services.PacketProcessor
         
         public void Process(ReadOnlySpan<byte> payload)
         {
-            T packet = default; 
-            
-            packet.Deserialize(payload);
-            
-            foreach (var handler in _handlers)
+            T packet = default;
+            try
             {
-                handler.Invoke(packet); 
+                packet.Deserialize(payload);
+
+                foreach (var handler in _handlers)
+                {
+                    handler.Invoke(packet);
+                }
             }
-            
-            packet.Release();
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                packet.Release();
+            }
         }
 
         public void AddHandler(Delegate handler) => _handlers.Add((Action<T>)handler);

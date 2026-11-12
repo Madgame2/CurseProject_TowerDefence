@@ -75,6 +75,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             DiContainer container)
         {
             systemsGroup.AddSystem(container.Instantiate<CameraInputSystem>());
+            systemsGroup.AddSystem(container.Instantiate<MakeSnapeshotSystem>());
         }
     }
 }

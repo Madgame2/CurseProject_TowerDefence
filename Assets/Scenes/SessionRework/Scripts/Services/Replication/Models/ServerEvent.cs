@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Scenes.SessionRework.Scripts.Network.Meta.Enums;
 using Scenes.SessionRework.Scripts.Services.Replication.Events;
 using Scenes.SessionRework.Scripts.Services.Replication.Events.Despawn;
+using Scenes.SessionRework.Scripts.Services.Replication.Events.Gameplay;
 using Scenes.SessionRework.Scripts.Services.Replication.Events.Spawn;
 using Scenes.SessionRework.Scripts.Services.Replication.Events.Spawn.Payload;
 
@@ -19,6 +20,9 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Models
 
         [FieldOffset(1)]
         public DespawnEvent despawnEvent;
+        
+        [FieldOffset(1)]
+        public GameplayEvent gameplayEvent;
 
         public int GetSize()
         {
@@ -26,6 +30,7 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Models
             {
                 EventType.SpawnEvent => 1 + spawnEvent.GetSize(),
                 EventType.DespawnEvent => 1 + DespawnEvent.ByteSize,
+                EventType.GamePlay => 1 + gameplayEvent.GetSize(),
                 _ => throw new NotSupportedException()
             };
         }
@@ -47,6 +52,9 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Models
                 EventType.DespawnEvent =>
                     despawnEvent.WriteTo(destination.Slice(1)),
 
+                EventType.GamePlay =>
+                    gameplayEvent.WriteTo(destination.Slice(1)),
+                
                 _ => throw new NotSupportedException()
             };
 
@@ -74,6 +82,10 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Models
                     offset += DespawnEvent.ByteSize;
                     break;
 
+                case EventType.GamePlay:
+                    offset += gameplayEvent.ReadFrom(source.Slice(offset));
+                    break;
+                
                 default:
                     throw new NotSupportedException(
                         $"Unsupported event type: {eventType}");

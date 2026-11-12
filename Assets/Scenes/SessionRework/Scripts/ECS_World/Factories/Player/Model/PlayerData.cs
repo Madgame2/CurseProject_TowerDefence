@@ -8,6 +8,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Factories.Player.Model
         public uint PlayerId;
         public uint ObjectId;
         public Vector3 Position;
+        public Quaternion Rotation;
         public bool IsPlaying;
     }
 }

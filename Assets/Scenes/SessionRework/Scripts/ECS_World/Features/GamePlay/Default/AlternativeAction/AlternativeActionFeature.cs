@@ -13,7 +13,8 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.Alter
 
         private static void AddSystems(World world, SystemsGroup group, DiContainer container)
         {
-            group.AddSystem(container.Instantiate<AlternativeFireActionSystem>());
+            group.AddSystem(container.Instantiate<AlternativeActionSystem>());
+            group.AddSystem(container.Instantiate<AlternativeActionMakeSnapShoot>());
         }
     }
 }

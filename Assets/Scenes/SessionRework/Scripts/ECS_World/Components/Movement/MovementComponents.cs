@@ -10,9 +10,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Components.Movement
         public Vector3 MoveDirection;
     }
     
-    public struct MoveInputHistoryComponent : IComponent
+    public struct PlayerStateHistoryComponent : IComponent
     {
-        public PlayerStateSnapShoot[] Buffer;
+        public PlayerStateSnapshot[] Buffer;
         public int CurrentIndex;
     }
     

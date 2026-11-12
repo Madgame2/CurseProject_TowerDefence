@@ -30,7 +30,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.System
             _skadiControllerFactory =  _container.Instantiate<SkadiControllerFactoryModule>();
             
             _characterFilter = World.Filter
-                .With<MyPlayerComponent>()
+                .With<PlayerComponent>()
                 .Without<CharacterController.PlayerControllerComponent>()
                 .Build();
             

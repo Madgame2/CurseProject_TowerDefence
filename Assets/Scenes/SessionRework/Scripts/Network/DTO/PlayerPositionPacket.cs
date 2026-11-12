@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -60,7 +61,7 @@ namespace Scenes.SessionRework.Scripts.Network.DTO
         {
             if (PlayersState != null)
             {
-                System.Buffers.ArrayPool<PlayerState>.Shared.Return(PlayersState);
+                ArrayPool<PlayerState>.Shared.Return(PlayersState);
                 PlayersState = null;
             }
         }

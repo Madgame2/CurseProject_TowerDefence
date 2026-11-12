@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Common.Services.Net.Modules
 {
@@ -63,9 +64,9 @@ namespace Common.Services.Net.Modules
                     if (receivedBytes > 0)
                     {
                         byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(receivedBytes);
-                        
+
                         _receiveBuffer.AsSpan(0, receivedBytes).CopyTo(rentedBuffer);
-                        
+
                         ProcessPacket(rentedBuffer, receivedBytes);
                     }
                 }
@@ -77,7 +78,11 @@ namespace Common.Services.Net.Modules
             catch (SocketException ex)
             {
 
-                Console.WriteLine($"Socket error: {ex.Message}");
+                Debug.LogError($"Socket error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Udp error: {ex.Message}");
             }
         }
 

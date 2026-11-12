@@ -53,13 +53,29 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Systems.Animation
                     continue;
                 }
                 
-                Vector3 localVelocity = math.rotate(math.inverse(rotationComponent.Rotation), velocityComponent.WorldVelocity);
-                
-                float moveX = localVelocity.x;
-                float moveY = localVelocity.z;
-                
-                animRef.SetFloat(AnimatorReferenceComponent.MoveXHash, moveX, 0.1f, deltaTime);
-                animRef.SetFloat(AnimatorReferenceComponent.MoveYHash, moveY, 0.1f, deltaTime);
+                Vector3 localVelocity = math.rotate(
+                    math.inverse(rotationComponent.Rotation),
+                    velocityComponent.WorldVelocity
+                );
+
+                const float maxSpeed = 2f;
+
+                float moveX = math.clamp(localVelocity.x / maxSpeed, -1f, 1f);
+                float moveY = math.clamp(localVelocity.z / maxSpeed, -1f, 1f);
+
+                animRef.SetFloat(
+                    AnimatorReferenceComponent.MoveXHash,
+                    moveX,
+                    0.1f,
+                    deltaTime
+                );
+
+                animRef.SetFloat(
+                    AnimatorReferenceComponent.MoveYHash,
+                    moveY,
+                    0.1f,
+                    deltaTime
+                );
             }
         }
         
