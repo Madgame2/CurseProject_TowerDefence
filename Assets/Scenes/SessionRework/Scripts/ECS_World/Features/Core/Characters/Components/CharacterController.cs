@@ -1,5 +1,5 @@
 using Scellecs.Morpeh;
-using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Meta;
+using Scenes.SessionRework.Characters.Base.Interfaces;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.Components
 {
@@ -7,7 +7,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.Compon
     {
         public struct PlayerControllerComponent : IComponent
         {
-            public CharacterControllerBase CharacterController;
+            public ICharacterGameplayEventHandler  Handler;
         }
     }
 }

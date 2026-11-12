@@ -1,4 +1,5 @@
 using Scellecs.Morpeh;
+using Scenes.SessionRework.Characters.Base.Models;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Common;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.Components;
@@ -15,6 +16,7 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Router.Modules.Gamep
         private World _world;
         private Filter _playerFilter;
         private Stash<IDComponent> _idStash;
+        private Stash<MyPlayerComponent> _myPlayerStash;
         private Stash<CharacterController.PlayerControllerComponent> _characterControllerStash;
 
         public GameplayRouterModule(World world)
@@ -23,6 +25,7 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Router.Modules.Gamep
             
             _idStash = _world.GetStash<IDComponent>();
             _characterControllerStash = _world.GetStash<CharacterController.PlayerControllerComponent>();
+            _myPlayerStash =  _world.GetStash<MyPlayerComponent>();
         }
         
         
@@ -38,7 +41,9 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Router.Modules.Gamep
             }
         }
 
-        private void ProcessPlayerEvent(uint objectID,PlayerGameplayEventPayload payloadPlayerEvent)
+        private void ProcessPlayerEvent(
+            uint objectId,
+            PlayerGameplayEventPayload payload)
         {
             if (_playerFilter == null)
             {
@@ -52,15 +57,30 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Router.Modules.Gamep
             foreach (var playerEntity in _playerFilter)
             {
                 ref var idComponent = ref _idStash.Get(playerEntity);
-                
-                if(idComponent.NetId != objectID)
+
+                if (idComponent.NetId != objectId)
+                    continue;
+
+                if(_myPlayerStash.Has(playerEntity))
                     continue;
                 
-                ref var characterControllerComponent = ref _characterControllerStash.Get(playerEntity);
+                ref var controllerComponent =
+                    ref _characterControllerStash.Get(playerEntity);
 
-                var characterController = characterControllerComponent.CharacterController;
+                var handler = controllerComponent.Handler;
 
-                characterController.ProcessAbylity(payloadPlayerEvent.ActionId, payloadPlayerEvent.EventType);
+                if (handler == null)
+                    return;
+
+                handler.HandleEvent(new CharacterGameplayEvent
+                {
+                    Source = CharacterEventSource.Network,
+                    Kind = CharacterEventKind.Ability,
+                    Id = payload.ActionId,
+                    EventType = payload.EventType
+                });
+
+                return;
             }
         }
     }

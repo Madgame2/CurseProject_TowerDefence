@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Scellecs.Morpeh;
+using Scenes.SessionRework.Characters.Base.Models;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Movement;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.Components;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Input.Compoennts;
 using Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.AlternativeAction.Meta;
+using Scenes.SessionRework.Scripts.Services.Replication.Models;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.AlternativeAction.Systems
 {
@@ -37,23 +39,34 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.Alter
         {
             foreach (var playerEntity in _filter)
             {
-                ref var alternativeActionComponent = ref _alternativeActionStash.Get(playerEntity);
-                ref var playerControllerComponent = ref _playerControllerStash.Get(playerEntity);
+                ref var action = ref _alternativeActionStash.Get(playerEntity);
+                ref var controller = ref _playerControllerStash.Get(playerEntity);
 
-                var playerController = playerControllerComponent.CharacterController;
+                var playerHandler = controller.Handler;
+                
+                if (playerHandler == null)
+                    continue;
 
-                if (playerController is IAlternativeActiveable alternativeController)
+                if (action.WasPressed)
                 {
-                    var actionModule = alternativeController.AlternativeActionModule;
-                    
-                    if(alternativeActionComponent.WasPressed)
-                        actionModule.StartProcess();
-                    
-                    if(alternativeActionComponent.IsPressed)
-                        actionModule.UpdateProcess(deltaTime);
-                    
-                    if(alternativeActionComponent.WasReleased)
-                        actionModule.StopProcess();
+                    playerHandler.HandleEvent(new CharacterGameplayEvent
+                    {
+                        Source = CharacterEventSource.LocalInput,
+                        Kind = CharacterEventKind.Input,
+                        Id = (ushort)CharacterInput.AlternativeAction,
+                        EventType = PlayerGameplayEventType.InstantAction
+                    });
+                }
+                
+                if (action.WasReleased)
+                {
+                    playerHandler.HandleEvent(new CharacterGameplayEvent
+                    {
+                        Source = CharacterEventSource.LocalInput,
+                        Kind = CharacterEventKind.Input,
+                        Id = (ushort)CharacterInput.AlternativeAction,
+                        EventType = PlayerGameplayEventType.ContinuousActionEnded
+                    });
                 }
             }
         }

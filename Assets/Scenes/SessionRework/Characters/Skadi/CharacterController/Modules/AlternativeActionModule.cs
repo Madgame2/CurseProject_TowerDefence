@@ -13,6 +13,7 @@ namespace Scenes.SessionRework.Characters.Skadi.CharacterController.Modules
     public class AlternativeActionModule:IAlternativeActionModule
     {
         private readonly ICameraController _cameraController;
+
         private PlayerView _playerView;
         
         public AlternativeActionModule(

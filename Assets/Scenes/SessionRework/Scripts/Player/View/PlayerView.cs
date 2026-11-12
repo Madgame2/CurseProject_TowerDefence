@@ -8,6 +8,7 @@ namespace Scenes.SessionRework.Scripts.Player.View
 {
     public class PlayerView: MonoBehaviour
     {
+        private static readonly int Aiming = Animator.StringToHash("IsAiming");
         [SerializeField] private CameraSettingsDefinition _cameraSettingsDefinition;
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _spineBone;
@@ -25,5 +26,22 @@ namespace Scenes.SessionRework.Scripts.Player.View
         public CameraAnchors AimingStateCameraAnchors =>_aimingStateCameraAnchors;
         public Transform PlayerLookTarget => _lookTarget;
         public Transform CharacterFacing => _characterFacing;
+
+        public void SetAiming(bool state)
+        {
+            IsAiming = state;
+
+            if (state)
+            {
+                _animator.SetTrigger("StartAiming");
+                _animator.SetBool(Aiming, true);
+            }
+            else
+            {
+                _animator.SetBool(Aiming, false);
+                //_animator.ResetTrigger("StartAiming");
+            }
+
+        }
     }
 }

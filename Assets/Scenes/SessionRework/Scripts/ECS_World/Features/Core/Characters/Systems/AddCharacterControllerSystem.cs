@@ -50,7 +50,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.System
 
                 _stash.Set(playerEntity, new CharacterController.PlayerControllerComponent
                 {
-                    CharacterController = controller
+                    Handler = controller
                 });
             }
         }

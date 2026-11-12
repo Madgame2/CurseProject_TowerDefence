@@ -1,8 +1,8 @@
 using System;
 using Scellecs.Morpeh;
+using Scenes.SessionRework.Characters.Base;
 using Scenes.SessionRework.Scripts.ECS_World.Components.Players;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters.Meta;
-using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Meta;
 using Zenject;
 
 namespace Scenes.SessionRework.Characters.Skadi.CharacterController.Factory
@@ -28,8 +28,12 @@ namespace Scenes.SessionRework.Characters.Skadi.CharacterController.Factory
                 throw new ArgumentException(
                     $"PlayerComponent not found for entity {playerEntity}");
 
+            bool isLocallyControlled = world
+                .GetStash<MyPlayerComponent>()
+                .Has(playerEntity);
+            
             return _container.Instantiate<SkadiController>(
-                new object[] { playerComponent.PlayerView });
+                new object[] { playerComponent.PlayerView, isLocallyControlled });
         }
     }
 }
