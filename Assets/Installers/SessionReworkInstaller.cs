@@ -34,6 +34,7 @@ namespace Installers
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private CameraView _cameraView;
         [SerializeField] private StateMachineConfig _cameraStateMachineConfig;
+        [SerializeField] private ProjectileView _projectileView;
         
         public override void InstallBindings()
         {
@@ -42,6 +43,7 @@ namespace Installers
             Container.BindInstance(_playerView);
             Container.BindInstance(_cameraView);
             Container.BindInstance(_cameraStateMachineConfig);
+            Container.BindInstance(_projectileView);
             
             Container.Bind<GraphReader>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneStateMachine<SessionReworkScene>>().AsSingle().NonLazy();

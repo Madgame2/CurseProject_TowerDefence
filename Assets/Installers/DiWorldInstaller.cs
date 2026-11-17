@@ -1,5 +1,6 @@
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Interfaces;
 using Scenes.SessionRework.Scripts.ECS_World.Factories.Player;
+using Scenes.SessionRework.Scripts.ECS_World.Services.ProjectileSpawner.ExtentionsMethods;
 using Scenes.SessionRework.Scripts.EntryPoints;
 using Scenes.SessionRework.Scripts.GameWorld.Core.Data;
 using Scenes.SessionRework.Scripts.GameWorld.Core.Orchestrator;
@@ -61,6 +62,7 @@ namespace Installers
             Container.Bind<PlayersInitializer>().AsSingle();
             
             Container.AddReplicationRouterService();
+            Container.AddProjectileSpawnerService();
         }
     }
 }

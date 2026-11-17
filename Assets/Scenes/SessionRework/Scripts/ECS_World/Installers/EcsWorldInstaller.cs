@@ -4,8 +4,10 @@ using Scenes.SessionRework.Scripts.ECS_World.Features;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Characters;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.GlobalGamePlayState;
 using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Input;
+using Scenes.SessionRework.Scripts.ECS_World.Features.Core.Projectiles;
 using Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.AlternativeAction;
 using Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.FocusPlayerLookFeature;
+using Scenes.SessionRework.Scripts.ECS_World.Features.GamePlay.Default.PrimaryAction;
 using UnityEngine;
 
 namespace Scenes.SessionRework.Scripts.ECS_World.Installers
@@ -30,6 +32,9 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Installers
             CharactersFeature.AddFeature(world, updateGroup, container);
             SyncEcsWithUnityFeature.AddFeature(world, updateGroup, container);
 
+            ProjectilesCoreFeature.AddFeature(world, updateGroup, container);
+            
+            PrimaryActionFeature.AddFeature(world, updateGroup, container);
             AlternativeActionFeature.AddFeature(world, updateGroup, container);
             PlayerMovementFeature.AddFeature(world, updateGroup,container);
             FocusPlayerLookFeature.AddFeature(world, updateGroup, container);

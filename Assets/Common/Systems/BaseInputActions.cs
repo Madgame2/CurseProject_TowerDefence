@@ -165,7 +165,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""PrimaryAction"",
                     ""type"": ""Button"",
                     ""id"": ""ebe949be-540c-42e2-bfb0-fbd045245456"",
                     ""expectedControlType"": """",
@@ -336,7 +336,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""PrimaryAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -355,7 +355,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         m_SessionPlayer_Move = m_SessionPlayer.FindAction("Move", throwIfNotFound: true);
         m_SessionPlayer_Look1 = m_SessionPlayer.FindAction("Look1", throwIfNotFound: true);
         m_SessionPlayer_Jump = m_SessionPlayer.FindAction("Jump", throwIfNotFound: true);
-        m_SessionPlayer_Attack = m_SessionPlayer.FindAction("Attack", throwIfNotFound: true);
+        m_SessionPlayer_PrimaryAction = m_SessionPlayer.FindAction("PrimaryAction", throwIfNotFound: true);
     }
 
     ~@BaseInputActions()
@@ -444,7 +444,7 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_SessionPlayer_Move;
     private readonly InputAction m_SessionPlayer_Look1;
     private readonly InputAction m_SessionPlayer_Jump;
-    private readonly InputAction m_SessionPlayer_Attack;
+    private readonly InputAction m_SessionPlayer_PrimaryAction;
     /// <summary>
     /// Provides access to input actions defined in input action map "SessionPlayer".
     /// </summary>
@@ -489,9 +489,9 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_SessionPlayer_Jump;
         /// <summary>
-        /// Provides access to the underlying input action "SessionPlayer/Attack".
+        /// Provides access to the underlying input action "SessionPlayer/PrimaryAction".
         /// </summary>
-        public InputAction @Attack => m_Wrapper.m_SessionPlayer_Attack;
+        public InputAction @PrimaryAction => m_Wrapper.m_SessionPlayer_PrimaryAction;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -542,9 +542,9 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @PrimaryAction.started += instance.OnPrimaryAction;
+            @PrimaryAction.performed += instance.OnPrimaryAction;
+            @PrimaryAction.canceled += instance.OnPrimaryAction;
         }
 
         /// <summary>
@@ -580,9 +580,9 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @PrimaryAction.started -= instance.OnPrimaryAction;
+            @PrimaryAction.performed -= instance.OnPrimaryAction;
+            @PrimaryAction.canceled -= instance.OnPrimaryAction;
         }
 
         /// <summary>
@@ -680,11 +680,11 @@ public partial class @BaseInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "PrimaryAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttack(InputAction.CallbackContext context);
+        void OnPrimaryAction(InputAction.CallbackContext context);
     }
 }

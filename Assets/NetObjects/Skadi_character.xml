@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NetObject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Metadata>
+        <ObjectType>None</ObjectType>
+        <ObjectName>Skadi_character</ObjectName>
+        <Version>1</Version>
+    </Metadata>
+    <Components>
+        <Component type="SpawnPointAnchor">
+            <Metadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <Version>1</Version>
+            </Metadata>
+            <Data>
+                <AnchorName>ArrowSpawnAnchor</AnchorName>
+                <SpawnPoint>
+                    <X>0.1</X>
+                    <Y>1.37</Y>
+                    <Z>0.45</Z>
+                </SpawnPoint>
+                <PivotPoint>
+                    <X>0</X>
+                    <Y>1.2</Y>
+                    <Z>0</Z>
+                </PivotPoint>
+            </Data>
+        </Component>
+        <Component type="UpperBodyComponent">
+            <Metadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <Version>1</Version>
+            </Metadata>
+            <Data>
+                <PivotLocalPosition>
+                    <x>0</x>
+                    <y>1.186</y>
+                    <z>0</z>
+                </PivotLocalPosition>
+                <AimOriginOffsetFromPivot>
+                    <x>0</x>
+                    <y>0.213999987</y>
+                    <z>0</z>
+                </AimOriginOffsetFromPivot>
+                <AimForwardLocal>
+                    <x>0</x>
+                    <y>0</y>
+                    <z>1</z>
+                </AimForwardLocal>
+            </Data>
+        </Component>
+    </Components>
+</NetObject>

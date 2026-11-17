@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using Scenes.SessionRework.Scripts.Network.Meta;
+using Scenes.SessionRework.Scripts.Network.Meta.EntityComponents.Base;
 using Scenes.SessionRework.Scripts.Network.Meta.EntityComponents.Hitboxes;
 using Scenes.SessionRework.Scripts.Network.Meta.EntityComponents.Hitboxes.Enums;
 using Scenes.SessionRework.Scripts.Network.Meta.EntityComponents.Hitboxes.Model.Base;
@@ -31,42 +32,25 @@ namespace Scenes.SessionRework.Scripts.Network.Tools.NetObjectSerializer
                 }
             };
 
-            var hitboxes = prefab.GetComponentsInChildren<HitboxMeta>(true);
+            var netComponents = prefab.GetComponentsInChildren<NetComponentBase>(true);
+            //var hitboxes = prefab.GetComponentsInChildren<HitboxMeta>(true);
 
-            var components = new List<ComponentDto>(hitboxes.Length);
+            var components = new List<ComponentDto>(netComponents.Length);
 
-            foreach (var hitbox in hitboxes)
+            foreach (var component  in netComponents)
             {
-                var (shapeType, shapeData) = hitbox.Shape switch
-                {
-                    HitboxShape.Sphere =>
-                        ("Sphere", (object)hitbox.Data.Sphere),
-
-                    HitboxShape.Capsule =>
-                        ("Capsule", (object)hitbox.Data.Capsule),
-
-                    HitboxShape.Box =>
-                        ("Box", (object)hitbox.Data.Box),
-
-                    _ => throw new NotSupportedException(
-                        $"Unsupported hitbox shape: {hitbox.Shape}")
-                };
-
-                // Метаданные конкретного компонента.
-                var metadata = new HitboxMetadataDto
-                {
-                    ShapeType = shapeType,
-                    Version = 1
-                };
-
-                // Создаём отдельный компонент для каждого хитбокса.
+                var metadata = component.GetSerializationMetadata();
+                var data = component.GetSerializationData();
+                    
+                    
                 components.Add(new ComponentDto
                 {
-                    Type = "Hitbox",
+                    Type = component.GetType().Name,
+
                     Data = new[]
                     {
                         SerializeToElement(metadata),
-                        SerializeChildrenToElement("Data", shapeData)
+                        SerializeChildrenToElement("Data", data)
                     }
                 });
             }

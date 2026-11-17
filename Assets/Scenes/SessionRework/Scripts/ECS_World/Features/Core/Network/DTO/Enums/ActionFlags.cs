@@ -7,6 +7,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features.DTO.Enums
     {
         None = 0,
         JumpRequested = 1 << 0,
-        AlternativeAction = 1 << 1
+        AlternativeAction = 1 << 1,
+        PrimaryAction = 1 << 2,
     }
 }

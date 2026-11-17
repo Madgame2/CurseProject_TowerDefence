@@ -20,6 +20,7 @@ namespace Scenes.SessionRework.Scripts.ECS_World.Features
             updateGroup.AddSystem(container.Instantiate<NetworkStateSendSystem>());
             updateGroup.AddSystem(container.Instantiate<NetworkPlayersStateApplySystem>());
             updateGroup.AddSystem(container.Instantiate<NetworkReplicationSystem>());
+            updateGroup.AddSystem(container.Instantiate<NetworkEnityStateApplySystem>());
         }
 
         private static void CreateEnity(World world, DiContainer container)

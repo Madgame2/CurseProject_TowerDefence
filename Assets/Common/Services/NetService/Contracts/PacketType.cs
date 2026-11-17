@@ -6,6 +6,7 @@ namespace Common.Services.Net.Contracts
 
         PlayerWorldState,
         ReplicationLog,
+        EntityStateSnapshot,
         
         Acknowledge
     }

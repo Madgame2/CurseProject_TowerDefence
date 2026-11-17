@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NetObject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Metadata>
+        <ObjectType>None</ObjectType>
+        <ObjectName>Arrow_deffoult</ObjectName>
+        <Version>1</Version>
+    </Metadata>
+    <Components>
+        <Component type="HitboxMeta">
+            <Metadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <ShapeType>Capsule</ShapeType>
+                <Version>1</Version>
+            </Metadata>
+            <Data>
+                <Center>
+                    <x>0</x>
+                    <y>0</y>
+                    <z>0.06</z>
+                </Center>
+                <Rotation>
+                    <x>0.707106769</x>
+                    <y>0</y>
+                    <z>0</z>
+                    <w>0.707106769</w>
+                    <eulerAngles>
+                        <x>90</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </eulerAngles>
+                </Rotation>
+                <Radius>0.005</Radius>
+                <Height>0.75</Height>
+            </Data>
+        </Component>
+    </Components>
+</NetObject>

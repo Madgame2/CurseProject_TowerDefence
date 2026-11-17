@@ -16,7 +16,7 @@ namespace Scenes.SessionRework.Scripts.Player.View
         [SerializeField] private  Transform _lookTarget;
         [SerializeField]private CameraAnchors _defoultStateCameraAnchors;
         [SerializeField] private CameraAnchors _aimingStateCameraAnchors;
-
+        
         public bool IsAiming;
         
         public Transform SpineBone => _spineBone;

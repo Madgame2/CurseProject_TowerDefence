@@ -5,6 +5,8 @@ namespace Scenes.SessionRework.Scripts.GameWorld.View
     public class CameraView : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
+        [SerializeField] private LayerMask _raycastLayerMask;
+        
         private float _maxRayCastDistance = 200f;
         
         private readonly Plane[] _frustumPlanes = new Plane[6];
@@ -22,7 +24,8 @@ namespace Scenes.SessionRework.Scripts.GameWorld.View
                 if (Physics.Raycast(
                         ray,
                         out RaycastHit hit,
-                        _maxRayCastDistance))
+                        _maxRayCastDistance,
+                        _raycastLayerMask))
                 {
                     return hit.point;
                 }

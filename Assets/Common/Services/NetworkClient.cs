@@ -14,6 +14,7 @@ using Zenject;
 using System.Buffers;
 using System.Threading;
 using Scenes.SessionRework.Scripts.GameWorld.Core.interfaces.BackendParams;
+using Scenes.SessionRework.Scripts.Network.DTO.EntityStates;
 
 namespace Editor.Interfaces.Services
 {
@@ -36,6 +37,7 @@ namespace Editor.Interfaces.Services
         {
             RegisterProcessor<PlayerStateSnapshot>(PacketType.PlayerWorldState);
             RegisterProcessor<ReplicationLogPaket>(PacketType.ReplicationLog);
+            RegisterProcessor<EntitesStatSnapshot>(PacketType.EntityStateSnapshot);
             
             _udpModule.OnDataReceived += HandleRawUdpData;
         }

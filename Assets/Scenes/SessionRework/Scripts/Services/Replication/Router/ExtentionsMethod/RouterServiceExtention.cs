@@ -15,10 +15,12 @@ namespace Scenes.SessionRework.Scripts.Services.Replication.Router.ExtentionsMet
         public static void AddReplicationRouterService(this DiContainer container)
         {
             container.Bind<ISpawnModule>().To<PlayerSpawnModule>().AsSingle();
+            container.Bind<ISpawnModule>().To<ProjectileSpawnModule>().AsSingle();
             
             container.Bind<IRouterModule>().To<DespawnRouterModule>().AsSingle();
             container.Bind<IRouterModule>().To<GameplayRouterModule>().AsSingle();
             container.Bind<IRouterModule>().To<SpawnRouterModule>().AsSingle();
+            
             container.Bind<IReplicationRouter>().To<ReplicationRouter>().AsSingle();
         }
     }

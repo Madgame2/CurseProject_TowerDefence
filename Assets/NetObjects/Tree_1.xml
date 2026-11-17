@@ -6,7 +6,7 @@
         <Version>1</Version>
     </Metadata>
     <Components>
-        <Component type="Hitbox">
+        <Component type="HitboxMeta">
             <Metadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <ShapeType>Capsule</ShapeType>
                 <Version>1</Version>
